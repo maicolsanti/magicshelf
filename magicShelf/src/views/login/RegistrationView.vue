@@ -6,9 +6,12 @@ import StepOne from '@/components/registration/StepOne.vue'
 import StepTwoCostumer from '@/components/registration/StepTwoCostumer.vue'
 import StepTwoSupplier from '@/components/registration/StepTwoSupplier.vue'
 import { UserType } from '@/models/user-type';
+import { computed } from 'vue';
 
 const registrationStore = useRegistrationStore();
-const { registration } = storeToRefs(registrationStore);
+const { registration, getStep } = storeToRefs(registrationStore);
+
+const step = computed(() => getStep.value);
 
 </script>
 
@@ -17,9 +20,9 @@ const { registration } = storeToRefs(registrationStore);
     <div class="mx-4">
       <PageTitleNavigation subTitle="Registrazione" v-bind:goPreviousStep="registration.step !=0"/>
     </div>
-    <StepOne v-if="registration.step == 0"></StepOne>
-    <StepTwoCostumer v-if="registration.step == 1 && registration.userType == UserType.COSTUMER"></StepTwoCostumer>
-    <StepTwoSupplier v-if="registration.step == 1 && registration.userType == UserType.SUPPLIER"></StepTwoSupplier>
+    <StepOne v-if="step == 0"></StepOne>
+    <StepTwoCostumer v-if="step == 1 && registration.userType == UserType.COSTUMER"></StepTwoCostumer>
+    <StepTwoSupplier v-if="step == 1 && registration.userType == UserType.SUPPLIER"></StepTwoSupplier>
   </main>
 </template>
 

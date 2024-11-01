@@ -3,7 +3,9 @@ import '@/assets/scss/custom-css.css'
 import { addIcons } from 'oh-vue-icons'
 import { IoArrowBackCircleOutline, IoArrowBackCircle } from "oh-vue-icons/icons";
 import { useRouter } from 'vue-router'
-defineProps({
+import { useRegistrationStore } from '@/stores/registration'
+
+const props = defineProps({
     subTitle: {
         type: String,
         required: false
@@ -16,9 +18,20 @@ defineProps({
 
 addIcons(IoArrowBackCircleOutline, IoArrowBackCircle);
 
+const registrationStore = useRegistrationStore();
+
 const router = useRouter()
 const goBack = () => {
-    router.go(-1)
+    console.log("arrived at row 27")
+    console.log("props.goPreviousStep", props.goPreviousStep)
+    if(props.goPreviousStep){
+        console.log("arrived at row 28")
+        registrationStore.previousStep();
+    } else {
+        console.log("arrived at row 32")
+        router.go(-1)
+    }
+    
 }
 
 </script>

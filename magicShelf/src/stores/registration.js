@@ -14,6 +14,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
     nextStep(){
       this.registration.step++;
     },
+    previousStep(){
+      this.registration.step--;
+    },
     setSelectedUserType(userType) {
       this.registration.userType = userType;
     }
@@ -30,6 +33,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
         default:
           return 'Seleziona'
       }
+    },
+    getStep() {
+      return this.registration.step;
     }
   },
 });
