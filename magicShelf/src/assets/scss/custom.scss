@@ -12,3 +12,7 @@ $body-bg: $white;
 $body-color: $dark;
 
 @import "../../../node_modules/bootstrap/scss/bootstrap";
+
+.welcome {
+    font-weight: lighter;
+}

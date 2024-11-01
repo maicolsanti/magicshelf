@@ -11845,5 +11845,8 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.welcome {
+  font-weight: lighter;
+}
 
 /*# sourceMappingURL=custom-css.css.map */
