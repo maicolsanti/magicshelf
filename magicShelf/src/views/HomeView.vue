@@ -13,7 +13,7 @@ const { configurations } = storeToRefs(confStore);
     <h1 class="welcome mb-4">Benvenut*,<br>qui potrai trovare ciò che cerchi
     </h1>
     <div class="d-grid gap-2 mb-1" v-if="!configurations.isLoggedIn">
-      <button type="button" class="btn btn-primary py-2 login-button">Accedi per iniziare la ricerca</button>
+      <button type="button" class="btn btn-primary py-2 login-button"><RouterLink to="/login" class="login-link">Accedi per iniziare la ricerca</RouterLink></button>
     </div>
     <SupplierLink v-if="!configurations.isLoggedIn" />
     <SearchInstructions v-if="!configurations.isLoggedIn" />
@@ -24,5 +24,9 @@ const { configurations } = storeToRefs(confStore);
 <style scoped>
 .login-button {
   max-width: 350px;
+}
+.login-link {
+  color: var(--bs-dark);
+  text-decoration: none;
 }
 </style>
