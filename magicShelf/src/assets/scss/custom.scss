@@ -16,3 +16,15 @@ $body-color: $dark;
 .welcome {
     font-weight: lighter;
 }
+
+.form-button{
+    min-width: 150px;
+}
+.form-alternative{
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.form-alternative-a{
+    color: var(--bs-secondary);
+}
