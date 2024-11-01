@@ -22,13 +22,9 @@ const registrationStore = useRegistrationStore();
 
 const router = useRouter()
 const goBack = () => {
-    console.log("arrived at row 27")
-    console.log("props.goPreviousStep", props.goPreviousStep)
     if(props.goPreviousStep){
-        console.log("arrived at row 28")
         registrationStore.previousStep();
     } else {
-        console.log("arrived at row 32")
         router.go(-1)
     }
     
