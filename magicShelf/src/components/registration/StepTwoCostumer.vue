@@ -1,25 +1,113 @@
 <script setup>
-// import PageTitleNavigation from '@/components/PageTitleNavigation.vue'
-// import { useRegistrationStore } from '@/stores/registration'
-// import { storeToRefs } from 'pinia';
-// import { computed } from 'vue';
-// import { useConfigurationStore } from '@/stores/configurations'
-// import { UserType } from '@/models/user-type'
+import { useRegistrationStore } from '@/stores/registration'
+import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { addIcons } from 'oh-vue-icons'
+import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 
-// const registrationStore = useRegistrationStore();
-// const { registration, getDropdownString } = storeToRefs(registrationStore);
+addIcons(MdVisibilityRound, MdVisibilityoffRound);
+const registrationStore = useRegistrationStore();
+const { registration, getPasswordType, getTowns } = storeToRefs(registrationStore);
 
-// const dropDownString = computed(() => getDropdownString.value);
+const passwordInputType = computed(() => getPasswordType.value);
+const towns = computed(() => getTowns.value);
 
 </script>
 
 <template>
     <main>
-        <div class="mx-4">
-            <p>costumer</p>
+        <h2 class="welcome d-flex justify-content-center my-5">
+            Ciao cliente,<br/>inserisci i tuoi dati per completare la registrazione
+        </h2>
+        <div class="form-g">
+            <div class="form-group mb-3">
+                <label for="">Nome</label>
+                <input type="text" class="form-control" id="nameInput" placeholder="indirizzo email" required />
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Cognome</label>
+                <input type="text" class="form-control" id="surnameInput" placeholder="indirizzo email" required />
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Email</label>
+                <input type="email" class="form-control" id="emailInput" placeholder="indirizzo email" required />
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Telefono</label>
+                <input type="text" class="form-control" id="phoneInput" placeholder="indirizzo email" required />
+            </div>
+            <div class="form-group mb-3">
+                <label for="">CAP</label>
+                <input type="number" class="form-control" id="CAPInput" placeholder="indirizzo email" required />
+            </div>
+            <div class="dropdown d-flex justify-content-center mb-5">
+            <button class="btn dropdown-toggle user-type-dropdown d-flex justify-content-between align-items-center"
+                type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
+                <span class="dropdown-text">{{ dropDownString }}</span>
+                <span class="dropdown-icon"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
+                <li>
+                    <!-- <a v-for="town in towns" v-bind:class="'disabled': registration.userType == UserType.COSTUMER" class="dropdown-item"
+                        @click="registrationStore.setSelectedTown(town.name)" href="#">{{town.name}}</a> -->
+                </li>
+            </ul>
+        </div>
+            <div class="form-group row">
+                <label for="">Password</label>
+                <div class="col-md-13 input-group">
+                    <input :type="passwordInputType" class=" form-control mb-5" id="passwordInput"
+                        placeholder="password" required />
+                    <div class="input-group-btn">
+                        <button class="btn icon-button" @click="registrationStore.toggleShowPassword()">
+                            <v-icon v-if="!registration.showPassword" name="md-visibility-round" class="visibility-icon" />
+                            <v-icon v-if="registration.showPassword" name="md-visibilityoff-round" class="visibility-icon" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary form-button mb-2">
+                Registrati
+            </button>
         </div>
     </main>
 </template>
   
   
-<style scoped></style>
+<style scoped>
+.form-g {
+    justify-self: center;
+    justify-items: center;
+    width: 350px;
+}
+
+input {
+    border-color: var(--bs-secondary);
+    border-width: 1px;
+    height: 40px;
+    color: var(--bs-secondary);
+    min-width: 350px;
+}
+
+::placeholder {
+    color: var(--bs-secondary);
+    opacity: 0.4;
+}
+
+label {
+    color: var(--bs-secondary);
+}
+
+.visibility-icon {
+    color: var(--bs-secondary);
+}
+
+.icon-button {
+    height: 40px;
+    border-color: var(--bs-secondary);
+    border-width: 1px;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    border-left: none;
+}
+</style>
