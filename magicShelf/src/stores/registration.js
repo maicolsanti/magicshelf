@@ -9,10 +9,8 @@ export const useRegistrationStore = defineStore('registrationStore', {
       registrationData: {
         name: "",
         surname: "",
-        companyName: "",
-        vatNumber: "",
-        // companyName: userType == UserType.SUPPLIER ? "" : null,
-        // vatNumber: userType == UserType.SUPPLIER ? "" : null,
+        companyName: null,
+        vatNumber: null,
         fiscalCode: "",
         email: "",
         phoneNumber: "",
@@ -23,23 +21,23 @@ export const useRegistrationStore = defineStore('registrationStore', {
       towns: [
         {
           name: "Cesena",
-          caps: [47520, 47521]
+          caps: ["47520", "47521"]
         },
         {
           name: "Longiano",
-          caps: [47020]
+          caps: ["47020"]
         },
         {
           name: "Bologna",
-          caps: [47120, 47121, 47122, 47123]
+          caps: ["47120", "47121", "47122", "47123"]
         },
         {
           name: "Cisterna di Latina",
-          caps: [47020]
+          caps: ["04012"]
         },
         {
           name: "Como",
-          caps: [40130, 40131]
+          caps: ["40130", "40131"]
         }
       ],
       showPassword: false,
@@ -56,13 +54,22 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     setSelectedUserType(userType) {
       this.registration.userType = userType;
+      if (userType === UserType.SUPPLIER) {
+        this.registration.registrationData.companyName = "";
+        this.registration.registrationData.vatNumber = "";
+      }
     },
     toggleShowPassword() {
-      this.registration.showPassword = !this.infos.showPassword;
+      this.registration.showPassword = !this.registration.showPassword;
     },
     setSelectedTown(townName) {
       this.registration.registrationData.town = townName;
     },
+    changeCAP(CAPInput) {
+      this.registration.registrationData.town = "";
+      this.setSelectedTown("");
+      this.registration.registrationData.cap = CAPInput;
+    }
   },
   getters: {
     getDropdownString(){
@@ -85,6 +92,16 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     getTowns() {
       return this.registration.towns.filter(town => town.caps.includes(this.registration.registrationData.cap));
+    },
+    getTownString(){
+      if(this.registration.registrationData.town == "") {
+        return "Seleziona comune";
+      } else {
+        return this.registration.registrationData.town;
+      }
+    },
+    getUserType() {
+      return this.registration.userType;
     }
   },
 });

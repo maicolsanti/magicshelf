@@ -7,9 +7,10 @@ import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 
 addIcons(MdVisibilityRound, MdVisibilityoffRound);
 const registrationStore = useRegistrationStore();
-const { registration, getPasswordType, getTowns } = storeToRefs(registrationStore);
+const { registration, getPasswordType, getTowns, getTownString } = storeToRefs(registrationStore);
 
 const passwordInputType = computed(() => getPasswordType.value);
+const dropDownString = computed(() => getTownString.value);
 const towns = computed(() => getTowns.value);
 
 </script>
@@ -19,14 +20,20 @@ const towns = computed(() => getTowns.value);
         <h2 class="welcome d-flex justify-content-center my-5">
             Ciao cliente,<br/>inserisci i tuoi dati per completare la registrazione
         </h2>
-        <div class="form-g">
+        <form
+  id="app"
+  @submit="checkForm"
+  action="https://vuejs.org/"
+  method="post"
+>
+<div class="form-g">
             <div class="form-group mb-3">
                 <label for="">Nome</label>
-                <input type="text" class="form-control" id="nameInput" placeholder="indirizzo email" required />
+                <input type="text" class="form-control" id="nameInput" placeholder="nome" required />
             </div>
             <div class="form-group mb-3">
                 <label for="">Cognome</label>
-                <input type="text" class="form-control" id="surnameInput" placeholder="indirizzo email" required />
+                <input type="text" class="form-control" id="surnameInput" placeholder="cognome" required />
             </div>
             <div class="form-group mb-3">
                 <label for="">Email</label>
@@ -34,22 +41,24 @@ const towns = computed(() => getTowns.value);
             </div>
             <div class="form-group mb-3">
                 <label for="">Telefono</label>
-                <input type="text" class="form-control" id="phoneInput" placeholder="indirizzo email" required />
+                <input type="tel" class="form-control" id="phoneInput" placeholder="numero di telefono" required />
             </div>
             <div class="form-group mb-3">
                 <label for="">CAP</label>
-                <input type="number" class="form-control" id="CAPInput" placeholder="indirizzo email" required />
+                <input type="text" class="form-control" id="CAPInput" v-model="CAPInput" placeholder="cap" required  @change="registrationStore.changeCAP(this.CAPInput)"/>
             </div>
-            <div class="dropdown d-flex justify-content-center mb-5">
-            <button class="btn dropdown-toggle user-type-dropdown d-flex justify-content-between align-items-center"
+            <div class="dropdown d-flex justify-content-center mb-3">
+            <button class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
                 type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
                 <span class="dropdown-text">{{ dropDownString }}</span>
                 <span class="dropdown-icon"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
                 <li>
-                    <!-- <a v-for="town in towns" v-bind:class="'disabled': registration.userType == UserType.COSTUMER" class="dropdown-item"
-                        @click="registrationStore.setSelectedTown(town.name)" href="#">{{town.name}}</a> -->
+                    <a v-if="towns.length == 0" class="dropdown-item disabled"
+                        @click="registrationStore.setSelectedTown(town.name)" href="#">Inserisci il cap</a>
+                    <a v-if="towns.length > 0" v-for="town in towns" v-bind:key="town.name" class="dropdown-item"
+                        @click="registrationStore.setSelectedTown(town.name)" href="#">{{town.name}}</a>
                 </li>
             </ul>
         </div>
@@ -70,6 +79,8 @@ const towns = computed(() => getTowns.value);
                 Registrati
             </button>
         </div>
+</form>
+        
     </main>
 </template>
   
@@ -85,7 +96,6 @@ input {
     border-color: var(--bs-secondary);
     border-width: 1px;
     height: 40px;
-    color: var(--bs-secondary);
     min-width: 350px;
 }
 
@@ -109,5 +119,17 @@ label {
     border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
     border-left: none;
+}
+
+.dropdown-menu {
+    width: 350px;
+}
+
+.cap-dropdown {
+    width: 350px;
+    align-content: start;
+    align-items: start;
+    justify-items: stretch;
+    border-color: var(--bs-secondary);
 }
 </style>
