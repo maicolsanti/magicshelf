@@ -42,6 +42,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
       ],
       showPassword: false,
       inputPasswordType: 'password',
+      registrationDataError: false,
       authToken: '',
     }
   }),
@@ -69,6 +70,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
       this.registration.registrationData.town = "";
       this.setSelectedTown("");
       this.registration.registrationData.cap = CAPInput;
+    },
+    setRegistrationDataError(hasError) {
+      this.registration.registrationDataError = hasError;
     }
   },
   getters: {
@@ -102,6 +106,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     getUserType() {
       return this.registration.userType;
+    },
+    getRegistrationDataError() {
+      return this.registration.registrationDataError;
     }
   },
 });

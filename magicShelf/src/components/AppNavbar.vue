@@ -63,4 +63,9 @@ const { updatePageName } = storeToRefs(confStore);
     1px -1px 0 var(--bs-secondary),
     -1px -1px 0 var(--bs-secondary);
 }
+
+.navbar {
+  width: 100vw;
+  /* position:fixed; TODO: fix position */
+}
 </style>
