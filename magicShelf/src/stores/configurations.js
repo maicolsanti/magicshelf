@@ -7,7 +7,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     configurations: {
       pageCode: page.HOME,
       pageString: '',
-      isLoggedIn: false,
+      logged: false,
       userType: UserType.COSTUMER,
     }
 }),
@@ -15,6 +15,9 @@ actions: {
     updatePage(newPageCode) {
       this.configurations.pageCode = newPageCode
       this.updatePageName
+    },
+    login() {
+      this.configurations.logged = true;
     }
 },
 getters: {

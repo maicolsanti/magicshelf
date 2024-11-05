@@ -71,6 +71,15 @@ export const useRegistrationStore = defineStore('registrationStore', {
       this.setSelectedTown("");
       this.registration.registrationData.cap = CAPInput;
     },
+    setCostumerFormData(nameInput, surnameInput, emailInput, phoneInput, CAPInput, townInput, passwordInput) {
+      this.registration.registrationData.name = nameInput;
+      this.registration.registrationData.surname = surnameInput;
+      this.registration.registrationData.email = emailInput;
+      this.registration.registrationData.phoneNumber = phoneInput;
+      // this.registration.registrationData.cap = CAPInput,
+      // this.registration.registrationData.town = townInput,
+      this.registration.registrationData.password = passwordInput;
+    },
     setRegistrationDataError(hasError) {
       this.registration.registrationDataError = hasError;
     }
@@ -96,6 +105,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     getTowns() {
       return this.registration.towns.filter(town => town.caps.includes(this.registration.registrationData.cap));
+    },
+    getTown() {
+      return this.registration.registrationData.town;
     },
     getTownString(){
       if(this.registration.registrationData.town == "") {

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useLoginStore = defineStore('loginStore', {
   state: () => ({
     infos: {
+      logged: false,
       showPassword: false,
       inputPasswordType: 'password',
       authToken: '',
@@ -11,6 +12,9 @@ export const useLoginStore = defineStore('loginStore', {
   actions: {
     toggleShowPassword() {
       this.infos.showPassword = !this.infos.showPassword;
+    },
+    login() {
+      this.infos.logged = true;
     }
   },
   getters: {
