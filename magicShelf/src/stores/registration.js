@@ -42,6 +42,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
       ],
       showPassword: false,
       inputPasswordType: 'password',
+      vatSameAsFiscalCode: false,
       registrationDataError: false,
       authToken: '',
     }
@@ -63,6 +64,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
     toggleShowPassword() {
       this.registration.showPassword = !this.registration.showPassword;
     },
+    toggleVatCheckbox() {
+      this.registration.vatSameAsFiscalCode = !this.registration.vatSameAsFiscalCode;
+    },
     setSelectedTown(townName) {
       this.registration.registrationData.town = townName;
     },
@@ -74,6 +78,18 @@ export const useRegistrationStore = defineStore('registrationStore', {
     setCostumerFormData(nameInput, surnameInput, emailInput, phoneInput, CAPInput, townInput, passwordInput) {
       this.registration.registrationData.name = nameInput;
       this.registration.registrationData.surname = surnameInput;
+      this.registration.registrationData.email = emailInput;
+      this.registration.registrationData.phoneNumber = phoneInput;
+      // this.registration.registrationData.cap = CAPInput,
+      // this.registration.registrationData.town = townInput,
+      this.registration.registrationData.password = passwordInput;
+    },
+    setCostumerFormData(nameInput, surnameInput, companyNameInput, vatNumberInput, fiscalCodeInput, emailInput, phoneInput, CAPInput, townInput, passwordInput) {
+      this.registration.registrationData.name = nameInput;
+      this.registration.registrationData.surname = surnameInput;
+      this.registration.registrationData.companyName = companyNameInput;
+      this.registration.registrationData.vatNumber = vatNumberInput;
+      this.registration.registrationData.fiscalCode = fiscalCodeInput;
       this.registration.registrationData.email = emailInput;
       this.registration.registrationData.phoneNumber = phoneInput;
       // this.registration.registrationData.cap = CAPInput,
@@ -102,6 +118,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     getPasswordType() {
       return this.registration.showPassword ? 'text' : 'password';
+    },
+    getVatEquivalence() {
+      return this.registration.vatSameAsFiscalCode;
     },
     getTowns() {
       return this.registration.towns.filter(town => town.caps.includes(this.registration.registrationData.cap));
