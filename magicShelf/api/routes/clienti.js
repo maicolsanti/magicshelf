@@ -52,12 +52,11 @@ router.get('/:codice_cliente', async (req, res) => {
 
 
 
-// Endpoint POST per creare un nuovo cliente
 router.post('/', async (req, res) => {
   const { custom_data } = req.body;
 
   // Costruisci la query SQL in modo dinamico per gestire tutti i campi
-  const fields = Object.keys(custom_data).map(key => `\`${key}\` = ?`).join(', ');
+  const fields = Object.keys(custom_data).join(', ');
   const values = Object.values(custom_data);
 
   const query = `
@@ -70,7 +69,11 @@ router.post('/', async (req, res) => {
     res.json({ message: 'Cliente creato con successo', id: result.insertId });
   } catch (error) {
     console.error('Errore durante la creazione del cliente:', error);
-    res.status(500).send('Errore interno del server');
+    if (error.code === 'ER_PARSE_ERROR') {
+      res.status(400).send('Errore nella query SQL');
+    } else {
+      res.status(500).send('Errore interno del server');
+    }
   }
 });
 
