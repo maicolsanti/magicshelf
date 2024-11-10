@@ -70,16 +70,13 @@
 ### PUT /materiali/{codice_materiale}: Aggiorna le informazioni di un materiale esistente.
 ### DELETE /materiali/{codice_materiale}: Elimina un materiale.
 
-## Endpoint per l'entità Situazione Fornitori
-### GET /situazioni-fornitori: Restituisce un elenco di tutte le situazioni dei fornitori (quantità di materiali forniti).
-### GET /situazioni-fornitori/{codice_fornitore}/{codice_materiale}: Restituisce la situazione di un fornitore specifico per un materiale specifico.
-### POST /situazioni-fornitori: Crea una nuova situazione fornitore (aggiunge una nuova quantità di un materiale fornito da un fornitore).
-### PUT /situazioni-fornitori/{id_fornitore}/{id_materiale}: Aggiorna la quantità di un materiale fornito da un fornitore.
-### DELETE /situazioni-fornitori/{id_fornitore}/{id_materiale}: Elimina la situazione di un fornitore per un materiale specifico.
+## Endpoint per l'entità Situazione Materiali
+### GET /situazione-materiali: Restituisce un elenco di tutte le situazioni dei fornitori (quantità di materiali forniti).
+### GET /situazione-materiali/{codice_materiale}: Restituisce la situazione di un fornitore specifico per un materiale specifico.
+### POST /situazione-materiali: Crea una nuova situazione fornitore (aggiunge una nuova quantità di un materiale fornito da un fornitore).
+### PUT /situazione-materiali/{id_materiale}: Aggiorna la quantità di un materiale fornito da un fornitore.
+### DELETE /situazione-materiali/{id_materiale}: Elimina la situazione di un fornitore per un materiale specifico.
 
 ## Endpoint per l'entità Località
 ### GET /localita: Restituisce un elenco di tutte le località.
 ### GET /localita/{codice_istat}: Restituisce i dettagli di una località specifica, identificata dal CAP.
-### POST /localita: Crea una nuova località.
-### PUT /localita/{codice_istat}: Aggiorna le informazioni di una località esistente.
-### DELETE /localita/{codice_istat}: Elimina una località.
