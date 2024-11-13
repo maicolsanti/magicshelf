@@ -66,6 +66,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     toggleVatCheckbox() {
       this.registration.vatSameAsFiscalCode = !this.registration.vatSameAsFiscalCode;
+      // if(this.registration.vatSameAsFiscalCode) {
+      //   this.registration.registrationData.fiscalCode = this.registration.registrationData.vatNumber;
+      // }
     },
     setSelectedTown(townName) {
       this.registration.registrationData.town = townName;

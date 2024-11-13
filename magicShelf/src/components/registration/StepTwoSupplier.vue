@@ -2,7 +2,7 @@
 import { useRegistrationStore } from '@/stores/registration'
 import { useConfigurationStore } from '@/stores/configurations'
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { watch, computed } from 'vue';
 import { addIcons } from 'oh-vue-icons'
 import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 import { useRouter } from 'vue-router'
@@ -10,7 +10,7 @@ import { useRouter } from 'vue-router'
 addIcons(MdVisibilityRound, MdVisibilityoffRound);
 const registrationStore = useRegistrationStore();
 const configurationStore = useConfigurationStore();
-const { registration, getPasswordType, getVatEquivalence, getTowns, getTown, getTownString, getRegistrationDataError, setCostumerFormData } = storeToRefs(registrationStore);
+const { registration, getPasswordType, getVatEquivalence, getTowns, getTown, getTownString, getRegistrationDataError } = storeToRefs(registrationStore);
 const { login } = storeToRefs(configurationStore);
 
 const passwordInputType = computed(() => getPasswordType.value);
@@ -19,6 +19,7 @@ const towns = computed(() => getTowns.value);
 const townData = computed(() => getTown.value);
 const getDataError = computed(() => getRegistrationDataError.value);
 const isVatEquivalent = computed(() => getVatEquivalence.value);
+let isVatSame = false;
 
 const router = useRouter()
 
@@ -46,6 +47,19 @@ let formData = {
     selectedTown: "",
     passwordInput: "",
 };
+
+
+function setFiscalCodeWithVatNumber() {
+    registrationStore.toggleVatCheckbox();
+    if (isVatEquivalent.value) {
+        isVatSame = true;
+        formData.fiscalCodeInput = formData.vatNumberInput;
+    } else {
+        isVatSame = false;
+        formData.fiscalCodeInput = "";
+    }
+
+}
 
 function submit() {
     registrationStore.setSupplierFormData(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.passwordInput);
@@ -78,14 +92,26 @@ function submit() {
                     <input type="text" class="form-control" id="companyNameInput" v-model="formData.companyNameInput"
                         placeholder="ragione sociale" required />
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-1">
                     <label for="">Partita Iva</label>
                     <input type="text" class="form-control" id="vatNumberInput" v-model="formData.vatNumberInput"
                         placeholder="p. iva" required />
                 </div>
-                <div class="form-group mb-3">
-                    <input type="checkbox" id="checkbox" v-model="isVatEquivalent" class="vat-checkbox" />
-                    <label for="checkbox">La partita iva corrisponde al codice fiscale</label>
+                <div class="form-check mb-3 d-flex align-items-center">
+                    <input type="checkbox" id="checkbox" v-model="isVatSame" class="form-check-input vat-checkbox"
+                        @click="setFiscalCodeWithVatNumber" />
+                    <label for="checkbox" class="form-check-label vat-checkbox-label ms-2">La partita iva corrisponde al
+                        codice fiscale</label>
+                </div>
+                <div class="form-group mb-3" v-if="!isVatEquivalent">
+                    <label for="">Codice Fiscale</label>
+                    <input type="text" class="form-control" id="fiscalCodeInput" v-model="formData.fiscalCodeInput"
+                        placeholder="codice fiscale" required />
+                </div>
+                <div class="form-group mb-3 disabled" v-if="isVatEquivalent">
+                    <label for="">Codice Fiscale</label>
+                    <input type="text" class="form-control disabled" :disabled="true" id="fiscalCodeInputSame"
+                        v-model="formData.vatNumberInput" placeholder="codice fiscale" required />
                 </div>
                 <div class="form-group mb-3">
                     <label for="">Email</label>
@@ -180,8 +206,23 @@ label {
     border-left: none;
 }
 
+.form-check {
+    display: flex;
+    align-items: center;
+    width: 350px;
+}
+
 .vat-checkbox {
     height: 20px;
+    width: 20px;
+    min-width: 20px;
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+.vat-checkbox-label {
+    font-size: small;
+    color: var(--bs-dark);
 }
 
 .dropdown-select {
