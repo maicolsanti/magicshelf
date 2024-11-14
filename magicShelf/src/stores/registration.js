@@ -70,6 +70,9 @@ export const useRegistrationStore = defineStore('registrationStore', {
       //   this.registration.registrationData.fiscalCode = this.registration.registrationData.vatNumber;
       // }
     },
+    clearVatSameAsFiscalCode() {
+      this.registration.vatSameAsFiscalCode = false;
+    },
     setSelectedTown(townName) {
       this.registration.registrationData.town = townName;
     },
@@ -101,6 +104,20 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     setRegistrationDataError(hasError) {
       this.registration.registrationDataError = hasError;
+    },
+    clearRegistrationData() {
+      this.registration.registrationData = {
+        name: "",
+        surname: "",
+        companyName: this.registration.UserType === UserType.SUPPLIER ? "" : null,
+        vatNumber: this.registration.UserType === UserType.SUPPLIER ? "" : null,
+        fiscalCode: "",
+        email: "",
+        phoneNumber: "",
+        cap: "",
+        town: "",
+        password: ""
+      };
     }
   },
   getters: {

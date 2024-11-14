@@ -21,6 +21,9 @@ const getDataError = computed(() => getRegistrationDataError.value);
 
 const router = useRouter()
 
+registrationStore.clearRegistrationData();
+registrationStore.clearVatSameAsFiscalCode();
+
 function checkDataValidity() {
     let valid = true;
     const inputs = document.querySelectorAll("#costumerRegistration input");

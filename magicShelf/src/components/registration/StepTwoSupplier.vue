@@ -23,6 +23,9 @@ let isVatSame = false;
 
 const router = useRouter()
 
+registrationStore.clearRegistrationData();
+registrationStore.clearVatSameAsFiscalCode();
+
 function checkDataValidity() {
     let valid = true;
     const inputs = document.querySelectorAll("#costumerRegistration input");
@@ -58,7 +61,6 @@ function setFiscalCodeWithVatNumber() {
         isVatSame = false;
         formData.fiscalCodeInput = "";
     }
-
 }
 
 function submit() {
