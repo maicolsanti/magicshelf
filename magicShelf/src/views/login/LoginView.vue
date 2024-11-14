@@ -37,7 +37,7 @@ const passwordInputType = computed(() => getPasswordType.value);
             <button type="submit" class="btn btn-primary form-button mb-2">
                 Accedi
             </button>
-            <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">
+            <RouterLink to="/registration" class="nav-link inactive-page" active-class="active-page">
                 <p class="form-alternative">
                     Non hai un account?<br /><span class="form-alternative-a">Registrati</span>
                 </p>
