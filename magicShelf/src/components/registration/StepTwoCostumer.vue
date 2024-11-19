@@ -77,13 +77,13 @@ function submit() {
                     </div>
                 </div>
 
-                <div class="col d-flex">
-                    <div class="form-group mb-3">
+                <div class="row form-group">
+                    <div class="col-4 mb-3">
                         <label for="">Email</label>
                         <input type="email" class="form-control" id="emailInput" v-model="formData.emailInput"
                             placeholder="indirizzo email" required />
                     </div>
-                    <div class="form-group mb-3 mx-3">
+                    <div class="col-4 mb-3 form-column">
                         <label for="">Telefono</label>
                         <input type="tel" class="form-control" id="phoneInput" v-model="formData.phoneInput"
                             placeholder="numero di telefono" required />
