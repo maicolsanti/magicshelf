@@ -76,7 +76,6 @@ function submit() {
                             placeholder="cognome" required />
                     </div>
                 </div>
-
                 <div class="row form-group">
                     <div class="col-4 mb-3">
                         <label for="">Email</label>
@@ -89,32 +88,39 @@ function submit() {
                             placeholder="numero di telefono" required />
                     </div>
                 </div>
-
-
-                <div class="form-group mb-3">
-                    <label for="">CAP</label>
-                    <input type="text" class="form-control" id="CAPInput" v-model="formData.CAPInput" placeholder="cap"
-                        required @change="registrationStore.changeCAP(formData.CAPInput)" />
+                <div class="row form-group">
+                    <div class="col-4 mb-3">
+                        <label for="">CAP</label>
+                        <input type="text" class="form-control" id="CAPInput" v-model="formData.CAPInput"
+                            placeholder="cap" required @change="registrationStore.changeCAP(formData.CAPInput)" />
+                    </div>
+                    <div class="col-4 mb-3 form-column">
+                        <label for="">Località</label>
+                        <div class="dropdown d-flex justify-content-center mb-3">
+                            <button
+                                class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
+                                type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
+                                <span class="dropdown-text" :class="{ 'town-not-selected': townData == '' }">{{
+                                    dropDownString }}</span>
+                                <span class="dropdown-icon"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
+                                <li>
+                                    <a v-if="towns.length == 0" class="dropdown-item disabled"
+                                        @click="registrationStore.setSelectedTown(town.name)" href="#">Inserisci il
+                                        cap</a>
+                                    <a v-if="towns.length > 0" v-for="   town in towns   " v-bind:key="town.name"
+                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.name)"
+                                        href="#">{{
+                                            town.name }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="dropdown d-flex justify-content-center mb-3">
-                    <button class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
-                        type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
-                        <span class="dropdown-text" :class="{ 'town-not-selected': townData == '' }">{{
-                            dropDownString }}</span>
-                        <span class="dropdown-icon"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
-                        <li>
-                            <a v-if="towns.length == 0" class="dropdown-item disabled"
-                                @click="registrationStore.setSelectedTown(town.name)" href="#">Inserisci il cap</a>
-                            <a v-if="towns.length > 0" v-for="   town    in    towns   " v-bind:key="town.name"
-                                class="dropdown-item" @click="registrationStore.setSelectedTown(town.name)" href="#">{{
-                                    town.name }}</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="form-group row">
-                    <label for="">Password</label>
+                <div class="row form-group">
+                    <div class="col-4 mb-3">
+                        <label for="">Password</label>
                     <div class="col-md-13 input-group">
                         <input :type="passwordInputType" class="form-control mb-5" id="passwordInput"
                             v-model="formData.passwordInput" placeholder="password" required />
@@ -126,6 +132,7 @@ function submit() {
                                     class="visibility-icon" />
                             </button>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -171,6 +178,11 @@ label {
     border-top-left-radius: 0%;
     border-bottom-left-radius: 0%;
     border-left: none;
+}
+
+.dropdown {
+    width: 350px;
+    height: 40px;
 }
 
 .dropdown-select {
