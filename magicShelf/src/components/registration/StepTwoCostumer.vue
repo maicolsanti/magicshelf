@@ -148,7 +148,7 @@ input {
     border-color: var(--bs-secondary);
     border-width: 1px;
     height: 40px;
-    min-width: 350px;
+    max-width: 350px;
 }
 
 ::placeholder {
@@ -173,20 +173,20 @@ label {
     border-left: none;
 }
 
+.dropdown {
+    max-width: 350px;
+}
+
 .dropdown-select {
-    width: 350px;
+    max-width: 350px;
     height: 36px;
     border-color: var(--bs-secondary);
     border-radius: 6px;
     padding-left: 10px;
 }
 
-.dropdown-menu {
-    width: 350px;
-}
-
 .cap-dropdown {
-    width: 350px;
+    max-width: 350px;
     align-content: start;
     align-items: start;
     justify-items: stretch;
