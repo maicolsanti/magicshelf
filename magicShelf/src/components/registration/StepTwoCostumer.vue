@@ -65,7 +65,7 @@ function submit() {
             <div class="container">
                 <h5 class="form-section-title">Anagrafici e di contatto</h5>
                 <div class="row form-group">
-                    <div class="col-4 mb-3">
+                    <div class="col-4 mb-3 form-column">
                         <label for="">Nome</label>
                         <input type="text" class="form-control" id="nameInput" v-model="formData.nameInput"
                             placeholder="nome" required />
@@ -77,7 +77,7 @@ function submit() {
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-4 mb-3">
+                    <div class="col-4 mb-3 form-column">
                         <label for="">Email</label>
                         <input type="email" class="form-control" id="emailInput" v-model="formData.emailInput"
                             placeholder="indirizzo email" required />
@@ -88,14 +88,15 @@ function submit() {
                             placeholder="numero di telefono" required />
                     </div>
                 </div>
+                <h5 class="form-section-title mt-2">Località</h5>
                 <div class="row form-group">
-                    <div class="col-4 mb-3">
+                    <div class="col-4 mb-3 form-column">
                         <label for="">CAP</label>
                         <input type="text" class="form-control" id="CAPInput" v-model="formData.CAPInput" placeholder="cap"
                             required @change="registrationStore.changeCAP(formData.CAPInput)" />
                     </div>
                     <div class="col-4 mb-3 form-column">
-                        <label for="">Località</label>
+                        <label for="">Comune</label>
                         <div class="dropdown d-flex justify-content-center mb-3">
                             <button
                                 class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
@@ -118,8 +119,9 @@ function submit() {
                         </div>
                     </div>
                 </div>
+                <h5 class="form-section-title mt-1">Account</h5>
                 <div class="row form-group">
-                    <div class="col-4 mb-3">
+                    <div class="col-4 mb-3 form-column">
                         <label for="">Password</label>
                         <div class="col-md-13 input-group">
                             <input :type="passwordInputType" class="form-control mb-5" id="passwordInput"
@@ -136,10 +138,12 @@ function submit() {
                     </div>
                 </div>
             </div>
+            <div class="d-flex justify-content-center">
+                <button @click="submit" class="btn btn-primary form-button mb-2">
+                    Registrati
+                </button>
+            </div>
 
-            <button @click="submit" class="btn btn-primary form-button mb-2">
-                Registrati
-            </button>
         </form>
 
     </main>
@@ -195,6 +199,7 @@ label {
 
 .cap-dropdown {
     max-width: 350px;
+    width: 350px;
     align-content: start;
     align-items: start;
     justify-items: stretch;
@@ -204,6 +209,10 @@ label {
 .town-not-selected {
     color: var(--bs-secondary);
     opacity: 0.5;
+}
+
+.input-group {
+    max-width: 350px;
 }
 
 .alert {
