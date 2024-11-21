@@ -54,75 +54,96 @@ function submit() {
 </script>
 
 <template>
-    <main>
+    <main class="margin-content">
         <b-alert v-if="registration.registrationDataError" variant="danger"
             class="d-flex justify-content-center alert">Compila correttamente i dati</b-alert>
-        <h2 class="welcome d-flex justify-content-center my-5">
+        <h4 class="welcome d-flex my-5">
             Ciao cliente,<br />inserisci i tuoi dati per completare la registrazione
-        </h2>
-        <form id="costumerRegistration" v-on:submit.prevent="checkDataValidity()" action="" method="post">
-            <div class="form-g mb-5">
-                <div class="form-group mb-3">
-                    <label for="">Nome</label>
-                    <input type="text" class="form-control" id="nameInput" v-model="formData.nameInput" placeholder="nome"
-                        required />
+        </h4>
+        <form id="costumerRegistration" class="form-g mb-5" v-on:submit.prevent="checkDataValidity()" action=""
+            method="post">
+            <div class="container">
+                <h5 class="form-section-title">Anagrafici e di contatto</h5>
+                <div class="row form-group">
+                    <div class="col-4 mb-3 form-column">
+                        <label for="">Nome</label>
+                        <input type="text" class="form-control" id="nameInput" v-model="formData.nameInput"
+                            placeholder="nome" required />
+                    </div>
+                    <div class="col-4 mb-3 form-column">
+                        <label for="">Cognome</label>
+                        <input type="text" class="form-control" id="surnameInput" v-model="formData.surnameInput"
+                            placeholder="cognome" required />
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="">Cognome</label>
-                    <input type="text" class="form-control" id="surnameInput" v-model="formData.surnameInput"
-                        placeholder="cognome" required />
+                <div class="row form-group">
+                    <div class="col-4 mb-3 form-column">
+                        <label for="">Email</label>
+                        <input type="email" class="form-control" id="emailInput" v-model="formData.emailInput"
+                            placeholder="indirizzo email" required />
+                    </div>
+                    <div class="col-4 mb-3 form-column">
+                        <label for="">Telefono</label>
+                        <input type="tel" class="form-control" id="phoneInput" v-model="formData.phoneInput"
+                            placeholder="numero di telefono" required />
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="">Email</label>
-                    <input type="email" class="form-control" id="emailInput" v-model="formData.emailInput"
-                        placeholder="indirizzo email" required />
-                </div>
-                <div class="form-group mb-3">
-                    <label for="">Telefono</label>
-                    <input type="tel" class="form-control" id="phoneInput" v-model="formData.phoneInput"
-                        placeholder="numero di telefono" required />
-                </div>
-                <div class="form-group mb-3">
-                    <label for="">CAP</label>
-                    <input type="text" class="form-control" id="CAPInput" v-model="formData.CAPInput" placeholder="cap"
-                        required @change="registrationStore.changeCAP(formData.CAPInput)" />
-                </div>
-                <div class="dropdown d-flex justify-content-center mb-3">
-                    <button class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
-                        type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
-                        <span class="dropdown-text" :class="{ 'town-not-selected': townData == '' }">{{
-                            dropDownString }}</span>
-                        <span class="dropdown-icon"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
-                        <li>
-                            <a v-if="towns.length == 0" class="dropdown-item disabled"
-                                @click="registrationStore.setSelectedTown(town.name)" href="#">Inserisci il cap</a>
-                            <a v-if="towns.length > 0" v-for="   town    in    towns   " v-bind:key="town.name"
-                                class="dropdown-item" @click="registrationStore.setSelectedTown(town.name)" href="#">{{
-                                    town.name }}</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="form-group row">
-                    <label for="">Password</label>
-                    <div class="col-md-13 input-group">
-                        <input :type="passwordInputType" class="form-control mb-5" id="passwordInput"
-                            v-model="formData.passwordInput" placeholder="password" required />
-                        <div class="input-group-btn">
-                            <button class="btn icon-button" @click="registrationStore.toggleShowPassword()">
-                                <v-icon v-if="!registration.showPassword" name="md-visibility-round"
-                                    class="visibility-icon" />
-                                <v-icon v-if="registration.showPassword" name="md-visibilityoff-round"
-                                    class="visibility-icon" />
+                <h5 class="form-section-title mt-2">Località</h5>
+                <div class="row form-group">
+                    <div class="col-4 mb-3 form-column">
+                        <label for="">CAP</label>
+                        <input type="text" class="form-control" id="CAPInput" v-model="formData.CAPInput" placeholder="cap"
+                            required @change="registrationStore.changeCAP(formData.CAPInput)" />
+                    </div>
+                    <div class="col-4 mb-3 form-column">
+                        <label for="">Comune</label>
+                        <div class="dropdown d-flex justify-content-center mb-3">
+                            <button
+                                class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
+                                type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
+                                <span class="dropdown-text" :class="{ 'town-not-selected': townData == '' }">{{
+                                    dropDownString }}</span>
+                                <span class="dropdown-icon"></span>
                             </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
+                                <li>
+                                    <a v-if="towns.length == 0" class="dropdown-item disabled"
+                                        @click="registrationStore.setSelectedTown(town.name)" href="#">Inserisci il
+                                        cap</a>
+                                    <a v-if="towns.length > 0" v-for="   town in towns   " v-bind:key="town.name"
+                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.name)"
+                                        href="#">{{
+                                            town.name }}</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+                <h5 class="form-section-title mt-1">Account</h5>
+                <div class="row form-group">
+                    <div class="col-4 mb-3 form-column">
+                        <label for="">Password</label>
+                        <div class="col-md-13 input-group">
+                            <input :type="passwordInputType" class="form-control mb-5" id="passwordInput"
+                                v-model="formData.passwordInput" placeholder="password" required />
+                            <div class="input-group-btn">
+                                <button class="btn icon-button" @click="registrationStore.toggleShowPassword()">
+                                    <v-icon v-if="!registration.showPassword" name="md-visibility-round"
+                                        class="visibility-icon" />
+                                    <v-icon v-if="registration.showPassword" name="md-visibilityoff-round"
+                                        class="visibility-icon" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
                 <button @click="submit" class="btn btn-primary form-button mb-2">
                     Registrati
                 </button>
             </div>
+
         </form>
 
     </main>
@@ -130,17 +151,15 @@ function submit() {
 
 
 <style scoped>
-.form-g {
-    justify-self: center;
-    justify-items: center;
+/* .form-g {
     width: 350px;
-}
+} */
 
 input {
     border-color: var(--bs-secondary);
     border-width: 1px;
     height: 40px;
-    min-width: 350px;
+    max-width: 350px;
 }
 
 ::placeholder {
@@ -165,19 +184,21 @@ label {
     border-left: none;
 }
 
+.dropdown {
+    max-width: 350px;
+    height: 40px;
+}
+
 .dropdown-select {
-    width: 350px;
+    max-width: 350px;
     height: 36px;
     border-color: var(--bs-secondary);
     border-radius: 6px;
     padding-left: 10px;
 }
 
-.dropdown-menu {
-    width: 350px;
-}
-
 .cap-dropdown {
+    max-width: 350px;
     width: 350px;
     align-content: start;
     align-items: start;
@@ -188,6 +209,10 @@ label {
 .town-not-selected {
     color: var(--bs-secondary);
     opacity: 0.5;
+}
+
+.input-group {
+    max-width: 350px;
 }
 
 .alert {

@@ -17,14 +17,25 @@ $body-color: $dark;
     font-weight: lighter;
 }
 
-.form-button{
+.form-button {
     min-width: 150px;
 }
-.form-alternative{
+.form-alternative {
     text-align: center;
     font-size: 13px;
     line-height: 1.5;
 }
-.form-alternative-a{
+.form-alternative-a {
     color: var(--bs-secondary);
+}
+.form-section-title {
+    font-weight: bold;
+}
+.form-column {
+    width: 350px;
+}
+
+.margin-content {
+    margin-left: 5rem;
+    margin-right: 5rem;
 }
