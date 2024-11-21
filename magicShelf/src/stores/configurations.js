@@ -45,6 +45,9 @@ getters: {
           break
       }
       return this.configurations.pageString
+    },
+    isLoggedIn() {
+      return this.configurations.logged;
     }
 },
 });

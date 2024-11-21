@@ -3,11 +3,15 @@ import '@/assets/scss/custom-css.css'
 import { page } from '@/models/page'
 import { useConfigurationStore } from '@/stores/configurations'
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
 const confStore = useConfigurationStore();
 const { updatePageName } = storeToRefs(confStore);
 
+const isLoggedIn = computed(() => confStore.isLoggedIn);
+
 </script>
+
 <template>
   <nav class="navbar navbar-expand-lg bg-primary shadow-sm mb-5">
     <div class="container-fluid">
@@ -34,7 +38,7 @@ const { updatePageName } = storeToRefs(confStore);
             <RouterLink to="/about" class="nav-link inactive-page" active-class="active-page">About</RouterLink>
           </li>
           <!-- TODO replace with icon -->
-          <li class="nav-item mx-2" @click="confStore.updatePage(page.LOGIN)">
+          <li class="nav-item mx-2" v-if="!isLoggedIn" @click="confStore.updatePage(page.LOGIN)">
             <RouterLink to="/login" class="nav-link inactive-page" active-class="active-page">Accedi</RouterLink>
           </li>
         </ul>
