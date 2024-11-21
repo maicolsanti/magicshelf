@@ -18,6 +18,9 @@ actions: {
     },
     login() {
       this.configurations.logged = true;
+    },
+    logout() {
+      this.configurations.logged = false;
     }
 },
 getters: {

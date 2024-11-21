@@ -15,6 +15,10 @@ export const useLoginStore = defineStore('loginStore', {
     },
     login() {
       this.infos.logged = true;
+    },
+    logout() {
+      this.infos.logged = false;
+      this.infos.authToken = '';
     }
   },
   getters: {

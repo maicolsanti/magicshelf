@@ -2,13 +2,21 @@
 import '@/assets/scss/custom-css.css'
 import { page } from '@/models/page'
 import { useConfigurationStore } from '@/stores/configurations'
+import { useLoginStore } from '@/stores/login'
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 
 const confStore = useConfigurationStore();
+const loginStore = useLoginStore();
 const { updatePageName } = storeToRefs(confStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
+
+function logout() {
+  confStore.updatePage(page.HOME)
+  configurationStore.logout();
+  router.push('/');
+}
 
 </script>
 
@@ -40,6 +48,9 @@ const isLoggedIn = computed(() => confStore.isLoggedIn);
           <!-- TODO replace with icon -->
           <li class="nav-item mx-2" v-if="!isLoggedIn" @click="confStore.updatePage(page.LOGIN)">
             <RouterLink to="/login" class="nav-link inactive-page" active-class="active-page">Accedi</RouterLink>
+          </li>
+          <li class="nav-item mx-2" v-if="isLoggedIn" @click="logout">
+            <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">Logout</RouterLink>
           </li>
         </ul>
       </div>
