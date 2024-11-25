@@ -14,7 +14,7 @@ const isLoggedIn = computed(() => confStore.isLoggedIn);
 
 function logout() {
   confStore.updatePage(page.HOME)
-  configurationStore.logout();
+  confStore.logout();
   router.push('/');
 }
 
