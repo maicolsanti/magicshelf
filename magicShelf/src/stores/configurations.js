@@ -9,21 +9,27 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       pageString: '',
       logged: false,
       userType: UserType.COSTUMER,
+      authToken: ''
     }
-}),
-actions: {
+  }),
+  actions: {
     updatePage(newPageCode) {
       this.configurations.pageCode = newPageCode
       this.updatePageName
     },
-    login() {
-      this.configurations.logged = true;
+    login(username, password) {
+      //TODO: implement login and remove test user
+      if (username == 'test' && password == 'test') {
+        this.configurations.logged = true;
+      } else {
+
+      }
     },
     logout() {
       this.configurations.logged = false;
     }
-},
-getters: {
+  },
+  getters: {
     updatePageName() {
       switch (this.configurations.pageCode) {
         case page.HOME:
@@ -52,5 +58,5 @@ getters: {
     isLoggedIn() {
       return this.configurations.logged;
     }
-},
+  },
 });

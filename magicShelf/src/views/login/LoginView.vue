@@ -2,13 +2,28 @@
 import { addIcons } from 'oh-vue-icons'
 import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 import { useLoginStore } from '@/stores/login'
+import { useConfigurationStore } from '@/stores/configurations'
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router'
 
 addIcons(MdVisibilityRound, MdVisibilityoffRound);
 const loginStore = useLoginStore();
+const configurationStore = useConfigurationStore();
 const { infos, getPasswordType } = storeToRefs(loginStore);
 const passwordInputType = computed(() => getPasswordType.value);
+
+const router = useRouter()
+
+let loginData = {
+    usernameInput: "",
+    passwordInput: "",
+};
+
+function submit() {
+    configurationStore.login(loginData.usernameInput, loginData.passwordInput);
+    router.push('/');
+}
 </script>
 
 <template>
@@ -19,12 +34,12 @@ const passwordInputType = computed(() => getPasswordType.value);
         <div class="form-g">
             <div class="form-group mb-3">
                 <label for="">Username</label>
-                <input type="email" class="form-control" id="emailInput" placeholder="indirizzo email" required />
+                <input type="email" class="form-control" id="usernameInput" v-model="loginData.usernameInput" placeholder="indirizzo email" required />
             </div>
             <div class="form-group row">
                 <label for="">Password</label>
                 <div class="col-md-13 input-group">
-                    <input :type="passwordInputType" class=" form-control mb-5" id="passwordInput"
+                    <input :type="passwordInputType" class=" form-control mb-5" id="passwordInput" v-model="loginData.passwordInput"
                         placeholder="password" required />
                     <div class="input-group-btn">
                         <button class="btn icon-button" @click="loginStore.toggleShowPassword()">
@@ -34,7 +49,7 @@ const passwordInputType = computed(() => getPasswordType.value);
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary form-button mb-2">
+            <button @click="submit" class="btn btn-primary form-button mb-2">
                 Accedi
             </button>
             <RouterLink to="/registration" class="nav-link inactive-page" active-class="active-page">

@@ -48,7 +48,7 @@ let formData = {
 
 function submit() {
     registrationStore.setCostumerFormData(formData.nameInput, formData.surnameInput, formData.emailInput, formData.phoneInput, formData.passwordInput);
-    configurationStore.login();
+    configurationStore.login(formData.emailInput, formData.passwordInput);
     router.push('/');
 }
 </script>
