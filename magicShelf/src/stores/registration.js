@@ -44,7 +44,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
       inputPasswordType: 'password',
       vatSameAsFiscalCode: false,
       registrationDataError: false,
-      authToken: '',
     }
   }),
   actions: {
