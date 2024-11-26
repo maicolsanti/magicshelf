@@ -32,7 +32,7 @@ const isLoggedIn = computed(() => confStore.isLoggedIn);
     </div>
     <SupplierLink v-if="!isLoggedIn" />
     <SearchInstructions v-if="!isLoggedIn" />
-    <!-- TODO: add about us -->
+    <!-- TODO: add about us for when user is logged in -->
   </main>
 </template>
 

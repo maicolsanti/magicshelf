@@ -77,7 +77,7 @@ function submit() {
         <h4 class="welcome d-flex my-5">
             Ciao fornitore,<br />inserisci i tuoi dati per completare la registrazione
         </h4>
-        <form id="costumerRegistration" class="form-g mb-5" v-on:submit.prevent="checkDataValidity()" action=""
+        <form id="supplierRegistration" class="form-g mb-5" v-on:submit.prevent="checkDataValidity()" action=""
             method="post">
             <div class="container">
                 <h5 class="form-section-title">Anagrafici e di contatto</h5>
