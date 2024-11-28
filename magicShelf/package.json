@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "scss-start": "sass --watch src/assets/scss/custom.scss src/assets/scss/custom-css.css",
+    "run-frontend": "npm run dev",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
