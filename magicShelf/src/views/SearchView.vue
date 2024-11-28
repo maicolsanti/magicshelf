@@ -264,7 +264,7 @@ label {
 .dropdown-select {
     max-width: 350px;
     height: 36px;
-    border-color: var(--bs-secondary);
+    border-color: var(--bs-primary);
     border-radius: 6px;
     padding-left: 10px;
 }
@@ -275,11 +275,11 @@ label {
     align-content: start;
     align-items: start;
     justify-items: stretch;
-    border-color: var(--bs-secondary);
+    border-color: var(--bs-primary);
 }
 
 .not-selected {
-    color: var(--bs-secondary);
+    color: var(--bs-primary);
     opacity: 0.5;
 }
 
