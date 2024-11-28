@@ -4,13 +4,17 @@ import { useSearchStore } from '@/stores/search';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { PriceRange } from '@/models/prince-ranges';
+import { DistanceRange } from '@/models/distance-range';
 
 const confStore = useConfigurationStore();
 const searchStore = useSearchStore();
-const { priceRangeOptions, getPriceRangeString } = storeToRefs(searchStore);
+const { priceRangeOptions, distanceRangeOptions, getPriceRange } = storeToRefs(searchStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
-const priceString = computed(() => searchStore.getPriceRangeString.value);
+const priceRangeSelected = computed(() => getPriceRange.value);
+
+let priceString = "Fascia di prezzo";
+let distanceString = "Zona di ricerca";
 
 let searchFilters = {
     product: "",
@@ -23,12 +27,46 @@ let searchFilters = {
 
 function changePriceRange(priceRange) {
     searchFilters.priceRange = priceRange;
+    priceString = findPriceString(priceRange);
     searchStore.changePriceRange(priceRange);
 }
 
-function findString(priceRange) {
-    let s = searchStore.getPriceRangeString(priceRange);
-    return s;
+function changeDistanceRange(distanceRange) {
+    searchFilters.distanceRange = distanceRange;
+    distanceString = findDistanceString(distanceRange);
+    searchStore.changeDistanceRange(distanceRange);
+}
+
+function findPriceString(priceRange) {
+    switch (priceRange) {
+        case PriceRange.NOTSELECTED:
+            return 'Nessun range'
+        case PriceRange.ZEROTEN:
+            return '0-10'
+        case PriceRange.TENTWENTYFIVE:
+            return '10-25'
+        case PriceRange.TWENTYFIVEFIFTY:
+            return '25-50'
+        case PriceRange.FIFTYHUNDRED:
+            return '50-100'
+    }
+}
+
+function findDistanceString(distanceRange) {
+    switch (distanceRange) {
+        case DistanceRange.NOTSELECTED:
+            return 'Nessun range'
+        case DistanceRange.LESSTHENFIVE:
+            return '< 5km'
+        case DistanceRange.LESSTHENTWENTY:
+            return '< 20km'
+        case DistanceRange.LESSTHENFIFTY:
+            return '< 50km'
+        case DistanceRange.LESSTHENHUNDRED:
+            return '< 100km'
+        default:
+            return 'Seleziona'
+    }
 }
 
 </script>
@@ -53,13 +91,12 @@ function findString(priceRange) {
                     <div class="row form-group  d-flex justify-content-center">
                         <div class="col-4 mb-3 form-column">
                             <label for="">Cosa cerchi?</label>
-                            <input type="text" class="form-control" id="productInput" v-model="searchFilters.product"
+                            <input type="text" class="form-control mb-3" id="productInput" v-model="searchFilters.product"
                                 placeholder="prodotto" required />
-                            <div class="row form-group">
+                            <div class="row d-flex justify-content-center">
 
-                                <div class="col-4 mb-3 form-column">
-                                    <label for="">Prezzo</label>
-                                    <div class="dropdown d-flex justify-content-center mb-3">
+                                <div id="firstColumn" class="col-2 form-column small">
+                                    <div class="dropdown small d-flex justify-content-center mb-3">
                                         <button
                                             class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
                                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -73,8 +110,30 @@ function findString(priceRange) {
                                             <li>
                                                 <a v-for="   priceRange    in    priceRangeOptions   "
                                                     v-bind:key="searchFilters.priceRange" class="dropdown-item"
+                                                    :class="{ 'disabled': searchFilters.priceRange == priceRange }"
                                                     @click="changePriceRange(priceRange)" href="#">
-                                                    inserire prezzo</a>
+                                                    {{ findPriceString(priceRange) }}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div id="secondColumn" class="col-2 form-column small">
+                                    <div class="dropdown small d-flex justify-content-center mb-3">
+                                        <button
+                                            class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
+                                            type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                            aria-expanded="true">
+                                            <span class="dropdown-text" :class="{ 'not-selected': distanceRange == '' }">{{
+                                                distanceString }}</span>
+                                            <span class="dropdown-icon"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
+                                            <li>
+                                                <a v-for="   distanceRange    in    distanceRangeOptions   "
+                                                    v-bind:key="searchFilters.distanceRange" class="dropdown-item"
+                                                    :class="{ 'disabled': searchFilters.distanceRange == distanceRange }"
+                                                    @click="changeDistanceRange(distanceRange)" href="#">
+                                                    {{ findDistanceString(distanceRange) }}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -219,8 +278,12 @@ label {
     border-color: var(--bs-secondary);
 }
 
-.town-not-selected {
+.not-selected {
     color: var(--bs-secondary);
     opacity: 0.5;
+}
+
+.small {
+    max-width: 165px;
 }
 </style>

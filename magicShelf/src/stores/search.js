@@ -24,37 +24,11 @@ export const useSearchStore = defineStore('searchStore', {
       },
   },
   getters: {
-    getPriceRangeString(){
-      switch (this.searchAttributes.priceRange) {
-        case PriceRange.NOTSELECTED:
-          return 'Seleziona'
-        case PriceRange.ZEROTEN:
-          return '0-10'
-        case PriceRange.TENTWENTYFIVE:
-          return '10-25'
-        case PriceRange.TWENTYFIVEFIFTY:
-          return '25-50'
-        case PriceRange.FIFTYHUNDRED:
-          return '50-100'
-        default:        
-          return 'Seleziona'
-      }
+    getPriceRange(){
+      return this.searchAttributes.priceRange;
     },
-    getDistanceRangeString(){
-        switch (this.searchAttributes.priceRange) {
-          case DistanceRange.NOTSELECTED:
-            return 'Seleziona'
-          case DistanceRange.LESSTHENFIVE:
-            return '< 5km'
-          case DistanceRange.LESSTHENTWENTY:
-            return '< 20km'
-          case DistanceRange.LESSTHENFIFTY:
-            return '< 50km'
-          case DistanceRange.LESSTHENHUNDRED:
-            return '< 100km'
-          default:        
-            return 'Seleziona'
-        }
-      },
+    getDistanceRange(){
+      return this.searchAttributes.distanceRange;
+    }
   },
 });
