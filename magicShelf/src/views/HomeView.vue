@@ -17,15 +17,15 @@ const isLoggedIn = computed(() => confStore.isLoggedIn);
     <h1 class="welcome mb-4">Benvenut*,<br>qui potrai trovare ciò che cerchi
     </h1>
     <div class="d-grid gap-2 mb-1" v-if="!isLoggedIn">
-      <RouterLink to="/login" class="login-link login-button">
-        <button type="button" class="btn btn-primary py-2 login-button">
+      <RouterLink to="/login" class="login-link primary-button">
+        <button type="button" class="btn btn-primary py-2 primary-button">
           Accedi per iniziare la ricerca
         </button>
       </RouterLink>
     </div>
     <div class="d-grid gap-2 mb-1" v-if="isLoggedIn">
-      <RouterLink to="/search" class="login-link login-button">
-        <button type="button" class="btn btn-primary py-2 login-button">
+      <RouterLink to="/search" class="login-link primary-button">
+        <button type="button" class="btn btn-primary py-2 primary-button">
           Vai alla ricerca
         </button>
       </RouterLink>
@@ -38,13 +38,6 @@ const isLoggedIn = computed(() => confStore.isLoggedIn);
 
 
 <style scoped>
-.login-button {
-  max-width: 350px;
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-  justify-content: center;
-}
 
 .login-link {
   color: var(--bs-dark);
