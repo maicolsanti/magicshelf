@@ -28,6 +28,31 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       this.configurations.pageCode = newPageCode
       this.updatePageName
     },
+    updatePageName() {
+      switch (this.configurations.pageCode) {
+        case page.HOME:
+          this.configurations.pageString = 'Home'
+          break
+        case page.SEARCH:
+          this.configurations.pageString = 'Ricerca'
+          break
+        case page.PRODUCTS:
+          this.configurations.pageString = 'Prodotti'
+          break
+        case page.PROFILE:
+          this.configurations.pageString = 'Profilo'
+          break
+        case page.ABOUT:
+          this.configurations.pageString = 'About us'
+          break
+        case page.LOGIN:
+          this.configurations.pageString = 'Login'
+          break
+        default:
+          break
+      }
+      return this.configurations.pageString
+    },
     login(username, password) {
       //TODO: implement login and remove test user
       if (username == 'test' && password == 'test') {
@@ -58,32 +83,5 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     getUserData() {
       return this.configurations.userData;
     }
-  },
-  actions: {
-    updatePageName() {
-      switch (this.configurations.pageCode) {
-        case page.HOME:
-          this.configurations.pageString = 'Home'
-          break
-        case page.SEARCH:
-          this.configurations.pageString = 'Ricerca'
-          break
-        case page.PRODUCTS:
-          this.configurations.pageString = 'Prodotti'
-          break
-        case page.PROFILE:
-          this.configurations.pageString = 'Profilo'
-          break
-        case page.ABOUT:
-          this.configurations.pageString = 'About us'
-          break
-        case page.LOGIN:
-          this.configurations.pageString = 'Login'
-          break
-        default:
-          break
-      }
-      return this.configurations.pageString
-    },
   }
 });
