@@ -9,6 +9,17 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       pageString: '',
       logged: false,
       userType: UserType.COSTUMER,
+      userData: {
+        name: "",
+        surname: "",
+        companyName: null,
+        vatNumber: null,
+        fiscalCode: "",
+        email: "",
+        phoneNumber: "",
+        cap: "",
+        town: ""
+      },
       authToken: ''
     }
   }),
@@ -21,6 +32,17 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       //TODO: implement login and remove test user
       if (username == 'test' && password == 'test') {
         this.configurations.logged = true;
+        this.configurations.userData = {
+          name: "Gianni",
+        surname: "Colo",
+        companyName: null,
+        vatNumber: null,
+        fiscalCode: "BGNMGH01A51C5573T",
+        email: "margheritabagnoliniunibo@gmail.it",
+        phoneNumber: "3342625441",
+        cap: "47020",
+        town: "Longiano",
+        }
       } else {
 
       }
@@ -57,6 +79,9 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     },
     isLoggedIn() {
       return this.configurations.logged;
+    },
+    getUserData() {
+      return this.configurations.userData;
     }
   },
 });
