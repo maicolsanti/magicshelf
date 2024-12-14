@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { useRegistrationStore } from '@/stores/registration'
 import { useConfigurationStore } from '@/stores/configurations'
 import { storeToRefs } from 'pinia';
-import { watch, computed } from 'vue';
+import { computed } from 'vue';
 import { addIcons } from 'oh-vue-icons'
 import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 import { useRouter } from 'vue-router'
@@ -10,14 +10,12 @@ import { useRouter } from 'vue-router'
 addIcons(MdVisibilityRound, MdVisibilityoffRound);
 const registrationStore = useRegistrationStore();
 const configurationStore = useConfigurationStore();
-const { registration, getPasswordType, getVatEquivalence, getTowns, getTown, getTownString, getRegistrationDataError } = storeToRefs(registrationStore);
-const { login } = storeToRefs(configurationStore);
+const { registration, getPasswordType, getVatEquivalence, getTowns, getTown, getTownString } = storeToRefs(registrationStore);
 
 const passwordInputType = computed(() => getPasswordType.value);
 const dropDownString = computed(() => getTownString.value);
 const towns = computed(() => getTowns.value);
 const townData = computed(() => getTown.value);
-const getDataError = computed(() => getRegistrationDataError.value);
 const isVatEquivalent = computed(() => getVatEquivalence.value);
 let isVatSame = false;
 
@@ -30,7 +28,7 @@ function checkDataValidity() {
     let valid = true;
     const inputs = document.querySelectorAll("#costumerRegistration input");
     inputs.forEach(input => {
-        if (!input.checkValidity()) {
+        if (input instanceof HTMLInputElement && !input.checkValidity()) {
             valid = false;
         }
     });
@@ -155,10 +153,13 @@ function submit() {
                                 <span class="dropdown-icon"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
-                                <li>
-                                    <a v-if="towns.length == 0" class="dropdown-item disabled"
-                                        @click="registrationStore.setSelectedTown(town.name)" href="#">Inserisci il cap</a>
-                                    <a v-if="towns.length > 0" v-for="   town    in    towns   " v-bind:key="town.name"
+                                <li v-if="towns.length == 0">
+                                    <a class="dropdown-item disabled"
+                                        @click="registrationStore.setSelectedTown('')" href="#">Inserisci il cap</a>
+                                    
+                                </li>
+                                <li v-if="towns.length > 0">
+                                    <a v-for="   town    in    towns   " v-bind:key="town.name"
                                         class="dropdown-item" @click="registrationStore.setSelectedTown(town.name)"
                                         href="#">{{
                                             town.name }}</a>

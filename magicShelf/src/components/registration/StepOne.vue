@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useRegistrationStore } from '@/stores/registration'
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';

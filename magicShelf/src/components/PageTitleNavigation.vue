@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import '@/assets/scss/custom-css.css'
 import { addIcons } from 'oh-vue-icons'
 import { IoArrowBackCircleOutline, IoArrowBackCircle } from "oh-vue-icons/icons";

@@ -1,16 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import '@/assets/scss/custom-css.css'
 import { page } from '@/models/page'
 import { useConfigurationStore } from '@/stores/configurations'
-import { useLoginStore } from '@/stores/login'
-import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router'
 import { computed } from 'vue';
 
 const confStore = useConfigurationStore();
-const loginStore = useLoginStore();
-const { updatePageName } = storeToRefs(confStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
+
+const router = useRouter()
 
 function logout() {
   confStore.updatePage(page.HOME)
@@ -23,7 +22,7 @@ function logout() {
 <template>
   <nav class="navbar navbar-expand-lg bg-primary shadow-sm mb-5">
     <div class="container-fluid">
-      <a class="navbar-brand page-name" href="#">{{ updatePageName }}</a>
+      <a class="navbar-brand page-name" href="#">{{ confStore.updatePageName() }}</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
