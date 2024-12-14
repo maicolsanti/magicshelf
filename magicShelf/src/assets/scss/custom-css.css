@@ -11876,4 +11876,14 @@ textarea.form-control-lg {
   margin-right: 5rem;
 }
 
+.primary-button {
+  max-width: 350px;
+  max-height: 40px;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+}
+
 /*# sourceMappingURL=custom-css.css.map */
