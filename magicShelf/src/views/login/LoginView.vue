@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { addIcons } from 'oh-vue-icons'
 import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 import { useLoginStore } from '@/stores/login'

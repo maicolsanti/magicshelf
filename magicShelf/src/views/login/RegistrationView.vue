@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import PageTitleNavigation from '@/components/PageTitleNavigation.vue'
 import { useRegistrationStore } from '@/stores/registration'
 import { storeToRefs } from 'pinia';

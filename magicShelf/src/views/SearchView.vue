@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useConfigurationStore } from '@/stores/configurations';
 import { useSearchStore } from '@/stores/search';
 import { storeToRefs } from 'pinia';
@@ -8,11 +8,9 @@ import { DistanceRange } from '@/models/distance-range';
 
 const confStore = useConfigurationStore();
 const searchStore = useSearchStore();
-const { getUserData } = storeToRefs(confStore);
-const { priceRangeOptions, distanceRangeOptions, getPriceRange } = storeToRefs(searchStore);
+const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
-const priceRangeSelected = computed(() => getPriceRange.value);
 
 let user = confStore.getUserData;
 
@@ -24,8 +22,8 @@ let searchFilters = {
     brand: "",
     supplier: "",
     cap: user.cap,
-    priceRange: "",
-    distanceRange: ""
+    priceRange: null,
+    distanceRange: null
 };
 
 function changePriceRange(priceRange) {
@@ -105,14 +103,14 @@ function findDistanceString(distanceRange) {
                                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                             aria-expanded="true">
                                             <span class="dropdown-text"
-                                                :class="{ 'town-not-selected': priceRange == '' }">{{
+                                                :class="{ 'town-not-selected': searchFilters.priceRange == null }">{{
                                                     priceString }}</span>
                                             <span class="dropdown-icon"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
                                             <li>
                                                 <a v-for="   priceRange in priceRangeOptions   "
-                                                    v-bind:key="searchFilters.priceRange" class="dropdown-item"
+                                                    v-bind:key="priceRange" class="dropdown-item"
                                                     :class="{ 'disabled': searchFilters.priceRange == priceRange }"
                                                     @click="changePriceRange(priceRange)" href="#">
                                                     {{ findPriceString(priceRange) }}</a>
@@ -127,14 +125,14 @@ function findDistanceString(distanceRange) {
                                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                             aria-expanded="true">
                                             <span class="dropdown-text"
-                                                :class="{ 'not-selected': distanceRange == '' }">{{
+                                                :class="{ 'not-selected': searchFilters.distanceRange == '' }">{{
                                                     distanceString }}</span>
                                             <span class="dropdown-icon"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
                                             <li>
                                                 <a v-for="   distanceRange in distanceRangeOptions   "
-                                                    v-bind:key="searchFilters.distanceRange" class="dropdown-item"
+                                                    v-bind:key="distanceRange" class="dropdown-item"
                                                     :class="{ 'disabled': searchFilters.distanceRange == distanceRange }"
                                                     @click="changeDistanceRange(distanceRange)" href="#">
                                                     {{ findDistanceString(distanceRange) }}</a>

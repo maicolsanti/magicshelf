@@ -1,12 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import SearchInstructions from '@/components/home/SearchInstructions.vue'
 import SupplierLink from '@/components/home/SupplierLink.vue'
 import { useConfigurationStore } from '@/stores/configurations'
-import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 
 const confStore = useConfigurationStore();
-const { configurations } = storeToRefs(confStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 
