@@ -8,10 +8,13 @@ import { DistanceRange } from '@/models/distance-range';
 
 const confStore = useConfigurationStore();
 const searchStore = useSearchStore();
+const { getUserData } = storeToRefs(confStore);
 const { priceRangeOptions, distanceRangeOptions, getPriceRange } = storeToRefs(searchStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 const priceRangeSelected = computed(() => getPriceRange.value);
+
+let user = confStore.getUserData;
 
 let priceString = "Fascia di prezzo";
 let distanceString = "Zona di ricerca";
@@ -20,7 +23,7 @@ let searchFilters = {
     product: "",
     brand: "",
     supplier: "",
-    cap: "",
+    cap: user.cap,
     priceRange: "",
     distanceRange: ""
 };
@@ -91,8 +94,8 @@ function findDistanceString(distanceRange) {
                     <div class="row form-group  d-flex justify-content-center">
                         <div class="col-4 mb-3 form-column">
                             <label for="">Cosa cerchi?</label>
-                            <input type="text" class="form-control mb-3" id="productInput" v-model="searchFilters.product"
-                                placeholder="prodotto" required />
+                            <input type="text" class="form-control mb-3" id="productInput"
+                                v-model="searchFilters.product" placeholder="prodotto" required />
                             <div class="row d-flex justify-content-center">
 
                                 <div id="firstColumn" class="col-2 form-column small">
@@ -108,7 +111,7 @@ function findDistanceString(distanceRange) {
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
                                             <li>
-                                                <a v-for="   priceRange    in    priceRangeOptions   "
+                                                <a v-for="   priceRange in priceRangeOptions   "
                                                     v-bind:key="searchFilters.priceRange" class="dropdown-item"
                                                     :class="{ 'disabled': searchFilters.priceRange == priceRange }"
                                                     @click="changePriceRange(priceRange)" href="#">
@@ -123,13 +126,14 @@ function findDistanceString(distanceRange) {
                                             class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
                                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                             aria-expanded="true">
-                                            <span class="dropdown-text" :class="{ 'not-selected': distanceRange == '' }">{{
-                                                distanceString }}</span>
+                                            <span class="dropdown-text"
+                                                :class="{ 'not-selected': distanceRange == '' }">{{
+                                                    distanceString }}</span>
                                             <span class="dropdown-icon"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
                                             <li>
-                                                <a v-for="   distanceRange    in    distanceRangeOptions   "
+                                                <a v-for="   distanceRange in distanceRangeOptions   "
                                                     v-bind:key="searchFilters.distanceRange" class="dropdown-item"
                                                     :class="{ 'disabled': searchFilters.distanceRange == distanceRange }"
                                                     @click="changeDistanceRange(distanceRange)" href="#">
@@ -161,6 +165,26 @@ function findDistanceString(distanceRange) {
                     </div>
                 </div>
             </form>
+            <div class="row d-flex justify-content-between my-5">
+                <div class="col-9">
+                    <h4 class="welcome d-flex">
+                        Puoi trovare il prodotto che cerchi presso...
+                    </h4>
+                </div>
+                <div class="col-3 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
+                </div>
+            </div>
+            <!-- <div class="col-md-4" v-for="prodotto in prodotti" :key="prodotto.id">
+                <div class="card">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Immagine prodotto">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ prodotto.nome }}</h5>
+                        <p class="card-text">{{ prodotto.descrizione }}</p>
+                        <p class="card-text"><strong>€{{ prodotto.prezzo.toFixed(2) }}</strong></p>
+                    </div>
+                </div>
+            </div> -->
         </div>
     </main>
 </template>
