@@ -1,4 +1,15 @@
 class RegistrazioneFornitore {
+    id: String;
+    name: String;
+    surname: String;
+    companyName: String;
+    vatNumber: String;
+    fiscalCode: String;
+    email: String;
+    phoneNumber: String;
+    cap: BigInt;
+    town: String;
+    password: String;
     constructor(id, name, surname, companyName, vatNumber, fiscalCode, email, phoneNumber, cap, town, password) {
         this.id = id;
         this.name = name;
