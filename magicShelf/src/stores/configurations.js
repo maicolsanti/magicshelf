@@ -52,6 +52,14 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     }
   },
   getters: {
+    isLoggedIn() {
+      return this.configurations.logged;
+    },
+    getUserData() {
+      return this.configurations.userData;
+    }
+  },
+  actions: {
     updatePageName() {
       switch (this.configurations.pageCode) {
         case page.HOME:
@@ -77,11 +85,5 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
       return this.configurations.pageString
     },
-    isLoggedIn() {
-      return this.configurations.logged;
-    },
-    getUserData() {
-      return this.configurations.userData;
-    }
-  },
+  }
 });
