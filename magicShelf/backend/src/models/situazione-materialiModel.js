@@ -2,13 +2,13 @@ import pool from '../config/db.js';
 
 // Recupera tutte le situazioni dei materiali
 export const getAllSituazioni = async () => {
-  const [rows] = await pool.query('SELECT * FROM SITUAZIONE_MATERIALI');
+  const [rows] = await pool.promise().query('SELECT * FROM SITUAZIONE_MATERIALI');
   return rows;
 };
 
 // Recupera una situazione specifica di un materiale
 export const getSituazioneById = async (codice_materiale) => {
-  const [rows] = await pool.execute(
+  const [rows] = await pool.promise().execute(
     'SELECT * FROM SITUAZIONE_MATERIALI WHERE CODICE_MATERIALE = ?',
     [codice_materiale]
   );
@@ -25,7 +25,7 @@ export const createSituazione = async (custom_data) => {
     VALUES (${values.map(() => '?').join(',')})
   `;
 
-  const [result] = await pool.execute(query, values);
+  const [result] = await pool.promise().execute(query, values);
   return result.insertId;
 };
 
@@ -41,13 +41,13 @@ export const updateSituazione = async (codice_materiale, custom_data) => {
     WHERE CODICE_MATERIALE = ?
   `;
 
-  const [result] = await pool.execute(query, values);
+  const [result] = await pool.promise().execute(query, values);
   return result.affectedRows;
 };
 
 // Elimina una situazione del materiale
 export const deleteSituazione = async (codice_materiale) => {
   const query = 'DELETE FROM SITUAZIONE_MATERIALI WHERE CODICE_MATERIALE = ?';
-  const [result] = await pool.execute(query, [codice_materiale]);
+  const [result] = await pool.promise().execute(query, [codice_materiale]);
   return result.affectedRows;
 };

@@ -2,13 +2,13 @@ import pool from '../config/db.js';
 
 // Recupera tutti i materiali
 export const getAllMateriali = async () => {
-  const [rows] = await pool.query('SELECT * FROM ANAGRAFICA_MATERIALI');
+  const [rows] = await pool.promise().query('SELECT * FROM ANAGRAFICA_MATERIALI');
   return rows;
 };
 
 // Recupera un materiale specifico
 export const getMaterialeById = async (codice_materiale) => {
-  const [rows] = await pool.execute(
+  const [rows] = await pool.promise().execute(
     'SELECT * FROM ANAGRAFICA_MATERIALI WHERE CODICE_MATERIALE = ?',
     [codice_materiale]
   );
@@ -25,7 +25,7 @@ export const createMateriale = async (custom_data) => {
     VALUES (${values.map(() => '?').join(',')})
   `;
   
-  const [result] = await pool.execute(query, values);
+  const [result] = await pool.promise().execute(query, values);
   return result.insertId;
 };
 
@@ -41,13 +41,13 @@ export const updateMateriale = async (codice_materiale, custom_data) => {
     WHERE CODICE_MATERIALE = ?
   `;
   
-  const [result] = await pool.execute(query, values);
+  const [result] = await pool.promise().execute(query, values);
   return result.affectedRows;
 };
 
 // Elimina un materiale
 export const deleteMateriale = async (codice_materiale) => {
   const query = 'DELETE FROM ANAGRAFICA_MATERIALI WHERE CODICE_MATERIALE = ?';
-  const [result] = await pool.execute(query, [codice_materiale]);
+  const [result] = await pool.promise().execute(query, [codice_materiale]);
   return result.affectedRows;
 };

@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Configurazione della connessione al database
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   // eslint-disable-next-line no-undef
   host: process.env.DB_HOST, // Host
   // eslint-disable-next-line no-undef
@@ -18,13 +18,16 @@ const connection = mysql.createConnection({
   port: process.env.DB_PORT || 3306 // DBport
 });
 
-// Check connection
-connection.connect((err) => {
+// Verifica della connessione usando getConnection
+pool.getConnection((err, connection) => {
   if (err) {
-    console.error('Errore di connessione al database:', err.stack);
-    return;
+    console.error('Errore nella connessione al database:', err);
+    // eslint-disable-next-line no-undef
+    process.exit(1);  // Esci con errore se la connessione fallisce
+  } else {
+    console.log('Connessione al database riuscita!');
+    connection.release();  // Rilascia la connessione
   }
-  console.log('Connesso al database MySQL.');
 });
 
-export default connection;
+export default pool;

@@ -1,12 +1,12 @@
 import pool from '../config/db.js';
 
 export const getAllClienti = async () => {
-  const [rows] = await pool.query('SELECT * FROM ANAGRAFICA_CLIENTI');
+  const [rows] = await pool.promise().query('SELECT * FROM ANAGRAFICA_CLIENTI');
   return rows;
 };
 
 export const getClienteById = async (codice_cliente) => {
-  const [rows] = await pool.execute(
+  const [rows] = await pool.promise().execute(
     'SELECT * FROM ANAGRAFICA_CLIENTI WHERE CODICE_CLIENTE = ?',
     [codice_cliente]
   );
@@ -22,7 +22,7 @@ export const createCliente = async (custom_data) => {
     VALUES (${values.map(() => '?').join(',')})
   `;
 
-  const [result] = await pool.execute(query, values);
+  const [result] = await pool.promise().execute(query, values);
   return result.insertId;
 };
 
@@ -39,12 +39,12 @@ export const updateCliente = async (codice_cliente, custom_data) => {
     WHERE CODICE_CLIENTE = ?
   `;
 
-  const [result] = await pool.execute(query, values);
+  const [result] = await pool.promise().execute(query, values);
   return result.affectedRows;
 };
 
 export const deleteCliente = async (codice_cliente) => {
   const query = 'DELETE FROM ANAGRAFICA_CLIENTI WHERE CODICE_CLIENTE = ?';
-  const [result] = await pool.execute(query, [codice_cliente]);
+  const [result] = await pool.promise().execute(query, [codice_cliente]);
   return result.affectedRows;
 };

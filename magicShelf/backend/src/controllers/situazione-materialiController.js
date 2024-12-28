@@ -50,7 +50,7 @@ export const update = async (req, res) => {
   }
 };
 
-export const deleteById = async (req, res) => {
+export const remove = async (req, res) => {
   const { codice_materiale } = req.params;
   try {
     const affectedRows = await deleteSituazione(codice_materiale);

@@ -1,12 +1,12 @@
 import pool from '../config/db.js';
 
 export const getAllFornitori = async () => {
-  const [rows] = await pool.query('SELECT * FROM ANAGRAFICA_FORNITORI');
+  const [rows] = await pool.promise().query('SELECT * FROM ANAGRAFICA_FORNITORI');
   return rows;
 };
 
 export const getFornitoreById = async (codice_fornitore) => {
-  const [rows] = await pool.execute(
+  const [rows] = await pool.promise().execute(
     'SELECT * FROM ANAGRAFICA_FORNITORI WHERE CODICE_FORNITORE = ?',
     [codice_fornitore]
   );
@@ -22,7 +22,7 @@ export const createFornitore = async (custom_data) => {
     VALUES (${values.map(() => '?').join(',')})
   `;
 
-  const [result] = await pool.execute(query, values);
+  const [result] = await pool.promise().execute(query, values);
   return result.insertId;
 };
 
@@ -39,12 +39,12 @@ export const updateFornitore = async (codice_fornitore, custom_data) => {
     WHERE CODICE_FORNITORE = ?
   `;
 
-  const [result] = await pool.execute(query, values);
+  const [result] = await pool.promise().execute(query, values);
   return result.affectedRows;
 };
 
 export const deleteFornitore = async (codice_fornitore) => {
   const query = 'DELETE FROM ANAGRAFICA_FORNITORI WHERE CODICE_FORNITORE = ?';
-  const [result] = await pool.execute(query, [codice_fornitore]);
+  const [result] = await pool.promise().execute(query, [codice_fornitore]);
   return result.affectedRows;
 };

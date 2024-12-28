@@ -1,12 +1,12 @@
 import pool from '../config/db.js';
 
 export const getAllLocalita = async () => {
-  const [rows] = await pool.query('SELECT * FROM LOCALITA');
+  const [rows] = await pool.promise().query('SELECT * FROM LOCALITA');
   return rows;
 };
 
 export const getLocalitaById = async (codice_istat) => {
-  const [rows] = await pool.execute(
+  const [rows] = await pool.promise().execute(
     'SELECT * FROM LOCALITA WHERE CODICE_ISTAT = ?',
     [codice_istat]
   );
