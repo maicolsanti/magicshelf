@@ -7,10 +7,11 @@ export class Supplier {
     public fiscalCode: string;
     public phoneNumber: string | null;
     public email: string;
+    public address: string;
     public cap: number;
     public istatCode: number;
 
-    constructor(id: number, name: string, surname: string, companyName: string, vatNumber: string, fiscalCode: string, phoneNumber: string | null, email: string, cap: number, istatCode: number) {
+    constructor(id: number, name: string, surname: string, companyName: string, vatNumber: string, fiscalCode: string, phoneNumber: string | null, email: string, address: string, cap: number, istatCode: number) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -19,6 +20,7 @@ export class Supplier {
         this.fiscalCode = fiscalCode;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.address = address;
         this.cap = cap;
         this.istatCode = istatCode;
     }
