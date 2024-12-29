@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useConfigurationStore } from '@/stores/configurations';
 import { useSearchStore } from '@/stores/search';
+import { useProductsStore } from '@/stores/product';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { PriceRange } from '@/models/prince-ranges';
@@ -8,9 +9,11 @@ import { DistanceRange } from '@/models/distance-range';
 
 const confStore = useConfigurationStore();
 const searchStore = useSearchStore();
+const productStore = useProductsStore();
 const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
+const products = computed(() => productStore.products);
 
 let user = confStore.getUserData;
 
@@ -70,6 +73,12 @@ function findDistanceString(distanceRange) {
     }
 }
 
+function submit() {
+    productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchFilters.priceRange, searchFilters.distanceRange);
+    //TODO: aggiorna lista prodotti trovati
+    productStore.fetchSearchedProducts();
+    console.log("products --> ", products);
+}
 </script>
 
 <template>
@@ -170,7 +179,36 @@ function findDistanceString(distanceRange) {
                     </h4>
                 </div>
                 <div class="col-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
+                    <button @click="submit" type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
+                </div>
+            </div>
+            <div class="product-list">
+                <div v-for="product in products" :key="product.id">
+                <div class="product-card">
+                    <div class="row align-items-center">
+                        <div class="col-7">
+                            <div class="row">
+                                <div class="col-12 bolder-text">
+                                    <!-- TODO: add institution -->
+                                    <span>{{ product.product.supplier.companyName }}</span> <span class="address">{{ product.product.supplier.address }}</span>
+                                </div>
+                                <div class="col-12 bolder-text">
+                                    {{ product.product.description }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="row">
+                                <div class="col-6">
+                                    <span class="badge">{{ product.distanceInKm }} km</span>
+                                </div>
+                                <div class="col-6">
+                                    <span class="badge">€{{ product.product.unitPrice }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
             <!-- <div class="col-md-4" v-for="prodotto in prodotti" :key="prodotto.id">
@@ -238,5 +276,29 @@ label {
 
 .small {
     max-width: 165px;
+}
+.product-card {
+    border: solid;
+    border-color: var(--bs-secondary);
+    border-radius: 6px;
+    border-width: 2px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.badge {
+    max-width: 300px;
+    font-weight: normal;
+    background-color: var(--bs-secondary);
+}
+.bolder-text {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.2;
+}
+.address {
+    font-weight: lighter;
+    font-size: 14px;
+    line-height: 1.2;
 }
 </style>
