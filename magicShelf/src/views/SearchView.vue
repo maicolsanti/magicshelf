@@ -60,14 +60,14 @@ function findDistanceString(distanceRange) {
     switch (distanceRange) {
         case DistanceRange.NOTSELECTED:
             return 'Nessun range'
-        case DistanceRange.LESSTHENFIVE:
-            return '< 5km'
-        case DistanceRange.LESSTHENTWENTY:
-            return '< 20km'
-        case DistanceRange.LESSTHENFIFTY:
-            return '< 50km'
-        case DistanceRange.LESSTHENHUNDRED:
-            return '< 100km'
+        case DistanceRange.SAMECAP:
+            return 'Nel tuo CAP'
+        case DistanceRange.SAMEISTATCODE:
+            return 'Nel tuo comune'
+        case DistanceRange.SAMEDISTRICT:
+            return 'Nella tua provincia'
+        case DistanceRange.SAMEREGION:
+            return 'Nella tua regione'
         default:
             return 'Seleziona'
     }
@@ -75,9 +75,7 @@ function findDistanceString(distanceRange) {
 
 function submit() {
     productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchFilters.priceRange, searchFilters.distanceRange);
-    //TODO: aggiorna lista prodotti trovati
     productStore.fetchSearchedProducts();
-    console.log("products --> ", products);
 }
 </script>
 

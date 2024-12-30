@@ -13,7 +13,7 @@ export const useSearchStore = defineStore('searchStore', {
         distanceRange: DistanceRange.NOTSELECTED
       },
       priceRangeOptions: [PriceRange.NOTSELECTED, PriceRange.ZEROTEN, PriceRange.TENTWENTYFIVE, PriceRange.TWENTYFIVEFIFTY, PriceRange.FIFTYHUNDRED],
-      distanceRangeOptions: [DistanceRange.NOTSELECTED, DistanceRange.LESSTHENFIVE, DistanceRange.LESSTHENTWENTY, DistanceRange.LESSTHENFIFTY, DistanceRange.LESSTHENHUNDRED]
+      distanceRangeOptions: [DistanceRange.NOTSELECTED, DistanceRange.SAMECAP, DistanceRange.SAMEISTATCODE, DistanceRange.SAMEDISTRICT, DistanceRange.SAMEREGION]
   }),
   actions: {
     changePriceRange(priceRangeSelected) {
