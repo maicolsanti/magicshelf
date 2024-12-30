@@ -161,7 +161,7 @@ function submit() {
                                 placeholder="fornitore" required />
                         </div>
                     </div>
-                    <div class="row form-group d-flex  d-flex justify-content-center">
+                    <div class="row form-group d-flex justify-content-center">
                         <div class="col-4 mb-3 form-column">
                             <label for="">CAP</label>
                             <input type="text" class="form-control" id="capInput" v-model="searchFilters.cap"
@@ -180,28 +180,28 @@ function submit() {
                     <button @click="submit" type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
                 </div>
             </div>
-            <div class="product-list">
+            <div class="">
                 <div v-for="product in products" :key="product.id">
-                <div class="product-card">
-                    <div class="row align-items-center">
+                <div class="product-card px-4 py-2 mx-auto">
+                    <div class="row align-items-center justify-content-between">
                         <div class="col-7">
                             <div class="row">
                                 <div class="col-12 bolder-text">
                                     <!-- TODO: add institution -->
-                                    <span>{{ product.product.supplier.companyName }}</span> <span class="address">{{ product.product.supplier.address }}</span>
+                                    <span>{{ product.supplier.companyName }}</span> <span class="address">{{ product.supplier.address }}</span>
                                 </div>
                                 <div class="col-12 bolder-text">
-                                    {{ product.product.description }}
+                                    {{ product.description }}
                                 </div>
                             </div>
                         </div>
-                        <div class="col-5">
-                            <div class="row">
-                                <div class="col-6">
-                                    <span class="badge">{{ product.distanceInKm }} km</span>
+                        <div class="col-auto"> 
+                            <div class="row gx-5">
+                                <div v-if="product.supplier.cap == searchFilters.cap" class="col-6">
+                                    <span class="badge">Nelle tue vicinanze</span>
                                 </div>
                                 <div class="col-6">
-                                    <span class="badge">€{{ product.product.unitPrice }}</span>
+                                    <span class="badge">€{{ product.unitPrice }}</span>
                                 </div>
                             </div>
                         </div>
@@ -209,6 +209,7 @@ function submit() {
                 </div>
                 </div>
             </div>
+                
             <!-- <div class="col-md-4" v-for="prodotto in prodotti" :key="prodotto.id">
                 <div class="card">
                     <img src="https://via.placeholder.com/150" class="card-img-top" alt="Immagine prodotto">
@@ -283,6 +284,7 @@ label {
     padding: 5px;
     margin-top: 10px;
     margin-bottom: 10px;
+    max-width: 800px;
 }
 .badge {
     max-width: 300px;

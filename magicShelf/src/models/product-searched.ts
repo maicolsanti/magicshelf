@@ -1,12 +1,11 @@
-import { Product } from "./product";
-import { Supplier } from "./supplier";
+//TODO delete this
+// import { Product } from "./product";
+// import { Supplier } from "./supplier";
 
-export class ProductSearched {
-  product: Product;
-  distanceInKm: number;
+// export class ProductSearched {
+//   product: Product;
 
-  constructor(product: Product, distanceInKm: number) {
-    this.product = product;
-    this.distanceInKm = distanceInKm;
-  }
-}
+//   constructor(product: Product) {
+//     this.product = product;
+//   }
+// }
