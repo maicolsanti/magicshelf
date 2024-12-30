@@ -93,7 +93,7 @@ const router = express.Router();
  *               type: string
  *               example: "Errore interno del server"
  */
-router.post('/clienti/register', registerCliente);
+router.post('/register', registerCliente);
 
 /**
  * @swagger
@@ -153,7 +153,7 @@ router.post('/clienti/register', registerCliente);
  *               type: string
  *               example: "Errore interno del server"
  */
-router.post('/clienti/login', loginCliente);
+router.post('/login', loginCliente);
 
 /**
  * @swagger
@@ -189,7 +189,7 @@ router.post('/clienti/login', loginCliente);
  *               type: string
  *               example: "Errore interno del server"
  */
-router.post('/clienti/logout', logoutCliente);
+router.post('/logout', logoutCliente);
 
 /**
  * @swagger
@@ -247,6 +247,6 @@ router.post('/clienti/logout', logoutCliente);
  *                     description: Data e ora dell'ultima modifica al cliente
  *                     example: "2024-12-29T12:34:56Z"
  */
-router.get('/clienti/getProfile', getProfileCliente);
+router.get('/getProfile', getProfileCliente);
 
 export default router;

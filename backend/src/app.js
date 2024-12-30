@@ -9,7 +9,7 @@ import localitaRoutes from './routes/localitaRoutes.js';
 import materialeRoutes from './routes/materialiRoutes.js';
 import situazioneMaterialeRoutes from './routes/situazione-materialiRoutes.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
-import authRoutes from './routes/authClientiRoutes.js';
+import authClientiRoutes from './routes/authClientiRoutes.js';
 
 // Carica le variabili d'ambiente
 dotenv.config();
@@ -30,7 +30,7 @@ app.use('/api/fornitori', fornitoriRoutes);
 app.use('/api/localita', localitaRoutes);
 app.use('/api/materiali', materialeRoutes);
 app.use('/api/situazione-materiali', situazioneMaterialeRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/auth/clienti', authClientiRoutes);
 
 // Middleware per gestire le rotte non trovate (404)
 app.use(notFoundHandler);
