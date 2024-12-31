@@ -65,6 +65,10 @@ const router = express.Router();
  *                     type: integer
  *                     description: The ISTAT code of the locality.
  *                     example: 12345
+ *                   INDIRIZZO:
+ *                     type: string
+ *                     description: L'indirizzo del fornitore
+ *                     example: "Via Rossi 124"
  *                   PHONE_NUMBER:
  *                     type: integer
  *                     description: The supplier's phone number (if available).
@@ -137,6 +141,10 @@ router.get('/getAll', getAll);
  *                   type: integer
  *                   description: The ISTAT code of the locality.
  *                   example: 12345
+ *                 INDIRIZZO:
+ *                   type: string
+ *                   description: L'indirizzo del fornitore
+ *                   example: "Via Rossi 124"
  *                 PHONE_NUMBER:
  *                   type: integer
  *                   description: The supplier's phone number (if available).
@@ -220,6 +228,10 @@ router.get('/getById/:codice_fornitore', getById);
  *                     type: integer
  *                     description: The ISTAT code of the locality.
  *                     example: 23456
+ *                   INDIRIZZO:
+ *                     type: string
+ *                     description: L'indirizzo del fornitore
+ *                     example: "Via Rossi 124"
  *                   PHONE_NUMBER:
  *                     type: integer
  *                     description: The supplier's phone number (if available).
@@ -298,6 +310,10 @@ router.post('/create', create);
  *                   CODICE_ISTAT:
  *                     type: integer
  *                     example: 12345
+ *                   INDIRIZZO:
+ *                     type: string
+ *                     description: L'indirizzo del fornitore
+ *                     example: "Via Rossi 124"
  *                   PHONE_NUMBER:
  *                     type: integer
  *                     example: 1122334455
