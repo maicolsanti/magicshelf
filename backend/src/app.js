@@ -9,7 +9,8 @@ import localitaRoutes from './routes/localitaRoutes.js';
 import materialeRoutes from './routes/materialiRoutes.js';
 import situazioneMaterialeRoutes from './routes/situazione-materialiRoutes.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
-import authRoutes from './routes/authClientiRoutes.js';
+import authClientiRoutes from './routes/authClientiRoutes.js';
+import authFornitoriRoutes from './routes/authFornitoriRoutes.js';
 
 // Carica le variabili d'ambiente
 dotenv.config();
@@ -30,7 +31,8 @@ app.use('/api/fornitori', fornitoriRoutes);
 app.use('/api/localita', localitaRoutes);
 app.use('/api/materiali', materialeRoutes);
 app.use('/api/situazione-materiali', situazioneMaterialeRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/auth/clienti', authClientiRoutes);
+app.use('/api/auth/fornitori', authFornitoriRoutes);
 
 // Middleware per gestire le rotte non trovate (404)
 app.use(notFoundHandler);
@@ -38,5 +40,5 @@ app.use(notFoundHandler);
 // Avvia il server
 app.listen(PORT, () => {
   console.log(`Server avviato su http://localhost:${PORT}`);
-  console.log('Documentazione Swagger disponibile su http://localhost:3000/api-docs');
+  console.log(`Documentazione Swagger disponibile su http://localhost:${PORT}/api-docs`);
 });

@@ -2,26 +2,26 @@
  * @swagger
  * tags:
  *   - name: Auth
- *     description: Operazioni relative all'autenticazione
+ *     description: Operazioni relative all'autenticazione dei clienti
  */
 
 import express from 'express';
 import {
-    registerCliente,
-    loginCliente,
-    logoutCliente,
-    getProfileCliente
-} from '../controllers/authClientiController.js';
+    registerFornitore,
+    loginFornitore,
+    logoutFornitore,
+    getProfileFornitore
+} from '../controllers/authFornitoriController.js';
 
 const router = express.Router();
 
 /**
  * @swagger
- * /auth/clienti/register:
+ * /auth/fornitori/register:
  *   post:
  *     tags:
  *      - Auth
- *     summary: Registra un nuovo cliente
+ *     summary: Registra un nuovo fornitore
  *     requestBody:
  *       required: true
  *       content:
@@ -31,24 +31,32 @@ const router = express.Router();
  *             properties:
  *               NOME:
  *                 type: string
- *                 description: Il nome del cliente
+ *                 description: Il nome del fornitore
  *                 example: "Giulia"
  *               COGNOME:
  *                 type: string
- *                 description: Il cognome del cliente
+ *                 description: Il cognome del fornitore
  *                 example: "Rossi"
+ *               RAGIONE_SOCIALE:
+ *                 type: string
+ *                 description: La ragione sociale del fornitore
+ *                 example: "Panificio Rossi SRL"
+ *               PARTITA_IVA:
+ *                 type: string
+ *                 description: La partita IVA del fornitore
+ *                 example: IT01020304056
+ *               CODICE_FISCALE:
+ *                 type: string
+ *                 description: Il codice fiscale del fornitore
+ *                 example: PNSMSC02M28C573I
  *               CAP:
  *                 type: integer
- *                 description: Il codice postale della località del cliente
+ *                 description: Il codice postale della località del fornitore
  *                 example: 30100
  *               CODICE_ISTAT:
  *                 type: integer
  *                 description: Il codice ISTAT della località del cliente
  *                 example: 23456
- *               EMAIL:
- *                 type: string
- *                 description: Indirizzo email del cliente
- *                 example: "giulia.rossi@example.com"
  *               PHONE_NUMBER:
  *                 type: integer
  *                 description: Il numero di telefono del cliente (se disponibile)
@@ -59,7 +67,7 @@ const router = express.Router();
  *                 example: "TavoloBlu1!"
  *     responses:
  *       200:
- *         description: La registrazione del cliente è avvenuta correttamente
+ *         description: La registrazione del fornitore è avvenuta correttamente
  *         content:
  *           application/json:
  *             schema:
@@ -93,15 +101,15 @@ const router = express.Router();
  *               type: string
  *               example: "Errore interno del server"
  */
-router.post('/register', registerCliente);
+router.post('/register', registerFornitore);
 
 /**
  * @swagger
- * /auth/clienti/login:
+ * /auth/fornitori/login:
  *   post:
  *     tags:
  *      - Auth
- *     summary: Login di un cliente
+ *     summary: Login di un fornitore
  *     requestBody:
  *       required: true
  *       content:
@@ -109,17 +117,17 @@ router.post('/register', registerCliente);
  *           schema:
  *             type: object
  *             properties:
- *               EMAIL:
+ *               CODICE_FISCALE:
  *                 type: string
- *                 description: L'indirizzo email del cliente
+ *                 description: L'indirizzo email del fornitore
  *                 example: "giulia.rossi@example.com"
  *               PASSWORD_HASH:
  *                 type: string
- *                 description: La password del cliente
+ *                 description: La password del fornitore
  *                 example: "TavoloBlu1!"
  *     responses:
  *       200:
- *         description: La login del cliente è avvenuta con successo
+ *         description: La login del fornitore è avvenuta con successo
  *         content:
  *           application/json:
  *             schema:
@@ -153,19 +161,19 @@ router.post('/register', registerCliente);
  *               type: string
  *               example: "Errore interno del server"
  */
-router.post('/login', loginCliente);
+router.post('/login', loginFornitore);
 
 /**
  * @swagger
- * /auth/clienti/logout:
+ * /auth/fornitori/logout:
  *   post:
  *     tags:
  *      - Auth
- *     summary: Logout di un cliente
- *     description: Logout di un cliente utilizzando l'access token salvato nel browser
+ *     summary: Logout di un fornitore
+ *     description: Logout di un fornitore utilizzando l'access token salvato nel browser
  *     responses:
  *       200:
- *         description: Logout del cliente avvenuto con successo
+ *         description: Logout del fornitore avvenuto con successo
  *         content:
  *           application/json:
  *             schema:
@@ -189,18 +197,18 @@ router.post('/login', loginCliente);
  *               type: string
  *               example: "Errore interno del server"
  */
-router.post('/logout', logoutCliente);
+router.post('/logout', logoutFornitore);
 
 /**
  * @swagger
- * /auth/clienti/getProfile:
+ * /auth/fornitori/getProfile:
  *   get:
  *     tags:
  *      - Auth
- *     summary: Ritorna il profilo corrente del cliente
+ *     summary: Ritorna il profilo corrente del fornitore
  *     responses:
  *       200:
- *         description: Dati del cliente correntemente loggato
+ *         description: Dati del fornitore correntemente loggato
  *         content:
  *           application/json:
  *             schema:
@@ -208,45 +216,53 @@ router.post('/logout', logoutCliente);
  *               items:
  *                 type: object
  *                 properties:
- *                   CODICE_CLIENTE:
+ *                   CODICE_FORNITORE:
  *                     type: integer
- *                     description: Il codice cliente univoco
+ *                     description: Il codice fornitore univoco
  *                     example: 1
  *                   NOME:
  *                     type: string
- *                     description: Il nome del cliente
+ *                     description: Il nome del fornitore
  *                     example: "Luca"
  *                   COGNOME:
  *                     type: string
- *                     description: Il cognome del cliente
+ *                     description: Il cognome del fornitore
  *                     example: "Verdi"
+ *                   RAGIONE_SOCIALE:
+ *                     type: string
+ *                     description: La ragione sociale del fornitore
+ *                     example: "Panificio Verdi SRL"
+ *                   PARTITA_IVA:
+ *                     type: string
+ *                     description: La partita IVA del fornitore
+ *                     example: IT01020304056
+ *                   CODICE_FISCALE:
+ *                     type: string
+ *                     description: Il codice fiscale del fornitore
+ *                     example: LVSMSE02M28C573I
  *                   CAP:
  *                     type: integer
- *                     description: Il codice postale del cliente
+ *                     description: Il codice postale del fornitore
  *                     example: 20100
  *                   CODICE_ISTAT:
  *                     type: integer
- *                     description: Il codice ISTAT del cliente
+ *                     description: Il codice ISTAT del fornitore
  *                     example: 12345
- *                   EMAIL:
- *                     type: string
- *                     description: L'indirizzo email del cliente
- *                     example: "luca.verdi@example.com"
  *                   PHONE_NUMBER:
  *                     type: integer
- *                     description: Il numero di telefono del cliente (se disponibile)
+ *                     description: Il numero di telefono del fornitore (se disponibile)
  *                     example: 1234567890
  *                   DATA_INSERIMENTO:
  *                     type: string
  *                     format: date-time
- *                     description: Data e ora dell'inserimento del cliente
+ *                     description: Data e ora dell'inserimento del fornitore
  *                     example: "2024-12-29T12:34:56Z"
  *                   DATA_ULTIMA_MODIFICA:
  *                     type: string
  *                     format: date-time
- *                     description: Data e ora dell'ultima modifica al cliente
+ *                     description: Data e ora dell'ultima modifica al fornitore
  *                     example: "2024-12-29T12:34:56Z"
  */
-router.get('/getProfile', getProfileCliente);
+router.get('/getProfile', getProfileFornitore);
 
 export default router;
