@@ -11,6 +11,7 @@ import situazioneMaterialeRoutes from './routes/situazione-materialiRoutes.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import authClientiRoutes from './routes/authClientiRoutes.js';
 import authFornitoriRoutes from './routes/authFornitoriRoutes.js';
+import MaterialiFornitoriRoutes from './routes/materiali-fornitoriRoutes.js';
 
 // Carica le variabili d'ambiente
 dotenv.config();
@@ -31,6 +32,7 @@ app.use('/api/fornitori', fornitoriRoutes);
 app.use('/api/localita', localitaRoutes);
 app.use('/api/materiali', materialeRoutes);
 app.use('/api/situazione-materiali', situazioneMaterialeRoutes);
+app.use('/api/materiali-fornitori', MaterialiFornitoriRoutes);
 app.use('/api/auth/clienti', authClientiRoutes);
 app.use('/api/auth/fornitori', authFornitoriRoutes);
 
