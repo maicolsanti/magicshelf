@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useProductsStore } from '@/stores/product';
+import { useSupplierStore } from '@/stores/supplier';
 const productStore = useProductsStore();
+const supplierStore = useSupplierStore();
 
 const props = defineProps({
     cap: {
@@ -11,12 +13,19 @@ const props = defineProps({
 })
 
 const products = computed(() => productStore.products);
+
+function setSelectedProduct(productId, supplierId) {
+	supplierStore.setSelectedProduct(productId, supplierId);
+	supplierStore.fetchSupplierById(supplierId);
+	supplierStore.fetchSupplierProductsById(supplierId);
+}
+
 </script>
 
 <template>
 	<div class="">
 	                <div v-for="product in products" :key="product.id">
-	                <div class="product-card px-4 py-2 mx-auto">
+	                <div class="product-card px-4 py-2 mx-auto" @click="setSelectedProduct(product.id, product.supplier.id)">
 	                    <div class="row align-items-center justify-content-between">
 	                        <div class="col-7">
 	                            <div class="row">
