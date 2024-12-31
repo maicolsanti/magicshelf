@@ -2,18 +2,23 @@
 import { useConfigurationStore } from '@/stores/configurations';
 import { useSearchStore } from '@/stores/search';
 import { useProductsStore } from '@/stores/product';
+import { useSupplierStore } from '@/stores/supplier';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { PriceRange } from '@/models/prince-ranges';
 import { DistanceRange } from '@/models/distance-range';
-import SearchedProductCard from '../components/search/SearchedProductCard.vue'
+import SearchedProductCard from '../../components/search/SearchedProductCard.vue'
+import SupplierView from './SupplierView.vue';
 
 const confStore = useConfigurationStore();
 const searchStore = useSearchStore();
 const productStore = useProductsStore();
+const supplierStore = useSupplierStore();
 const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
+const selectedSupplierId = computed(() => supplierStore.selectedSupplierId);
+const selectedProductId = computed(() => supplierStore.selectedProductId);
 
 let user = confStore.getUserData;
 
@@ -88,7 +93,7 @@ function submit() {
                 </button>
             </RouterLink>
         </div>
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn && selectedSupplierId == null">
             <h4 class="welcome d-flex my-5">
                 Cerca qui, gli articoli
             </h4>
@@ -181,6 +186,9 @@ function submit() {
                 </div>
             </div>
             <SearchedProductCard :cap="searchFilters.cap" />
+        </div>
+        <div v-if="isLoggedIn && selectedSupplierId != null">
+            <SupplierView :supplierId="selectedSupplierId" :productId="selectedProductId" />
         </div>
     </main>
 </template>
