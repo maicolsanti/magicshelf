@@ -1,0 +1,51 @@
+@import url('http://fonts.googleapis.com/css?family=Rubik:300,400,700');
+
+$font-family-base: 'Rubik', sans-serif !important;
+
+$primary: #eb6424;
+$dark: #2a2b2a;
+$secondary: #fa9500;
+$white: #ffffff;
+$bg-primary: #eb6424;
+
+$body-bg: $white;
+$body-color: $dark;
+
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+.welcome {
+    font-weight: lighter;
+}
+
+.form-button {
+    min-width: 150px;
+}
+.form-alternative {
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.form-alternative-a {
+    color: var(--bs-secondary);
+}
+.form-section-title {
+    font-weight: bold;
+}
+.form-column {
+    width: 350px;
+}
+
+.margin-content {
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+.primary-button {
+    max-width: 350px;
+    max-height: 40px;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+  }
