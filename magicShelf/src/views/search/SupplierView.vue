@@ -36,31 +36,36 @@ const selectedProduct = products.value.find(product => product.id === props.prod
 
 <template>
   <main class="margin-content">
-    <section class="supplier-header">
-      <div class="supplier-info">
-        <div class="supplier-icon">
+    <div class="col-auto supplier-header">
+      <h2 class="text-center">{{ supplier.companyName }}</h2>
+      <div class="row justify-content-center align-items-center">
+        <div class="col-1 supplier-icon">
             <v-icon name="hi-location-marker"
             class="visibility-icon" />
         </div>
-        <div>
-          <h2>{{ supplier.companyName || 'Ragione Sociale' }}</h2>
-          <p>{{ supplier.address }}</p>
-          <p>{{ supplier.address || 'Via delle vie, 2405 Langiano 47020 FC' }}</p>
-          <p class="price">Nelle tue vicinanze</p>
+        <p class="col-auto text-center">{{ supplier.address }}<br>{{ location.municipality }} {{ location.cap }} {{ location.district }}</p>
+      </div>
+      <div v-if="props.isNearby">
+        <p>Nelle tue vicinanze</p>
+      </div>
+      <div class="row product-highlight justify-content-between align-items-center mx-1 px-4 gx-3">
+        <div class="col-6">
+          <span class="text-dark product-name">{{ selectedProduct.description  }}</span>
+        </div>
+        <div class="col-6 badge my-3">
+          <span class="price">€ {{ selectedProduct.unitPrice }}</span>
         </div>
       </div>
-      <div class="product-highlight">
-        <p>{{ selectedProduct.description || 'Nome prodotto' }}</p>
-        <p class="price">{{ selectedProduct.price }}</p>
-      </div>
-    </section>
+    </div>
 
     <section class="supplier-products">
       <h3>Tutti i prodotti del fornitore</h3>
       <ul>
         <li v-for="product in products" :key="product.id" class="product-item">
-          <span>{{ product.description }}</span>
-          <span class="price">{{ product.price }}</span>
+          <span class="product-name">{{ product.description }}</span>
+          <div class="badge">
+            <span class="price">€ {{ product.unitPrice }}</span>
+          </div>
         </li>
       </ul>
     </section>
@@ -77,7 +82,6 @@ const selectedProduct = products.value.find(product => product.id === props.prod
   padding: 20px;
   border-radius: 10px;
   color: #fff;
-  display: flex;
   justify-content: space-between;
   align-items: center;
 }
@@ -85,7 +89,7 @@ const selectedProduct = products.value.find(product => product.id === props.prod
 .supplier-info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .supplier-icon img {
@@ -96,7 +100,9 @@ const selectedProduct = products.value.find(product => product.id === props.prod
 }
 
 .product-highlight {
-  text-align: right;
+  background-color: #fff;
+  border-radius: 18px;
+  height: 50px;
 }
 
 .price {
@@ -123,6 +129,16 @@ const selectedProduct = products.value.find(product => product.id === props.prod
 
 .product-item .price {
   color: var(--bs-secondary);
+  font-weight: bold;
+}
+
+.badge {
+    max-width: 50px;
+    font-weight: normal;
+    background-color: var(--bs-secondary);
+}
+
+.product-name {
   font-weight: bold;
 }
 </style>

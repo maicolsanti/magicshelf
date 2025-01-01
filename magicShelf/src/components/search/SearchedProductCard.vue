@@ -18,6 +18,7 @@ function setSelectedProduct(productId, supplierId) {
 	supplierStore.setSelectedProduct(productId, supplierId);
 	supplierStore.fetchSupplierById(supplierId);
 	supplierStore.fetchSupplierProductsById(supplierId);
+	supplierStore.fetchLocationByIstatCode();
 }
 
 </script>
@@ -44,7 +45,7 @@ function setSelectedProduct(productId, supplierId) {
 	                                    <span class="badge">Nelle tue vicinanze</span>
 	                                </div>
 	                                <div class="col-6">
-	                                    <span class="badge">€{{ product.unitPrice }}</span>
+	                                    <span class="badge">€ {{ product.unitPrice }}</span>
 	                                </div>
 	                            </div>
 	                        </div>

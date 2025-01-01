@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { Supplier } from '@/models/supplier';
 import { Product } from '@/models/product';
 import { SupplierPorducts } from '@/models/supplier-products';
+import { LocationDetails } from '@/models/location-details';
 
 // for api calls see https://pinia.vuejs.org/core-concepts/actions.html
 
@@ -10,7 +11,8 @@ export const useSupplierStore = defineStore('supplierStore', {
     selectedSupplierId: null,
     selectedProductId: null,
     supplier: null,
-    products: Product[0]
+    products: Product[0],
+    location: null,
   }),
   actions: {
     setSelectedProduct(productId, supplierId) {
@@ -28,6 +30,12 @@ export const useSupplierStore = defineStore('supplierStore', {
             new Product(2, "Matita", "Faber", "pezzi", 1.5, new Supplier(2, "n", "s", "Faber", "22222222222", "22222222222", "011/222222", "faber@faber.com", "via rossi, 2", 47020, 1002)),
         ]);
         this.products = fetchedSupplierProducts.products;
+        return true;
+      },
+      async fetchLocationByIstatCode() {
+        //TODO add call using this.supplier.istatCode
+        var fetchedLocation = new LocationDetails(1, 47020, "FC", "Emilia-Romagna", "Longiano");
+        this.location = fetchedLocation;
         return true;
       },
   },
