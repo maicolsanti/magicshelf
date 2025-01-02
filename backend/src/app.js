@@ -13,34 +13,35 @@ import authClientiRoutes from './routes/authClientiRoutes.js';
 import authFornitoriRoutes from './routes/authFornitoriRoutes.js';
 import MaterialiFornitoriRoutes from './routes/materiali-fornitoriRoutes.js';
 
-// Carica le variabili d'ambiente
+// Load environment variables from the .env file
 dotenv.config();
 
-const app = express();
-// eslint-disable-next-line no-undef
-const PORT = process.env.PORT || 3000;
+const app = express(); // Create an Express application instance
+const PORT = process.env.PORT || 3000; // Define the port to listen on
 
-// Middleware
+// Middleware to parse JSON in request bodies
 app.use(express.json());
-app.use(cookieParser())
+// Middleware to parse cookies
+app.use(cookieParser());
 
+// Swagger route for API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Rotte
-app.use('/api/clienti', clientiRoutes);
-app.use('/api/fornitori', fornitoriRoutes);
-app.use('/api/localita', localitaRoutes);
-app.use('/api/materiali', materialeRoutes);
-app.use('/api/situazione-materiali', situazioneMaterialeRoutes);
-app.use('/api/materiali-fornitori', MaterialiFornitoriRoutes);
-app.use('/api/auth/clienti', authClientiRoutes);
-app.use('/api/auth/fornitori', authFornitoriRoutes);
+// Define API routes
+app.use('/api/clienti', clientiRoutes); // Routes for client management
+app.use('/api/fornitori', fornitoriRoutes); // Routes for supplier management
+app.use('/api/localita', localitaRoutes); // Routes for managing locations
+app.use('/api/materiali', materialeRoutes); // Routes for material management
+app.use('/api/situazione-materiali', situazioneMaterialeRoutes); // Routes for tracking material situations
+app.use('/api/materiali-fornitori', MaterialiFornitoriRoutes); // Routes for supplier materials
+app.use('/api/auth/clienti', authClientiRoutes); // Authentication routes for clients
+app.use('/api/auth/fornitori', authFornitoriRoutes); // Authentication routes for suppliers
 
-// Middleware per gestire le rotte non trovate (404)
+// Middleware to handle 404 errors for undefined routes
 app.use(notFoundHandler);
 
-// Avvia il server
+// Start the server and listen on the defined port
 app.listen(PORT, () => {
-  console.log(`Server avviato su http://localhost:${PORT}`);
-  console.log(`Documentazione Swagger disponibile su http://localhost:${PORT}/api-docs`);
+  console.log(`🚀 Server is running and listening on http://localhost:${PORT}`);
+  console.log(`📖 Swagger documentation available at http://localhost:${PORT}/api-docs`);
 });

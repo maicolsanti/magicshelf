@@ -1,8 +1,8 @@
 /**
  * @swagger
  * tags:
- *   - name: Auth
- *     description: Operazioni relative all'autenticazione dei clienti
+ *   - name: AuthFornitori
+ *     description: Suppliers Authentication
  */
 
 import express from 'express';
@@ -20,8 +20,8 @@ const router = express.Router();
  * /auth/fornitori/register:
  *   post:
  *     tags:
- *      - Auth
- *     summary: Registra un nuovo fornitore
+ *      - AuthFornitori
+ *     summary: Register a new supplier
  *     requestBody:
  *       required: true
  *       content:
@@ -31,43 +31,47 @@ const router = express.Router();
  *             properties:
  *               NOME:
  *                 type: string
- *                 description: Il nome del fornitore
+ *                 description: The supplier's first name
  *                 example: "Giulia"
  *               COGNOME:
  *                 type: string
- *                 description: Il cognome del fornitore
+ *                 description: The supplier's last name
  *                 example: "Rossi"
  *               RAGIONE_SOCIALE:
  *                 type: string
- *                 description: La ragione sociale del fornitore
+ *                 description: The legal name of the supplier
  *                 example: "Panificio Rossi SRL"
  *               PARTITA_IVA:
  *                 type: string
- *                 description: La partita IVA del fornitore
+ *                 description: The supplier's VAT number
  *                 example: IT01020304056
  *               CODICE_FISCALE:
  *                 type: string
- *                 description: Il codice fiscale del fornitore
+ *                 description: The supplier's tax code
  *                 example: PNSMSC02M28C573I
  *               CAP:
  *                 type: integer
- *                 description: Il codice postale della località del fornitore
+ *                 description: The postal code of the supplier's location
  *                 example: 30100
  *               CODICE_ISTAT:
  *                 type: integer
- *                 description: Il codice ISTAT della località del cliente
+ *                 description: The ISTAT code of the supplier's location
  *                 example: 23456
+ *               INDIRIZZO:
+ *                 type: string
+ *                 description: The address of the supplier's location
+ *                 example: "Via Rossi 123"
  *               PHONE_NUMBER:
  *                 type: integer
- *                 description: Il numero di telefono del cliente (se disponibile)
+ *                 description: The supplier's phone number (if available)
  *                 example: 987654321
  *               PASSWORD_HASH:
  *                 type: string
- *                 description: La password del cliente
+ *                 description: The supplier's password
  *                 example: "TavoloBlu1!"
  *     responses:
  *       200:
- *         description: La registrazione del fornitore è avvenuta correttamente
+ *         description: The supplier registration was successful
  *         content:
  *           application/json:
  *             schema:
@@ -75,31 +79,31 @@ const router = express.Router();
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Registrazione avvenuta con successo"
+ *                   example: "Supplier registration successful"
  *                 id:
  *                   type: integer
  *                   example: 1
  *       400:
- *         description: La mail con cui ci si sta cercando di registrarsi è già utilizzata
+ *         description: The "codice fiscale" being used for registration is already in use
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Email già in uso"
+ *               example: 'The provided "codice fiscale" is already in use'
  *       401:
- *         description: L'operazione di registrazione può avvenire solo dopo aver eseguito il logout
+ *         description: Registration can only occur after logging out
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Questa operazione richiede il logout"
+ *               example: "You must log out before registering a new account"
  *       500:
- *         description: Errore interno del server
+ *         description: Internal server error
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Errore interno del server"
+ *               example: "Internal server error"
  */
 router.post('/register', registerFornitore);
 
@@ -108,8 +112,8 @@ router.post('/register', registerFornitore);
  * /auth/fornitori/login:
  *   post:
  *     tags:
- *      - Auth
- *     summary: Login di un fornitore
+ *      - AuthFornitori
+ *     summary: Supplier login
  *     requestBody:
  *       required: true
  *       content:
@@ -119,15 +123,15 @@ router.post('/register', registerFornitore);
  *             properties:
  *               CODICE_FISCALE:
  *                 type: string
- *                 description: L'indirizzo email del fornitore
+ *                 description: The supplier's tax code
  *                 example: "giulia.rossi@example.com"
  *               PASSWORD_HASH:
  *                 type: string
- *                 description: La password del fornitore
+ *                 description: The supplier's password
  *                 example: "TavoloBlu1!"
  *     responses:
  *       200:
- *         description: La login del fornitore è avvenuta con successo
+ *         description: Supplier login was successful
  *         content:
  *           application/json:
  *             schema:
@@ -135,31 +139,38 @@ router.post('/register', registerFornitore);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Login avvenuto con successo"
+ *                   example: "Login successful"
  *                 id:
  *                   type: integer
  *                   example: 1
  *       400:
- *         description: L'utente che sta cercando di fare la login non è ancora registrato
+ *         description: The supplier trying to log in is not registered yet
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Utente non registrato"
+ *               example: "Supplier not registered"
+ *       403:
+ *         description: The inserted login credentials are invalid
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Incorrect credentials"
  *       401:
- *         description: L'operazione di login può avvenire solo dopo aver eseguita il logout
+ *         description: Login can only occur after logging out
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Questa operazione richiede il logout"
+ *               example: "You must log out before logging in again"
  *       500:
- *         description: Errore interno del server
+ *         description: Internal server error
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Errore interno del server"
+ *               example: "Internal server error"
  */
 router.post('/login', loginFornitore);
 
@@ -168,12 +179,12 @@ router.post('/login', loginFornitore);
  * /auth/fornitori/logout:
  *   post:
  *     tags:
- *      - Auth
- *     summary: Logout di un fornitore
- *     description: Logout di un fornitore utilizzando l'access token salvato nel browser
+ *      - AuthFornitori
+ *     summary: Supplier logout
+ *     description: Supplier logout using the access token saved in the browser
  *     responses:
  *       200:
- *         description: Logout del fornitore avvenuto con successo
+ *         description: Supplier logout was successful
  *         content:
  *           application/json:
  *             schema:
@@ -181,21 +192,21 @@ router.post('/login', loginFornitore);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Logout avvenuto con successo"
+ *                   example: "Logout successful"
  *       401:
- *         description: L'operazione di login può avvenire solo dopo aver eseguita il logout
+ *         description: Login can only occur after logging out
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Questa operazione richiede il logout"
+ *               example: "You must be logged in to log out"
  *       500:
- *         description: Errore interno del server
+ *         description: Internal server error
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Errore interno del server"
+ *               example: "Internal server error"
  */
 router.post('/logout', logoutFornitore);
 
@@ -204,11 +215,11 @@ router.post('/logout', logoutFornitore);
  * /auth/fornitori/getProfile:
  *   get:
  *     tags:
- *      - Auth
- *     summary: Ritorna il profilo corrente del fornitore
+ *      - AuthFornitori
+ *     summary: Returns the current supplier profile
  *     responses:
  *       200:
- *         description: Dati del fornitore correntemente loggato
+ *         description: Data of the currently logged-in supplier
  *         content:
  *           application/json:
  *             schema:
@@ -218,50 +229,68 @@ router.post('/logout', logoutFornitore);
  *                 properties:
  *                   CODICE_FORNITORE:
  *                     type: integer
- *                     description: Il codice fornitore univoco
+ *                     description: The unique supplier code
  *                     example: 1
  *                   NOME:
  *                     type: string
- *                     description: Il nome del fornitore
+ *                     description: The supplier's first name
  *                     example: "Luca"
  *                   COGNOME:
  *                     type: string
- *                     description: Il cognome del fornitore
+ *                     description: The supplier's last name
  *                     example: "Verdi"
  *                   RAGIONE_SOCIALE:
  *                     type: string
- *                     description: La ragione sociale del fornitore
+ *                     description: The supplier's business name
  *                     example: "Panificio Verdi SRL"
  *                   PARTITA_IVA:
  *                     type: string
- *                     description: La partita IVA del fornitore
+ *                     description: The supplier's VAT number
  *                     example: IT01020304056
  *                   CODICE_FISCALE:
  *                     type: string
- *                     description: Il codice fiscale del fornitore
+ *                     description: The supplier's tax code
  *                     example: LVSMSE02M28C573I
  *                   CAP:
  *                     type: integer
- *                     description: Il codice postale del fornitore
+ *                     description: The supplier's postal code
  *                     example: 20100
  *                   CODICE_ISTAT:
  *                     type: integer
- *                     description: Il codice ISTAT del fornitore
+ *                     description: The supplier's ISTAT code
  *                     example: 12345
+ *                   INDIRIZZO:
+ *                     type: string
+ *                     description: The adress of the supplier's location
+ *                     example: "Via Rossi 123"
  *                   PHONE_NUMBER:
  *                     type: integer
- *                     description: Il numero di telefono del fornitore (se disponibile)
+ *                     description: The supplier's phone number (if available)
  *                     example: 1234567890
  *                   DATA_INSERIMENTO:
  *                     type: string
  *                     format: date-time
- *                     description: Data e ora dell'inserimento del fornitore
+ *                     description: The date and time the supplier was added
  *                     example: "2024-12-29T12:34:56Z"
  *                   DATA_ULTIMA_MODIFICA:
  *                     type: string
  *                     format: date-time
- *                     description: Data e ora dell'ultima modifica al fornitore
+ *                     description: The date and time of the last update to the supplier
  *                     example: "2024-12-29T12:34:56Z"
+ *       401:
+ *         description: The login operation can only be performed after logging out
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "You must be logged in to view your profile"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getProfile', getProfileFornitore);
 

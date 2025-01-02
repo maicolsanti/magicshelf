@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   - name: Materiali
- *     description: Operazioni relative alle localita
+ *     description: Material operation management
  */
 
 import express from 'express';
@@ -29,23 +29,37 @@ const router = express.Router();
  *                 properties:
  *                   CODICE_MATERIALE:
  *                     type: integer
+ *                     description: The unique material code.
+ *                     example: 1
  *                   DESCRIZIONE_MATERIALE:
  *                     type: string
+ *                     description: The material description.
+ *                     example: "Gocciole"
  *                   MARCA:
  *                     type: string
+ *                     description: The material label.
+ *                     example: "Pavesi"
  *                   CODICE_FORNITORE:
  *                     type: integer
+ *                     description: The supplier unique code.
+ *                     example: 2
  *                   UNITA_MISURA:
  *                     type: string
+ *                     description: The unit of measurement.
+ *                     example: "PZ"
  *                   PREZZO_UNITARIO:
  *                     type: number
  *                     format: double
+ *                     description: The price of the material for one unit of measurement.
+ *                     example: 10.0
  *                   DATA_INSERIMENTO:
  *                     type: string
  *                     format: date-time
+ *                     description: The date and time when the material was added.
  *                   DATA_ULTIMA_MODIFICA:
  *                     type: string
  *                     format: date-time
+ *                     description: The date and time when the material's information was last updated.
  */
 router.get('/getAll', getAll);
 
@@ -73,23 +87,44 @@ router.get('/getAll', getAll);
  *               properties:
  *                 CODICE_MATERIALE:
  *                   type: integer
+ *                   description: The unique material code.
+ *                   example: 1
  *                 DESCRIZIONE_MATERIALE:
  *                   type: string
+ *                   description: The material description.
+ *                   example: "Gocciole"
  *                 MARCA:
  *                   type: string
+ *                   description: The material label.
+ *                   example: "Pavesi"
  *                 CODICE_FORNITORE:
  *                   type: integer
+ *                   description: The supplier unique code.
+ *                   example: 2
  *                 UNITA_MISURA:
  *                   type: string
+ *                   description: The unit of measurement.
+ *                   example: "PZ"
  *                 PREZZO_UNITARIO:
  *                   type: number
  *                   format: double
+ *                   description: The price of the material for one unit of measurement.
+ *                   example: 10.0
  *                 DATA_INSERIMENTO:
  *                   type: string
  *                   format: date-time
+ *                   description: The date and time when the material was added.
  *                 DATA_ULTIMA_MODIFICA:
  *                   type: string
  *                   format: date-time
+ *                   description: The date and time when the material's information was last updated.
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getById/:codice_materiale', getById);
 
@@ -136,7 +171,7 @@ router.get('/getById/:codice_materiale', getById);
  *               - custom_data
  *     responses:
  *       200:
- *         description: Material created successfully
+ *         description: Material successfully created
  *         content:
  *           application/json:
  *             schema:
@@ -151,12 +186,10 @@ router.get('/getById/:codice_materiale', getById);
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               type: string
+ *               example: "Internal server error"
  */
 router.post('/create', create);
 
@@ -210,7 +243,7 @@ router.post('/create', create);
  *               - custom_data
  *     responses:
  *       200:
- *         description: Material updated successfully
+ *         description: Material successfully updated
  *         content:
  *           application/json:
  *             schema:
@@ -221,21 +254,17 @@ router.post('/create', create);
  *       404:
  *         description: Material not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               type: string
+ *               example: "Material not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               type: string
+ *               example: "Internal server error"
  */
 router.put('/update/:codice_materiale', update);
 
@@ -266,21 +295,17 @@ router.put('/update/:codice_materiale', update);
  *       404:
  *         description: Material not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               type: string
+ *               example: "Material not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *               type: string
+ *               example: "Internal server error"
  */
 router.delete('/remove/:codice_materiale', remove);
 
