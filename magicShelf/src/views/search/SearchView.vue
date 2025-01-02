@@ -188,7 +188,7 @@ function submit() {
             <SearchedProductCard :cap="searchFilters.cap" />
         </div>
         <div v-if="isLoggedIn && selectedSupplierId != null">
-            <SupplierView :supplierId="selectedSupplierId" :productId="selectedProductId" />
+            <SupplierView :supplierId="selectedSupplierId" :productId="selectedProductId" :filterCap="searchFilters.cap" />
         </div>
     </main>
 </template>

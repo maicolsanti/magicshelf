@@ -15,8 +15,8 @@ const props = defineProps({
         type: Number,
         required: true
     },
-    isNearby: {
-        type: Boolean,
+    filterCap: {
+        type: Number,
         required: true
     }
 });
@@ -30,57 +30,59 @@ const location = computed(() => supplierStore.location);
 console.log("products ", products.value);
 console.log("productId prop ", props.productId);
 
+console.log("caps ", props.filterCap, supplier.value.cap);
+
 const selectedProduct = products.value.find(product => product.id === props.productId);
 
+console.log("selectedProduct ", selectedProduct);
 </script>
 
 <template>
-  <main class="margin-content">
+  <main class="width">
     <div class="col-auto supplier-header">
-      <h2 class="text-center">{{ supplier.companyName }}</h2>
+      <h2 class="text-center bold">{{ supplier.companyName }}</h2>
       <div class="row justify-content-center align-items-center">
         <div class="col-1 supplier-icon">
             <v-icon name="hi-location-marker"
             class="visibility-icon" />
         </div>
-        <p class="col-auto text-center">{{ supplier.address }}<br>{{ location.municipality }} {{ location.cap }} {{ location.district }}</p>
+        <p class="col-auto text-center font-lighter">{{ supplier.address }}<br>{{ location.municipality }} {{ location.cap }} {{ location.district }}</p>
       </div>
-      <div v-if="props.isNearby">
-        <p>Nelle tue vicinanze</p>
+      <div v-if="supplier.cap == props.filterCap">
+        <p class="text-center bold">Nelle tue vicinanze</p>
       </div>
       <div class="row product-highlight justify-content-between align-items-center mx-1 px-4 gx-3">
         <div class="col-6">
-          <span class="text-dark product-name">{{ selectedProduct.description  }}</span>
+          <span class="text-dark bold">{{ selectedProduct.description  }}</span>
         </div>
-        <div class="col-6 badge my-3">
+        <div class="col-6 badge my-3 d-flex justify-content-center align-items-center">
           <span class="price">€ {{ selectedProduct.unitPrice }}</span>
         </div>
       </div>
     </div>
 
-    <section class="supplier-products">
-      <h3>Tutti i prodotti del fornitore</h3>
-      <ul>
+    <section class="supplier-products mt-5">
+      <h3 class="font-lighter">Tutti i prodotti del fornitore</h3>
         <li v-for="product in products" :key="product.id" class="product-item">
-          <span class="product-name">{{ product.description }}</span>
-          <div class="badge">
-            <span class="price">€ {{ product.unitPrice }}</span>
+          <span class="bold">{{ product.description }}</span>
+          <div class="badge d-flex justify-content-center align-items-center">
+            <span class="price text-light">€ {{ product.unitPrice }}</span>
           </div>
         </li>
-      </ul>
     </section>
   </main>
 </template>
 
 <style scoped>
-.margin-content {
-  padding: 20px;
+.width {
+  max-width: 500px;
+  min-width: 350px;
 }
 
 .supplier-header {
   background-color: var(--bs-primary);
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 30px;
   color: #fff;
   justify-content: space-between;
   align-items: center;
@@ -101,8 +103,8 @@ const selectedProduct = products.value.find(product => product.id === props.prod
 
 .product-highlight {
   background-color: #fff;
-  border-radius: 18px;
-  height: 50px;
+  border-radius: 30px;
+  max-height: 60px;
 }
 
 .price {
@@ -118,13 +120,17 @@ const selectedProduct = products.value.find(product => product.id === props.prod
   margin-bottom: 10px;
 }
 
+.font-lighter {
+  font-weight: lighter;
+}
+
 .product-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 5px;
+  padding: 16px;
+  border: 1px solid var(--bs-secondary);
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .product-item .price {
@@ -135,10 +141,11 @@ const selectedProduct = products.value.find(product => product.id === props.prod
 .badge {
     max-width: 50px;
     font-weight: normal;
+    height: 25px;
     background-color: var(--bs-secondary);
 }
 
-.product-name {
+.bold {
   font-weight: bold;
 }
 </style>

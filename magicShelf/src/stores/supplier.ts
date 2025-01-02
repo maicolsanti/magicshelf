@@ -20,7 +20,7 @@ export const useSupplierStore = defineStore('supplierStore', {
         this.selectedSupplierId = supplierId;
     },
     async fetchSupplierById(id) {
-      var fetchedSupplier = new Supplier(1, "Maicol", "Santi", "Bic", "11111111111", "11111111111", "011/111111", " bic@bic.com", "Via rossi, 1", 10100, 1001);
+      var fetchedSupplier = new Supplier(1, "Maicol", "Santi", "Bic", "11111111111", "11111111111", "011/111111", " bic@bic.com", "Via rossi, 1", 47020, 1001);
       this.supplier = fetchedSupplier;
       return true;
     },
