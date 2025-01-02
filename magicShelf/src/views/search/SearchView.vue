@@ -2,18 +2,23 @@
 import { useConfigurationStore } from '@/stores/configurations';
 import { useSearchStore } from '@/stores/search';
 import { useProductsStore } from '@/stores/product';
+import { useSupplierStore } from '@/stores/supplier';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { PriceRange } from '@/models/prince-ranges';
 import { DistanceRange } from '@/models/distance-range';
+import SearchedProductCard from '../../components/search/SearchedProductCard.vue'
+import SupplierView from './SupplierView.vue';
 
 const confStore = useConfigurationStore();
 const searchStore = useSearchStore();
 const productStore = useProductsStore();
+const supplierStore = useSupplierStore();
 const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
-const products = computed(() => productStore.products);
+const selectedSupplierId = computed(() => supplierStore.selectedSupplierId);
+const selectedProductId = computed(() => supplierStore.selectedProductId);
 
 let user = confStore.getUserData;
 
@@ -88,7 +93,7 @@ function submit() {
                 </button>
             </RouterLink>
         </div>
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn && selectedSupplierId == null">
             <h4 class="welcome d-flex my-5">
                 Cerca qui, gli articoli
             </h4>
@@ -180,46 +185,10 @@ function submit() {
                     <button @click="submit" type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
                 </div>
             </div>
-            <div class="">
-                <div v-for="product in products" :key="product.id">
-                <div class="product-card px-4 py-2 mx-auto">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-7">
-                            <div class="row">
-                                <div class="col-12 bolder-text">
-                                    <!-- TODO: add institution -->
-                                    <span>{{ product.supplier.companyName }}</span> <span class="address">{{ product.supplier.address }}</span>
-                                </div>
-                                <div class="col-12 bolder-text">
-                                    {{ product.description }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-auto"> 
-                            <div class="row gx-5">
-                                <div v-if="product.supplier.cap == searchFilters.cap" class="col-6">
-                                    <span class="badge">Nelle tue vicinanze</span>
-                                </div>
-                                <div class="col-6">
-                                    <span class="badge">€{{ product.unitPrice }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-                
-            <!-- <div class="col-md-4" v-for="prodotto in prodotti" :key="prodotto.id">
-                <div class="card">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Immagine prodotto">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ prodotto.nome }}</h5>
-                        <p class="card-text">{{ prodotto.descrizione }}</p>
-                        <p class="card-text"><strong>€{{ prodotto.prezzo.toFixed(2) }}</strong></p>
-                    </div>
-                </div>
-            </div> -->
+            <SearchedProductCard :cap="searchFilters.cap" />
+        </div>
+        <div v-if="isLoggedIn && selectedSupplierId != null">
+            <SupplierView :supplierId="selectedSupplierId" :productId="selectedProductId" :filterCap="searchFilters.cap" />
         </div>
     </main>
 </template>
@@ -275,30 +244,5 @@ label {
 
 .small {
     max-width: 165px;
-}
-.product-card {
-    border: solid;
-    border-color: var(--bs-secondary);
-    border-radius: 6px;
-    border-width: 2px;
-    padding: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    max-width: 800px;
-}
-.badge {
-    max-width: 300px;
-    font-weight: normal;
-    background-color: var(--bs-secondary);
-}
-.bolder-text {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 1.2;
-}
-.address {
-    font-weight: lighter;
-    font-size: 14px;
-    line-height: 1.2;
 }
 </style>
