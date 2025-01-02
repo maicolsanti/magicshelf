@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useSupplierStore } from '@/stores/supplier';
 import { computed } from 'vue';
-import { addIcons } from 'oh-vue-icons';
-import { HiLocationMarker } from 'oh-vue-icons/icons';
+import { addIcons} from 'oh-vue-icons';
+import { HiLocationMarker, IoArrowBackCircleOutline, IoArrowBackCircle } from 'oh-vue-icons/icons';
 
-addIcons(HiLocationMarker);
+addIcons(HiLocationMarker, IoArrowBackCircleOutline, IoArrowBackCircle);
 
 const props = defineProps({
     supplierId: {
@@ -38,7 +38,15 @@ console.log("selectedProduct ", selectedProduct);
 </script>
 
 <template>
-  <main class="width">
+  <div class="row align-items-end">
+        <div class="col d-flex flex-column align-items-start">
+            <button @click="supplierStore.setSupplierIdNull()"><v-icon name="io-arrow-back-circle" scale="2.3" class="navigation-icon" /></button>
+        </div>
+        <div class="col sub-page-title d-flex flex-column align-items-end">
+            <h4>Dettaglio fornitore</h4>
+        </div>
+    </div>
+  <main class="width mt-5">
     <div class="col-auto supplier-header">
       <h2 class="text-center bold">{{ supplier.companyName }}</h2>
       <div class="row justify-content-center align-items-center">
@@ -74,6 +82,20 @@ console.log("selectedProduct ", selectedProduct);
 </template>
 
 <style scoped>
+.navigation-icon {
+    color: var(--bs-primary);
+}
+
+.sub-page-title {
+    align-items: end;
+    align-content: end;
+}
+
+button {
+    background-color: unset;
+    border: unset;
+}
+
 .width {
   max-width: 500px;
   min-width: 350px;

@@ -38,6 +38,9 @@ export const useSupplierStore = defineStore('supplierStore', {
         this.location = fetchedLocation;
         return true;
       },
+    setSupplierIdNull() {
+      this.selectedSupplierId = null;
+    }
   },
   getters: {
   },
