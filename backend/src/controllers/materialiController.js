@@ -2,64 +2,100 @@ import { getAllMateriali, getMaterialeById, createMateriale, updateMateriale, de
 
 export const getAll = async (req, res) => {
   try {
+    // Retrieve all materials from the database
     const materiali = await getAllMateriali();
+
+    // Send the retrieved materials as a JSON response
     res.json(materiali);
   } catch (error) {
-    console.error('Errore durante il recupero dei materiali:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the retrieval process
+    console.error('Error occurred while retrieving materials:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const getById = async (req, res) => {
-  const { codice_materiale } = req.params;
+  const { codice_materiale } = req.params;  // Extract the material ID from the request parameters
   try {
+    // Retrieve the material details from the database
     const materiale = await getMaterialeById(codice_materiale);
+
+    // If no material is found, send a 404 error
     if (!materiale) {
-      return res.status(404).json({ message: 'Materiale non trovato' });
+      return res.status(404).json({ message: 'Material not found' });
     }
+
+    // Send the material data as a JSON response
     res.json(materiale);
   } catch (error) {
-    console.error('Errore durante il recupero del materiale:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the retrieval process
+    console.error('Error occurred while retrieving the material:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const create = async (req, res) => {
-  const { custom_data } = req.body;
+  const { custom_data } = req.body;  // Extract custom data from the request body
   try {
+    // Attempt to create the material in the database
     const id = await createMateriale(custom_data);
-    res.json({ message: 'Materiale creato con successo', id });
+
+    // If successful, send a response with the success message and the newly created material's ID
+    res.json({ message: 'Material successfully created', id });
   } catch (error) {
-    console.error('Errore durante la creazione del materiale:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the creation process
+    console.error('Error occurred while creating the material:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const update = async (req, res) => {
-  const { codice_materiale } = req.params;
-  const { custom_data } = req.body;
+  const { codice_materiale } = req.params;  // Extract material code from request parameters
+  const { custom_data } = req.body;         // Extract custom data from request body
   try {
+    // Attempt to update the material in the database
     const affectedRows = await updateMateriale(codice_materiale, custom_data);
+
+    // If no rows were affected, send a 404 response indicating the material was not found
     if (affectedRows === 0) {
-      return res.status(404).json({ message: 'Materiale non trovato' });
+      return res.status(404).json({ message: 'Material not found' });
     }
-    res.json({ message: 'Materiale aggiornato correttamente' });
+
+    // If the update was successful, send a success message
+    res.json({ message: 'Material successfully updated' });
   } catch (error) {
-    console.error('Errore durante l\'aggiornamento del materiale:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the update process
+    console.error('Error occurred while updating the material:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const remove = async (req, res) => {
-  const { codice_materiale } = req.params;
+  const { codice_materiale } = req.params;  // Extract material code from request parameters
   try {
+    // Attempt to delete the material from the database
     const affectedRows = await deleteMateriale(codice_materiale);
+
+    // If no rows were affected, send a 404 response indicating the material was not found
     if (affectedRows === 0) {
-      return res.status(404).json({ message: 'Materiale non trovato' });
+      return res.status(404).json({ message: 'Material not found' });
     }
-    res.json({ message: 'Materiale eliminato correttamente' });
+
+    // If the deletion was successful, send a success message
+    res.json({ message: 'Material successfully deleted' });
   } catch (error) {
-    console.error('Errore durante l\'eliminazione del materiale:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the deletion process
+    console.error('Error occurred while deleting the material:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };

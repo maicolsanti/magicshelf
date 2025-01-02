@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   - name: Fornitori
- *     description: Operazioni relative ai fornitori
+ *     description: Suppliers management operation
  */
 
 import express from 'express';
@@ -83,6 +83,13 @@ const router = express.Router();
  *                     format: date-time
  *                     description: The date and time when the supplier's information was last updated.
  *                     example: "2024-12-29T12:34:56Z"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getAll', getAll);
 
@@ -162,23 +169,17 @@ router.get('/getAll', getAll);
  *       404:
  *         description: Supplier not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Supplier not found"
+ *               type: string
+ *               example: "Supplier not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getById/:codice_fornitore', getById);
 
@@ -246,20 +247,17 @@ router.get('/getById/:codice_fornitore', getById);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Supplier created successfully"
+ *                   example: "Supplier successfully created"
  *                 id:
  *                   type: integer
  *                   example: 1
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.post('/create', create);
 
@@ -327,27 +325,21 @@ router.post('/create', create);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Supplier updated successfully"
+ *                   example: "Supplier successfully updated"
  *       404:
  *         description: Supplier not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Supplier not found"
+ *               type: string
+ *               example: "Supplier not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.put('/update/:codice_fornitore', update);
 
@@ -376,27 +368,21 @@ router.put('/update/:codice_fornitore', update);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Supplier deleted successfully"
+ *                   example: "Supplier successfully removed"
  *       404:
  *         description: Supplier not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Supplier not found"
+ *               type: string
+ *               example: "Supplier not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.delete('/remove/:codice_fornitore', remove);
 

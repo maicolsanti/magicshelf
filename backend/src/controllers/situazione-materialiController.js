@@ -2,64 +2,104 @@ import { getAllSituazioni, getSituazioneById, createSituazione, updateSituazione
 
 export const getAll = async (req, res) => {
   try {
+    // Fetch all material situations from the database
     const situazioni = await getAllSituazioni();
+    
+    // Return the fetched data as JSON
     res.json(situazioni);
   } catch (error) {
-    console.error('Errore durante il recupero delle situazioni dei materiali:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during data retrieval
+    console.error('Error occurred while retrieving material situations:', error);
+    
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const getById = async (req, res) => {
   const { codice_materiale } = req.params;
+  
   try {
+    // Fetch material situation by its ID from the database
     const situazione = await getSituazioneById(codice_materiale);
+    
+    // If the material situation is not found, return a 404 error
     if (!situazione) {
-      return res.status(404).json({ message: 'Materiale non trovato' });
+      return res.status(404).json({ message: 'Material situation not found' });
     }
+    
+    // Return the found material situation as JSON
     res.json(situazione);
   } catch (error) {
-    console.error('Errore durante il recupero della situazione del materiale:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the retrieval
+    console.error('Error occurred while retrieving material situation:', error);
+    
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const create = async (req, res) => {
   const { custom_data } = req.body;
+  
   try {
+    // Create the material situation in the database
     const id = await createSituazione(custom_data);
-    res.json({ message: 'Situazione del materiale creata con successo', id });
+    
+    // Return success message with the ID of the newly created situation
+    res.json({ message: 'Material situation successfully created', id });
   } catch (error) {
-    console.error('Errore durante la creazione della situazione del materiale:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the creation process
+    console.error('Error occurred while creating material situation:', error);
+    
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const update = async (req, res) => {
   const { codice_materiale } = req.params;
   const { custom_data } = req.body;
+
   try {
+    // Update the material situation in the database
     const affectedRows = await updateSituazione(codice_materiale, custom_data);
+    
+    // If no rows are affected, the material is not found
     if (affectedRows === 0) {
-      return res.status(404).json({ message: 'Materiale non trovato' });
+      return res.status(404).json({ message: 'Material not found' });
     }
-    res.json({ message: 'Situazione del materiale aggiornata correttamente' });
+
+    // Return success message after updating the material situation
+    res.json({ message: 'Material situation successfully updated' });
   } catch (error) {
-    console.error('Errore durante l\'aggiornamento della situazione del materiale:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the update process
+    console.error('Error occurred while updating material situation:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const remove = async (req, res) => {
   const { codice_materiale } = req.params;
+
   try {
+    // Remove the material situation from the database
     const affectedRows = await deleteSituazione(codice_materiale);
+    
+    // If no rows are affected, the material is not found
     if (affectedRows === 0) {
-      return res.status(404).json({ message: 'Materiale non trovato' });
+      return res.status(404).json({ message: 'Material not found' });
     }
-    res.json({ message: 'Situazione del materiale eliminata correttamente' });
+
+    // Return success message after deleting the material situation
+    res.json({ message: 'Material situation successfully deleted' });
   } catch (error) {
-    console.error('Errore durante l\'eliminazione della situazione del materiale:', error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the removal process
+    console.error('Error occurred while deleting material situation:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };

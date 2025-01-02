@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   - name: Clienti
- *     description: Operazioni relative ai clienti
+ *     description: Clients management operation
  */
 
 import express from 'express';
@@ -71,6 +71,13 @@ const router = express.Router();
  *                     format: date-time
  *                     description: The date and time when the client's information was last updated.
  *                     example: "2024-12-29T12:34:56Z"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getAll', getAll);
 
@@ -138,23 +145,17 @@ router.get('/getAll', getAll);
  *       404:
  *         description: Client not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Client not found"
+ *               type: string
+ *               example: "Client not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getById/:codice_cliente', getById);
 
@@ -210,20 +211,17 @@ router.get('/getById/:codice_cliente', getById);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Client created successfully"
+ *                   example: "Client successfully created"
  *                 id:
  *                   type: integer
  *                   example: 1
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.post('/create', create);
 
@@ -281,27 +279,21 @@ router.post('/create', create);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Client updated successfully"
+ *                   example: "Client successfully updated"
  *       404:
  *         description: Client not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Client not found"
+ *               type: string
+ *               example: "Client not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.put('/update/:codice_cliente', update);
 
@@ -330,27 +322,21 @@ router.put('/update/:codice_cliente', update);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Client deleted successfully"
+ *                   example: "Client successfully deleted"
  *       404:
  *         description: Client not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Client not found"
+ *               type: string
+ *               example: "Client not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.delete('/remove/:codice_cliente', remove);
 
