@@ -1,7 +1,15 @@
 import { getAllMateriali, getMaterialeById, createMateriale, updateMateriale, deleteMateriale } from '../models/materialiModel.js';
+import { getUser } from '../utils/auth.js';
 
 export const getAll = async (req, res) => {
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Retrieve all materials from the database
     const materiali = await getAllMateriali();
 
@@ -19,6 +27,13 @@ export const getAll = async (req, res) => {
 export const getById = async (req, res) => {
   const { codice_materiale } = req.params;  // Extract the material ID from the request parameters
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Retrieve the material details from the database
     const materiale = await getMaterialeById(codice_materiale);
 
@@ -41,6 +56,13 @@ export const getById = async (req, res) => {
 export const create = async (req, res) => {
   const { custom_data } = req.body;  // Extract custom data from the request body
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Attempt to create the material in the database
     const id = await createMateriale(custom_data);
 
@@ -59,6 +81,13 @@ export const update = async (req, res) => {
   const { codice_materiale } = req.params;  // Extract material code from request parameters
   const { custom_data } = req.body;         // Extract custom data from request body
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Attempt to update the material in the database
     const affectedRows = await updateMateriale(codice_materiale, custom_data);
 
@@ -81,6 +110,13 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   const { codice_materiale } = req.params;  // Extract material code from request parameters
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Attempt to delete the material from the database
     const affectedRows = await deleteMateriale(codice_materiale);
 

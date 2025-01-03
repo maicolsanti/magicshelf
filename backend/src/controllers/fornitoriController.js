@@ -5,9 +5,27 @@ import {
   updateFornitore,
   deleteFornitore,
 } from '../models/fornitoriModel.js';
+import {
+  getUser
+} from '../utils/auth.js';
+
+const ROLE_NAME = 'FORNITORE';
 
 export const getAll = async (req, res) => {
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
+    // Check if the user is authorized
+    if(user.ROLE != ROLE_NAME) {
+      res.status(403).send('Insufficient permission');
+      return;
+    }
+
     // Attempt to retrieve all suppliers from the database
     const fornitori = await getAllFornitori();
     
@@ -23,6 +41,19 @@ export const getAll = async (req, res) => {
 export const getById = async (req, res) => {
   const { codice_fornitore } = req.params;
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
+    // Check if the user is authorized
+    if(user.ROLE != ROLE_NAME) {
+      res.status(403).send('Insufficient permission');
+      return;
+    }
+
     // Attempt to retrieve the supplier by their unique ID
     const fornitore = await getFornitoreById(codice_fornitore);
 
@@ -43,6 +74,19 @@ export const getById = async (req, res) => {
 export const create = async (req, res) => {
   const { custom_data } = req.body;  // Extract custom data from the request body
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
+    // Check if the user is authorized
+    if(user.ROLE != ROLE_NAME) {
+      res.status(403).send('Insufficient permission');
+      return;
+    }
+
     // Attempt to create a new supplier in the database
     const id = await createFornitore(custom_data);
     
@@ -61,6 +105,19 @@ export const update = async (req, res) => {
   const { codice_fornitore } = req.params;  // Extract the supplier's ID from the route parameters
   const { custom_data } = req.body;  // Extract the updated data from the request body
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
+    // Check if the user is authorized
+    if(user.ROLE != ROLE_NAME) {
+      res.status(403).send('Insufficient permission');
+      return;
+    }
+
     // Attempt to update the supplier in the database
     const rowsAffected = await updateFornitore(codice_fornitore, custom_data);
 
@@ -83,6 +140,19 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   const { codice_fornitore } = req.params;  // Extract the supplier's ID from the route parameters
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
+    // Check if the user is authorized
+    if(user.ROLE != ROLE_NAME) {
+      res.status(403).send('Insufficient permission');
+      return;
+    }
+
     // Attempt to delete the supplier from the database
     const rowsAffected = await deleteFornitore(codice_fornitore);
 

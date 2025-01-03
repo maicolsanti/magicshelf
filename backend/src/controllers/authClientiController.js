@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import { getUser, setUser, unsetUser } from "../utils/auth.js";
 import { getClienteByEmail, insertCliente } from "../models/authClientiModel.js";
 
+const ROLE_NAME = 'CLIENTE';
+
 export const registerCliente = async (req, res) => {
     try {
         // Check if the user is already logged in
@@ -38,6 +40,7 @@ export const registerCliente = async (req, res) => {
         // Fetch the client data by email
         const users = await getClienteByEmail(email);
         const userData = users[0];
+        userData.RUOLO = ROLE_NAME;
 
         // Set the user session or authentication cookie
         setUser(req, res, userData);
@@ -92,47 +95,6 @@ export const loginCliente = async (req, res) => {
     } catch (error) {
         // Log the error and send a generic server error response
         console.error('Error during client login:', error);
-        res.status(500).send('Internal server error');
-    }
-};
-
-export const logoutCliente = async (req, res) => {
-    try {
-        // Check if the user is logged in
-        const user = getUser(req, res);
-        if (!user) {
-            res.status(401).send('This operation requires you to be logged in');
-            return;
-        }
-
-        // Unset the user session or authentication cookie
-        unsetUser(req, res);
-
-        // Send a success response
-        res.json({ message: 'Logout successful' });
-    } catch (error) {
-        // Log the error and send a generic server error response
-        console.error('Error during client logout:', error);
-        res.status(500).send('Internal server error');
-    }
-};
-
-export const getProfileCliente = async (req, res) => {
-    try {
-        // Retrieve the currently logged-in user's data from the session or cookie
-        const user = getUser(req, res);
-
-        // Check if the user is logged in
-        if (!user) {
-            res.status(401).send('You must be logged in to access your profile');
-            return;
-        }
-
-        // Respond with the user's profile data
-        res.json(user);
-    } catch (error) {
-        // Log the error and send a generic server error response
-        console.error('Error retrieving client profile:', error);
         res.status(500).send('Internal server error');
     }
 };
