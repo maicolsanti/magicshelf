@@ -1,7 +1,15 @@
 import { getAllSituazioni, getSituazioneById, createSituazione, updateSituazione, deleteSituazione } from '../models/situazione-materialiModel.js';
+import { getUser } from '../utils/auth.js';
 
 export const getAll = async (req, res) => {
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Fetch all material situations from the database
     const situazioni = await getAllSituazioni();
     
@@ -20,6 +28,13 @@ export const getById = async (req, res) => {
   const { codice_materiale } = req.params;
   
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Fetch material situation by its ID from the database
     const situazione = await getSituazioneById(codice_materiale);
     
@@ -43,6 +58,13 @@ export const create = async (req, res) => {
   const { custom_data } = req.body;
   
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Create the material situation in the database
     const id = await createSituazione(custom_data);
     
@@ -62,6 +84,13 @@ export const update = async (req, res) => {
   const { custom_data } = req.body;
 
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Update the material situation in the database
     const affectedRows = await updateSituazione(codice_materiale, custom_data);
     
@@ -85,6 +114,13 @@ export const remove = async (req, res) => {
   const { codice_materiale } = req.params;
 
   try {
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
     // Remove the material situation from the database
     const affectedRows = await deleteSituazione(codice_materiale);
     

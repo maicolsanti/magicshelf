@@ -8,9 +8,7 @@
 import express from 'express';
 import {
     registerCliente,
-    loginCliente,
-    logoutCliente,
-    getProfileCliente
+    loginCliente
 } from '../controllers/authClientiController.js';
 
 const router = express.Router();
@@ -161,113 +159,5 @@ router.post('/register', registerCliente);
  *               example: "Internal server error"
  */
 router.post('/login', loginCliente);
-
-/**
- * @swagger
- * /auth/clienti/logout:
- *   post:
- *     tags:
- *      - AuthClienti
- *     summary: Client logout
- *     description: Client logout using the access token saved in the browser
- *     responses:
- *       200:
- *         description: The client's logout was successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Logout successful"
- *       401:
- *         description: The login operation can only be performed after logging out
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "This operation requires you to be logged in"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Internal server error"
- */
-router.post('/logout', logoutCliente);
-
-/**
- * @swagger
- * /auth/clienti/getProfile:
- *   get:
- *     tags:
- *      - AuthClienti
- *     summary: Returns the current client profile
- *     responses:
- *       200:
- *         description: Data of the currently logged-in client
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   CODICE_CLIENTE:
- *                     type: integer
- *                     description: The unique client code
- *                     example: 1
- *                   NOME:
- *                     type: string
- *                     description: The client's first name
- *                     example: "Luca"
- *                   COGNOME:
- *                     type: string
- *                     description: The client's last name
- *                     example: "Verdi"
- *                   CAP:
- *                     type: integer
- *                     description: The client's postal code
- *                     example: 20100
- *                   CODICE_ISTAT:
- *                     type: integer
- *                     description: The client's ISTAT code
- *                     example: 12345
- *                   EMAIL:
- *                     type: string
- *                     description: The client's email address
- *                     example: "luca.verdi@example.com"
- *                   PHONE_NUMBER:
- *                     type: integer
- *                     description: The client's phone number (if available)
- *                     example: 1234567890
- *                   DATA_INSERIMENTO:
- *                     type: string
- *                     format: date-time
- *                     description: The date and time when the client was added
- *                     example: "2024-12-29T12:34:56Z"
- *                   DATA_ULTIMA_MODIFICA:
- *                     type: string
- *                     format: date-time
- *                     description: The date and time of the last modification to the client
- *                     example: "2024-12-29T12:34:56Z"
- *       401:
- *         description: The login operation can only be performed after logging out
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "You must be logged in to access your profile"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Internal server error"
- */
-router.get('/getProfile', getProfileCliente);
 
 export default router;

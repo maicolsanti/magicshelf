@@ -11,6 +11,7 @@ import situazioneMaterialeRoutes from './routes/situazione-materialiRoutes.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import authClientiRoutes from './routes/authClientiRoutes.js';
 import authFornitoriRoutes from './routes/authFornitoriRoutes.js';
+import authGeneralRoutes from './routes/authGeneralRoutes.js';
 import MaterialiFornitoriRoutes from './routes/materiali-fornitoriRoutes.js';
 
 // Load environment variables from the .env file
@@ -36,6 +37,7 @@ app.use('/api/situazione-materiali', situazioneMaterialeRoutes); // Routes for t
 app.use('/api/materiali-fornitori', MaterialiFornitoriRoutes); // Routes for supplier materials
 app.use('/api/auth/clienti', authClientiRoutes); // Authentication routes for clients
 app.use('/api/auth/fornitori', authFornitoriRoutes); // Authentication routes for suppliers
+app.use('/api/auth/general', authGeneralRoutes); // Authentication general routes
 
 // Middleware to handle 404 errors for undefined routes
 app.use(notFoundHandler);

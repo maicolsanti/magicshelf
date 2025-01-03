@@ -1,7 +1,23 @@
 import { getAllFornitoriMateriali, getFornitoreMaterialiById } from '../models/materiali-fornitoriModel.js';
+import { getUser } from '../utils/auth.js';
+
+const ROLE_NAME = 'FORNITORE';
 
 export const getAll = async (req, res) => {
     try {
+        const user = getUser(req, res);
+        // Check if the user is logged in
+        if (!user) {
+            res.status(401).send('This operation requires you to be logged in');
+            return;
+        }
+
+        // Check if the user is authorized
+        if(user.ROLE != ROLE_NAME) {
+            res.status(403).send('Insufficient permission');
+            return;
+        }
+
         // Fetch all supplier materials from the database
         const fornitori_materiali = await getAllFornitoriMateriali();
 
@@ -19,6 +35,19 @@ export const getAll = async (req, res) => {
 export const getById = async (req, res) => {
     const { codice_fornitore } = req.params; // Extract 'codice_fornitore' from request parameters
     try {
+        const user = getUser(req, res);
+        // Check if the user is logged in
+        if (!user) {
+          res.status(401).send('This operation requires you to be logged in');
+          return;
+        }
+    
+        // Check if the user is authorized
+        if(user.ROLE != ROLE_NAME) {
+          res.status(403).send('Insufficient permission');
+          return;
+        }
+
         // Retrieve supplier material by its unique identifier (codice_fornitore)
         const fornitore_materiali = await getFornitoreMaterialiById(codice_fornitore);
 
