@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { UserType } from '@/models/user-type'
+import axios from "axios"
+import { LocationDetails } from '@/models/location-details';
 
 export const useRegistrationStore = defineStore('registrationStore', {
   state: () => ({
@@ -18,28 +20,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
         town: "",
         password: ""
       },
-      towns: [
-        {
-          name: "Cesena",
-          caps: ["47520", "47521"]
-        },
-        {
-          name: "Longiano",
-          caps: ["47020"]
-        },
-        {
-          name: "Bologna",
-          caps: ["47120", "47121", "47122", "47123"]
-        },
-        {
-          name: "Cisterna di Latina",
-          caps: ["04012"]
-        },
-        {
-          name: "Como",
-          caps: ["40130", "40131"]
-        }
-      ],
+      towns:  [] as LocationDetails[],
       showPassword: false,
       inputPasswordType: 'password',
       vatSameAsFiscalCode: false,
@@ -71,6 +52,25 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     clearVatSameAsFiscalCode() {
       this.registration.vatSameAsFiscalCode = false;
+    },
+    async fetchTowns() {
+        try {
+          console.log("fetching towns begins");
+          this.registration.towns = await axios.get('/api/localita/getAll').then(res => res.data.map((locality: any) => new LocationDetails(
+            locality.CODICE_ISTAT,
+            locality.CAP,
+            locality.PROVINCIA,
+            locality.REGIONE,
+            locality.LOCALITA
+        )));
+
+            console.log("fetching towns ended");
+            console.log("towns: " + JSON.stringify(this.registration.towns));
+          }
+          catch (error) {
+            alert(error);
+            console.log(error);
+        }
     },
     setSelectedTown(townName) {
       this.registration.registrationData.town = townName;
@@ -142,7 +142,15 @@ export const useRegistrationStore = defineStore('registrationStore', {
       return this.registration.vatSameAsFiscalCode;
     },
     getTowns() {
-      return this.registration.towns.filter(town => town.caps.includes(this.registration.registrationData.cap));
+      console.log("requested getTowns");
+      if(this.registration.towns.length > 0) {
+        console.log("towns.cap = " + this.registration.towns[0].cap);
+        console.log("equal caps " + JSON.stringify(this.registration.towns.filter(town => town.cap == this.registration.registrationData.cap)));
+        return this.registration.towns.filter(town => town.cap == this.registration.registrationData.cap);
+      } else {
+        console.log("towns is empty");
+        return  [] as LocationDetails[];
+      }
     },
     getTown() {
       return this.registration.registrationData.town;

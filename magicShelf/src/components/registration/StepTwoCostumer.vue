@@ -2,7 +2,7 @@
 import { useRegistrationStore } from '@/stores/registration'
 import { useConfigurationStore } from '@/stores/configurations'
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { addIcons } from 'oh-vue-icons'
 import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 import { useRouter } from 'vue-router'
@@ -10,7 +10,12 @@ import { useRouter } from 'vue-router'
 addIcons(MdVisibilityRound, MdVisibilityoffRound);
 const registrationStore = useRegistrationStore();
 const configurationStore = useConfigurationStore();
-const { registration, getPasswordType, getTowns, getTown, getTownString } = storeToRefs(registrationStore);
+const { registration, getTowns, getPasswordType, getTown, getTownString } = storeToRefs(registrationStore);
+
+onMounted(() => {
+  registrationStore.fetchTowns();
+  console.log('fetching towns...');
+});
 
 const passwordInputType = computed(() => getPasswordType.value);
 const dropDownString = computed(() => getTownString.value);
@@ -21,6 +26,8 @@ const router = useRouter()
 
 registrationStore.clearRegistrationData();
 registrationStore.clearVatSameAsFiscalCode();
+
+
 
 function checkDataValidity() {
     let valid = true;
@@ -49,6 +56,7 @@ function submit() {
     configurationStore.login(formData.emailInput, formData.passwordInput);
     router.push('/');
 }
+
 </script>
 
 <template>
@@ -108,13 +116,12 @@ function submit() {
                                     <a class="dropdown-item disabled"
                                         @click="registrationStore.setSelectedTown('')" href="#">Inserisci il
                                         cap</a>
-                                    
                                 </li>
                                 <li v-if="towns.length > 0">
-                                    <a v-for="   town in towns   " v-bind:key="town.name"
-                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.name)"
+                                    <a v-for="   town in towns   " v-bind:key="town.istatCode"
+                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.municipality)"
                                         href="#">{{
-                                            town.name }}</a>
+                                            town.municipality }}</a>
                                 </li>
                                 
                             </ul>
