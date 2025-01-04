@@ -6,7 +6,7 @@
  */
 
 import express from 'express';
-import { getAll, getById } from '../controllers/materiali-fornitoriController.js';
+import { getAll, getById, getFiltered } from '../controllers/materiali-fornitoriController.js';
 
 const router = express.Router();
 
@@ -199,5 +199,107 @@ router.get('/getAll', getAll);
  *               example: "Internal server error"
  */
 router.get('/getById/:codice_fornitore', getById);
+
+/**
+ * @swagger
+ * /materiali-fornitori/getFiltered:
+ *   post:
+ *     tags:
+ *       - MaterialiFornitori
+ *     summary: Retrieve materials dynamically based on filters
+ *     description: This endpoint allows the client to search for materials in the database using dynamic filters. Filters such as material description, brand, supplier, price range, and location-based criteria can be applied.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               DESCRIZIONE_MATERIALE:
+ *                 type: string
+ *                 description: The description of the material to search for (supports partial matches).
+ *                 example: "Gocciole"
+ *               MARCA:
+ *                 type: string
+ *                 description: The brand of the material.
+ *                 example: "Pavesi"
+ *               FORNITORE:
+ *                 type: string
+ *                 description: The supplier's name.
+ *                 example: "Conad"
+ *               PREZZO_UNITARIO:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *                   format: float
+ *                 description: The price range for the material (min and max values).
+ *                 example: [5, 10]
+ *               ZONA_DI_RICERCA:
+ *                 type: string
+ *                 description: The search area. Options are 'Dentro il Comune' or 'Fuori dal Comune'.
+ *                 example: "Fuori dal Comune"
+ *               ZONA_DI_PARTENZA:
+ *                 type: string
+ *                 description: The starting zone for the search.
+ *                 example: "Roma"
+ *               REGIONE:
+ *                 type: string
+ *                 description: The region of the starting zone.
+ *                 example: "Lazio"
+ *     responses:
+ *       200:
+ *         description: A list of materials matching the search criteria.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   ID_MATERIALE:
+ *                     type: integer
+ *                     description: The unique identifier of the material.
+ *                     example: 1
+ *                   DESCRIZIONE_MATERIALE:
+ *                     type: string
+ *                     description: The description of the material.
+ *                     example: "Gocciole"
+ *                   MARCA:
+ *                     type: string
+ *                     description: The brand of the material.
+ *                     example: "Pavesi"
+ *                   FORNITORE:
+ *                     type: string
+ *                     description: The supplier's name.
+ *                     example: "Conad"
+ *                   PREZZO_UNITARIO:
+ *                     type: number
+ *                     format: float
+ *                     description: The unit price of the material.
+ *                     example: 7.5
+ *                   DENOMINAZIONE_LOCALITA:
+ *                     type: string
+ *                     description: The location of the material.
+ *                     example: "Napoli"
+ *                   DENOMINAZIONE_REGIONE:
+ *                     type: string
+ *                     description: The region where the material is located.
+ *                     example: "Campania"
+ *       400:
+ *         description: Invalid request or missing filters.
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Invalid filters provided."
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error."
+ */
+router.post('/getFiltered', getFiltered);
 
 export default router;
