@@ -15,7 +15,7 @@ const router = express.Router();
  * /situazione-materiali/getAll:
  *   get:
  *     tags:
- *       - Situazioni Materiali
+ *       - Situazione Materiali
  *     summary: Retrieve all material situations
  *     description: Fetches all material situations from the database, including the current quantity and last modification date.
  *     responses:
@@ -57,7 +57,7 @@ router.get('/getAll', getAll);
  * /situazione-materiali/getById/{codice_materiale}:
  *   get:
  *     tags:
- *       - Situazioni Materiali
+ *       - Situazione Materiali
  *     summary: Retrieve the situation of a specific material
  *     description: Fetches the situation of a material by its unique ID, including its current quantity and the last modification date.
  *     parameters:
@@ -111,7 +111,7 @@ router.get('/getById/:codice_materiale', getById);
  * /situazione-materiali/create:
  *   post:
  *     tags:
- *       - Situazioni Materiali
+ *       - Situazione Materiali
  *     summary: Create a new material situation
  *     description: Adds a new material situation to the database with the provided custom data.
  *     requestBody:
@@ -159,7 +159,7 @@ router.post('/create', create);
  * /situazione-materiali/update/{codice_materiale}:
  *   put:
  *     tags:
- *       - Situazioni Materiali
+ *       - Situazione Materiali
  *     summary: Update an existing material situation
  *     description: Updates the details of a material situation in the database using the provided material code and custom data.
  *     parameters:
@@ -216,7 +216,7 @@ router.put('/update/:codice_materiale', update);
  * /situazione-materiali/remove/{codice_materiale}:
  *   delete:
  *     tags:
- *       - Situazioni Materiali
+ *       - Situazione Materiali
  *     summary: Delete a material situation
  *     description: Deletes a material situation from the database based on the provided material code.
  *     parameters:
