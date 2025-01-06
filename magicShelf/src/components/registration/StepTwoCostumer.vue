@@ -27,8 +27,6 @@ const router = useRouter()
 registrationStore.clearRegistrationData();
 registrationStore.clearVatSameAsFiscalCode();
 
-
-
 function checkDataValidity() {
     let valid = true;
     const inputs = document.querySelectorAll("#costumerRegistration input");
@@ -52,7 +50,7 @@ let formData = {
 };
 
 function submit() {
-    registrationStore.setCostumerFormData(formData.nameInput, formData.surnameInput, formData.emailInput, formData.phoneInput, formData.passwordInput);
+    registrationStore.registerCostumer(formData.nameInput, formData.surnameInput, formData.emailInput, formData.phoneInput, formData.passwordInput);
     configurationStore.login(formData.emailInput, formData.passwordInput);
     router.push('/');
 }
@@ -114,12 +112,12 @@ function submit() {
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
                                 <li v-if="towns.length == 0">
                                     <a class="dropdown-item disabled"
-                                        @click="registrationStore.setSelectedTown('')" href="#">Inserisci il
+                                        @click="registrationStore.setSelectedTown('', '')" href="#">Inserisci il
                                         cap</a>
                                 </li>
                                 <li v-if="towns.length > 0">
                                     <a v-for="   town in towns   " v-bind:key="town.istatCode"
-                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.municipality)"
+                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.municipality, town.istatCode)"
                                         href="#">{{
                                             town.municipality }}</a>
                                 </li>
