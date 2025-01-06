@@ -6,12 +6,12 @@ export class Supplier {
     public vatNumber: string;
     public fiscalCode: string;
     public phoneNumber: string | null;
-    public email: string;
-    public address: string;
+    public email: string | null;
+    public address: string | null;
     public cap: number;
     public istatCode: number;
 
-    constructor(id: number, name: string, surname: string, companyName: string, vatNumber: string, fiscalCode: string, phoneNumber: string | null, email: string, address: string, cap: number, istatCode: number) {
+    constructor(id: number, name: string, surname: string, companyName: string, vatNumber: string, fiscalCode: string, phoneNumber: string | null, email: string | null, address: string | null, cap: number, istatCode: number) {
         this.id = id;
         this.name = name;
         this.surname = surname;

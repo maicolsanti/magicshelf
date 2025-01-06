@@ -69,7 +69,7 @@ function setFiscalCodeWithVatNumber() {
 
 function submit() {
     registrationStore.registerSupplier(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.address, formData.passwordInput);
-    configurationStore.login(formData.emailInput, formData.passwordInput);
+    configurationStore.loginSupplier(formData.emailInput, formData.passwordInput);
     router.push('/');
 }
 </script>

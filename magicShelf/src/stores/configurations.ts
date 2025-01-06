@@ -1,5 +1,8 @@
+import { Costumer } from '@/models/costumer';
 import { page } from '@/models/page'
+import { Supplier } from '@/models/supplier';
 import { UserType } from '@/models/user-type'
+import axios from 'axios';
 import { defineStore } from 'pinia'
 
 export const useConfigurationStore = defineStore('configurationsStore', {
@@ -53,26 +56,98 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
       return this.configurations.pageString
     },
-    login(username, password) {
-      //TODO: implement login and remove test user
-      if (username == 'test' && password == 'test') {
-        this.configurations.logged = true;
-        this.configurations.userData = {
-          name: "Gianni",
-        surname: "Colo",
-        companyName: null,
-        vatNumber: null,
-        fiscalCode: "BGNMGH01A51C5573T",
-        email: "margheritabagnoliniunibo@gmail.it",
-        phoneNumber: "3342625441",
-        cap: "47020",
-        town: "Longiano",
+    async loginCostumer(username, password) {
+
+      try {
+        await axios.post('/auth/clienti/login', {
+          EMAIL: username,
+          PASSWORD_HASH: password,
+        })
+          .then(function (response) {
+            console.log("logged in");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+
+            this.configurations.logged = true;
+            this.fetchUserData(UserType.COSTUMER);
+          })
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+
+    },
+    async loginSupplier(fiscalCode, password) {
+
+      try {
+        await axios.post('/auth/fornitori/login', {
+          CODICE_FISCALE: fiscalCode,
+          PASSWORD_HASH: password,
+        })
+          .then(function (response) {
+            console.log("logged in");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+
+            this.configurations.logged = true;
+            this.fetchUserData(UserType.SUPPLIER);
+          })
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+
+    },
+    async fetchUserData(userType) {
+
+      if (userType == UserType.COSTUMER) {
+        try {
+          this.configurations.userData = await axios.get('/api/clienti/getProfifle').then(res => res.data.map((costumer: any) => new Costumer(
+            costumer.CODICE_CLIENTE,
+            costumer.NOME,
+            costumer.COGNOME,
+            costumer.CAP,
+            costumer.CODICE_ISTAT,
+            costumer.EMAIL,
+            costumer.PHONE_NUMBER
+          )));
+
+          console.log("fetched customer profile");
         }
-      } else {
+        catch (error) {
+          alert(error);
+          console.log(error);
+        }
+
+      } else if (userType == UserType.SUPPLIER) {
+        try {
+          this.configurations.userData = await axios.get('/api/fornitori/getProfifle').then(res => res.data.map((supplier: any) => new Supplier(
+            supplier.CODICE_FORNITORE,
+            supplier.NOME,
+            supplier.COGNOME,
+            supplier.RAGIONE_SOCIALE,
+            supplier.PARTITA_IVA,
+            supplier.CODICE_FISCALE,
+            supplier.PHONE_NUMBER,
+            null,
+            null,
+            supplier.CAP,
+            supplier.CODICE_ISTAT,
+            
+          )));
+
+          console.log("fetched supplier profile");
+        }
+        catch (error) {
+          alert(error);
+          console.log(error);
+        }
 
       }
+
     },
     logout() {
+      //TODO: implement logout
       this.configurations.logged = false;
     }
   },

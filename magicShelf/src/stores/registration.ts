@@ -94,14 +94,15 @@ export const useRegistrationStore = defineStore('registrationStore', {
       this.registration.registrationData.password = passwordInput;
 
       try {
-        await axios.post('/api/clienti/create', {
+        await axios.post('/auth/clienti/register', {
           custom_data: {
             NOME: nameInput,
             COGNOME: surnameInput,
             CAP: Number(this.registration.registrationData.cap),
             CODICE_ISTAT: Number(this.registration.registrationData.townCode),
             EMAIL: emailInput,
-            PHONE_NUMBER: Number(phoneInput)
+            PHONE_NUMBER: Number(phoneInput),
+            PASSWORD_HASH: passwordInput
           }
         })
           .then(function (response) {
@@ -140,6 +141,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
             // TODO: add EMAIL: emailInput,
             INDIRIZZO: addressInput,
             PHONE_NUMBER: Number(phoneInput),
+            PASSWORD_HASH: passwordInput
           }
         })
           .then(function (response) {
