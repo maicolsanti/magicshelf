@@ -2,92 +2,99 @@ import bcrypt from 'bcrypt';
 import { getUser, setUser, unsetUser } from "../utils/auth.js";
 import { getClienteByEmail, insertCliente } from "../models/authClientiModel.js";
 
+const ROLE_NAME = 'CLIENTE';
+
 export const registerCliente = async (req, res) => {
     try {
+        // Check if the user is already logged in
         const checklogout = getUser(req, res);
-        if(checklogout) {
-            res.status(401).send('Questa operazione richiede il logout');
+        if (checklogout) {
+            res.status(401).send('This operation requires you to log out first');
             return;
         }
 
+        // Extract the email from the request body
         const email = req.body.EMAIL;
+
+        // Check if the email is already in use
         const rows = await getClienteByEmail(email);
-        if(rows && rows.length > 0) {
-            res.status(400).send('Email già in uso');
+        if (rows && rows.length > 0) {
+            res.status(400).send('This email address is already in use');
             return;
         }
 
+        // Hash the password before storing it in the database
         const password = req.body.PASSWORD_HASH;
         const passwordHash = await bcrypt.hash(password, 10);
         req.body.PASSWORD_HASH = passwordHash;
 
+        // Insert the new client data into the database
         const result = await insertCliente(req.body);
-        if(!(result.affectedRows > 0)) {
-            throw new Error('Errore durante l\'inserimento dei dati all\'interno del database');
+        if (!(result.affectedRows > 0)) {
+            throw new Error('An error occurred while inserting the data into the database');
         }
+        
+        // Retrieve the ID of the newly inserted client
         const id = result.insertId;
 
+        // Fetch the client data by email
         const users = await getClienteByEmail(email);
         const userData = users[0];
+        userData.RUOLO = ROLE_NAME;
+
+        // Set the user session or authentication cookie
         setUser(req, res, userData);
 
-        res.json({message: 'Registrazione avvenuta con successo', id});
+        // Send a success response with the client ID
+        res.json({ message: 'Client registration successful', id });
     } catch (error) {
-        console.log('Errore durante la registrazione del cliente:', error);
-        res.status(500).send('Errore interno del server');
+        // Log the error and send a generic server error response
+        console.error('Error during client registration:', error);
+        res.status(500).send('Internal server error');
     }
-}
+};
 
 export const loginCliente = async (req, res) => {
     try {
+        // Check if the user is already logged in
         const checklogout = getUser(req, res);
-        if(checklogout) {
-            res.status(401).send('Questa operazione richiede il logout');
+        if (checklogout) {
+            res.status(401).send('This operation requires you to log out first');
             return;
         }
 
+        // Extract the email from the request body
         const email = req.body.EMAIL;
+
+        // Retrieve the client data by email
         const users = await getClienteByEmail(email);
         if (!users.length > 0) {
-            res.status(400).send('Utente non registrato');
+            res.status(400).send('User not registered');
             return;
         }
 
+        // Get the first user from the retrieved data
         const user = users[0];
+
+        // Compare the provided password with the stored hash
         const password = req.body.PASSWORD_HASH;
-        const correctPassword = await bcrypt.compare(password, user.PASSWORD_HASH)
+        const correctPassword = await bcrypt.compare(password, user.PASSWORD_HASH);
         if (!correctPassword) {
-            res.status(400).send('Credenziali errate');
+            res.status(403).send('Invalid credentials');
             return;
         }
-        delete user.PASSWORD_HASH; // Eliminiamo la password dalla risposta in quanto sarebbe in chiaro
 
+        // Remove the password hash before sending the user data in the response
+        delete user.PASSWORD_HASH;
+
+        // Set the user session or authentication cookie
         setUser(req, res, user);
 
-        res.json({message: 'Login avvenuto con successo'});
+        // Send a success response
+        res.json({ message: 'Login successful' });
     } catch (error) {
-        console.log('Errore durante la login del cliente:', error);
-        res.status(500).send('Errore interno del server');
+        // Log the error and send a generic server error response
+        console.error('Error during client login:', error);
+        res.status(500).send('Internal server error');
     }
-}
-
-export const logoutCliente = async (req, res) => {
-    try {
-        const user = getUser(req, res);
-        if(!user) {
-            res.status(401).send('Questa operazione richiede il login');
-            return;
-        }
-
-        unsetUser(req, res);
-        res.json({message: 'Logout avvenuto con successo'});
-    } catch (error) {
-        console.log('Errore durante la logout del cliente:', error);
-        res.status(500).send('Errore interno del server');
-    }
-}
-
-export const getProfileCliente = async (req, res) => {
-    const user = getUser(req, res);
-    res.json(user);
-}
+};

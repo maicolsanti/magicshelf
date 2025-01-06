@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   - name: Localita
- *     description: Get locality endpoints
+ *     description: Localities get endpoints
  */
 
 import express from 'express';
@@ -47,6 +47,13 @@ const router = express.Router();
  *                     type: string
  *                     description: The name of the locality (e.g., city or town).
  *                     example: "Bologna"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getAll', getAll);
 
@@ -94,25 +101,19 @@ router.get('/getAll', getAll);
  *                   description: The name of the locality (e.g., city or town).
  *                   example: "Bologna"
  *       404:
- *         description: Locality not found
+ *         description: The location is not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Locality not found"
+ *               type: string
+ *               example: "Location not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getById/:codice_istat', getById);
 
@@ -160,25 +161,19 @@ router.get('/getById/:codice_istat', getById);
  *                   description: The name of the locality (e.g., city or town).
  *                   example: "Bologna"
  *       404:
- *         description: Locality not found
+ *         description: The location is not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Locality not found"
+ *               type: string
+ *               example: "Location not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getByCap/:cap', getByCap);
 
@@ -233,25 +228,19 @@ router.get('/getByCap/:cap', getByCap);
  *                   description: The name of the locality (e.g., city or town).
  *                   example: "Bologna"
  *       404:
- *         description: Locality not found
+ *         description: The location is not found
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Locality not found"
+ *               type: string
+ *               example: "Location not found"
  *       500:
  *         description: Internal server error
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Internal server error"
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getByCapDenominazione/:cap/:denominazione', getByCapDenominazione);
 

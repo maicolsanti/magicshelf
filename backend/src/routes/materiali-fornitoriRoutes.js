@@ -2,11 +2,11 @@
  * @swagger
  * tags:
  *   - name: MaterialiFornitori
- *     description: Situazione dei fornitori incrociata con i relativi materiali
+ *     description: Supplier's material situation
  */
 
 import express from 'express';
-import { getAll, getById } from '../controllers/materiali-fornitoriController.js';
+import { getAll, getById, getFiltered } from '../controllers/materiali-fornitoriController.js';
 
 const router = express.Router();
 
@@ -16,10 +16,10 @@ const router = express.Router();
  *   get:
  *     tags:
  *      - MaterialiFornitori
- *     summary: Ritorna tutti i fornitori e i relativi materiali presenti
+ *     summary: Returns all suppliers and their respective materials
  *     responses:
  *       200:
- *         description: Lista di tutti i fornitori e i loro materiali
+ *         description: List of all suppliers and their materials.
  *         content:
  *           application/json:
  *             schema:
@@ -29,65 +29,72 @@ const router = express.Router();
  *                 properties:
  *                   CODICE_FORNITORE:
  *                     type: integer
- *                     description: Il codice univoco del fornitore
+ *                     description: The unique code of the supplier.
  *                     example: 1
  *                   NOME:
  *                     type: string
- *                     description: Il nome del fornitore
+ *                     description: The supplier's first name.
  *                     example: "Mario"
  *                   COGNOME:
  *                     type: string
- *                     description: Il cognome del fornitore
+ *                     description: The supplier's last name.
  *                     example: "Rossi"
  *                   RAGIONE_SOCIALE:
  *                     type: string
- *                     description: La regione sociale del fornitore
+ *                     description: The legal name of the supplier.
  *                     example: "Rossi S.p.A."
  *                   PARTITA_IVA:
  *                     type: string
- *                     description: La partita IVA del fornitore
+ *                     description: The supplier's VAT number.
  *                     example: "12345678901"
  *                   CODICE_FISCALE:
  *                     type: string
- *                     description: Il codice fiscale del fornitore
+ *                     description: The supplier's tax code.
  *                     example: "RSSMRA80A01H501Z"
  *                   CAP:
  *                     type: integer
- *                     description: Il codice postale della località del fornitore
+ *                     description: The postal code of the supplier's location.
  *                     example: 40100
  *                   CODICE_ISTAT:
  *                     type: integer
- *                     description: Il codice ISTAT della località del fornitore
+ *                     description: The ISTAT code of the supplier's location.
  *                     example: 12345
  *                   INDIRIZZO:
  *                     type: string
- *                     description: L'indirizzo del fornitore
+ *                     description: The address of the supplier.
  *                     example: "Via Rossi 124"
  *                   PHONE_NUMBER:
  *                     type: integer
- *                     description: Il numero di telefono del fornitore (se disponibile)
+ *                     description: The supplier's phone number (if available).
  *                     example: 1234567890
  *                   CODICE_MATERIALE:
  *                     type: integer
- *                     description: Il codice univoco del materiale per quel fornitore
+ *                     description: The unique code of the material for that supplier.
  *                     example: 1
  *                   DESCRIZIONE_MATERIALE:
  *                     type: string
- *                     description: La descrizione del materiale immessa dal fornitore
+ *                     description: The description of the material provided by the supplier.
  *                     example: "Biscotti Gocciole"
  *                   MARCA:
  *                     type: string
- *                     description: La marca del prodotto venduta
+ *                     description: The brand of the product sold.
  *                     example: "Pavesi"
  *                   UNITA_MISURA:
  *                     type: string
- *                     description: L'unità di misura di unità di prodotto
+ *                     description: The unit of measurement for the product.
  *                     example: "PZ"
  *                   PREZZO_UNITARIO:
  *                     type: number
  *                     format: double
- *                     description: Il costo di una unità di prodotto
+ *                     description: The cost per unit of the product.
  *                     example: 5.00
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getAll', getAll);
 
@@ -97,17 +104,17 @@ router.get('/getAll', getAll);
  *   get:
  *     tags:
  *      - MaterialiFornitori
- *     summary: Ritorna tutti i fornitori e i relativi materiali presenti
+ *     summary: Returns all materials for a specific supplier by their unique code
  *     parameters:
  *       - in: path
  *         name: codice_fornitore
  *         required: true
  *         schema:
  *           type: integer
- *         description: Codice univoco del fornitore
+ *         description: Unique code of the supplier
  *     responses:
  *       200:
- *         description: Lista di tutti i fornitori e i loro materiali
+ *         description: List of all materials for the specified supplier
  *         content:
  *           application/json:
  *             schema:
@@ -117,66 +124,182 @@ router.get('/getAll', getAll);
  *                 properties:
  *                   CODICE_FORNITORE:
  *                     type: integer
- *                     description: Il codice univoco del fornitore
+ *                     description: Unique code of the supplier
  *                     example: 1
  *                   NOME:
  *                     type: string
- *                     description: Il nome del fornitore
+ *                     description: The supplier's first name
  *                     example: "Mario"
  *                   COGNOME:
  *                     type: string
- *                     description: Il cognome del fornitore
+ *                     description: The supplier's last name
  *                     example: "Rossi"
  *                   RAGIONE_SOCIALE:
  *                     type: string
- *                     description: La regione sociale del fornitore
+ *                     description: The legal name of the supplier
  *                     example: "Rossi S.p.A."
  *                   PARTITA_IVA:
  *                     type: string
- *                     description: La partita IVA del fornitore
+ *                     description: The supplier's VAT number
  *                     example: "12345678901"
  *                   CODICE_FISCALE:
  *                     type: string
- *                     description: Il codice fiscale del fornitore
+ *                     description: The supplier's tax code
  *                     example: "RSSMRA80A01H501Z"
  *                   CAP:
  *                     type: integer
- *                     description: Il codice postale della località del fornitore
+ *                     description: The postal code of the supplier's location
  *                     example: 40100
  *                   CODICE_ISTAT:
  *                     type: integer
- *                     description: Il codice ISTAT della località del fornitore
+ *                     description: The ISTAT code of the supplier's location
  *                     example: 12345
  *                   INDIRIZZO:
  *                     type: string
- *                     description: L'indirizzo del fornitore
+ *                     description: The address of the supplier
  *                     example: "Via Rossi 124"
  *                   PHONE_NUMBER:
  *                     type: integer
- *                     description: Il numero di telefono del fornitore (se disponibile)
+ *                     description: The supplier's phone number (if available)
  *                     example: 1234567890
  *                   CODICE_MATERIALE:
  *                     type: integer
- *                     description: Il codice univoco del materiale per quel fornitore
+ *                     description: Unique code of the material for the supplier
  *                     example: 1
  *                   DESCRIZIONE_MATERIALE:
  *                     type: string
- *                     description: La descrizione del materiale immessa dal fornitore
+ *                     description: Description of the material provided by the supplier
  *                     example: "Biscotti Gocciole"
  *                   MARCA:
  *                     type: string
- *                     description: La marca del prodotto venduta
+ *                     description: Brand of the product sold
  *                     example: "Pavesi"
  *                   UNITA_MISURA:
  *                     type: string
- *                     description: L'unità di misura di unità di prodotto
+ *                     description: Unit of measurement for the product
  *                     example: "PZ"
  *                   PREZZO_UNITARIO:
  *                     type: number
  *                     format: double
- *                     description: Il costo di una unità di prodotto
+ *                     description: Cost per unit of the product
  *                     example: 5.00
+ *       404:
+ *         description: The supplier material is not found
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Supplier material not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getById/:codice_fornitore', getById);
+
+/**
+ * @swagger
+ * /materiali-fornitori/getFiltered:
+ *   post:
+ *     tags:
+ *       - MaterialiFornitori
+ *     summary: Retrieve materials dynamically based on filters
+ *     description: This endpoint allows the client to search for materials in the database using dynamic filters. Filters such as material description, brand, supplier, price range, and location-based criteria can be applied.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               DESCRIZIONE_MATERIALE:
+ *                 type: string
+ *                 description: The description of the material to search for (supports partial matches).
+ *                 example: "Gocciole"
+ *               MARCA:
+ *                 type: string
+ *                 description: The brand of the material.
+ *                 example: "Pavesi"
+ *               FORNITORE:
+ *                 type: string
+ *                 description: The supplier's name.
+ *                 example: "Conad"
+ *               PREZZO_UNITARIO:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *                   format: float
+ *                 description: The price range for the material (min and max values).
+ *                 example: [5, 10]
+ *               ZONA_DI_RICERCA:
+ *                 type: string
+ *                 description: The search area. Options are 'Dentro il Comune' or 'Fuori dal Comune'.
+ *                 example: "Fuori dal Comune"
+ *               ZONA_DI_PARTENZA:
+ *                 type: string
+ *                 description: The starting zone for the search.
+ *                 example: "Roma"
+ *               REGIONE:
+ *                 type: string
+ *                 description: The region of the starting zone.
+ *                 example: "Lazio"
+ *     responses:
+ *       200:
+ *         description: A list of materials matching the search criteria.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   ID_MATERIALE:
+ *                     type: integer
+ *                     description: The unique identifier of the material.
+ *                     example: 1
+ *                   DESCRIZIONE_MATERIALE:
+ *                     type: string
+ *                     description: The description of the material.
+ *                     example: "Gocciole"
+ *                   MARCA:
+ *                     type: string
+ *                     description: The brand of the material.
+ *                     example: "Pavesi"
+ *                   FORNITORE:
+ *                     type: string
+ *                     description: The supplier's name.
+ *                     example: "Conad"
+ *                   PREZZO_UNITARIO:
+ *                     type: number
+ *                     format: float
+ *                     description: The unit price of the material.
+ *                     example: 7.5
+ *                   DENOMINAZIONE_LOCALITA:
+ *                     type: string
+ *                     description: The location of the material.
+ *                     example: "Napoli"
+ *                   DENOMINAZIONE_REGIONE:
+ *                     type: string
+ *                     description: The region where the material is located.
+ *                     example: "Campania"
+ *       400:
+ *         description: Invalid request or missing filters.
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Invalid filters provided."
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error."
+ */
+router.post('/getFiltered', getFiltered);
 
 export default router;

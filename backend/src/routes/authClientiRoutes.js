@@ -1,16 +1,14 @@
 /**
  * @swagger
  * tags:
- *   - name: Auth
- *     description: Operazioni relative all'autenticazione
+ *   - name: AuthClienti
+ *     description: Clients authentication
  */
 
 import express from 'express';
 import {
     registerCliente,
-    loginCliente,
-    logoutCliente,
-    getProfileCliente
+    loginCliente
 } from '../controllers/authClientiController.js';
 
 const router = express.Router();
@@ -20,8 +18,8 @@ const router = express.Router();
  * /auth/clienti/register:
  *   post:
  *     tags:
- *      - Auth
- *     summary: Registra un nuovo cliente
+ *      - AuthClienti
+ *     summary: Register a new client
  *     requestBody:
  *       required: true
  *       content:
@@ -31,35 +29,35 @@ const router = express.Router();
  *             properties:
  *               NOME:
  *                 type: string
- *                 description: Il nome del cliente
+ *                 description: The client's first name
  *                 example: "Giulia"
  *               COGNOME:
  *                 type: string
- *                 description: Il cognome del cliente
+ *                 description: The client's last name
  *                 example: "Rossi"
  *               CAP:
  *                 type: integer
- *                 description: Il codice postale della località del cliente
+ *                 description: The postal code of the client's location
  *                 example: 30100
  *               CODICE_ISTAT:
  *                 type: integer
- *                 description: Il codice ISTAT della località del cliente
+ *                 description: The ISTAT code of the client's location
  *                 example: 23456
  *               EMAIL:
  *                 type: string
- *                 description: Indirizzo email del cliente
+ *                 description: The client's email address
  *                 example: "giulia.rossi@example.com"
  *               PHONE_NUMBER:
  *                 type: integer
- *                 description: Il numero di telefono del cliente (se disponibile)
+ *                 description: The client's phone number (if available)
  *                 example: 987654321
  *               PASSWORD_HASH:
  *                 type: string
- *                 description: La password del cliente
+ *                 description: The client's password
  *                 example: "TavoloBlu1!"
  *     responses:
  *       200:
- *         description: La registrazione del cliente è avvenuta correttamente
+ *         description: The client has been successfully registered
  *         content:
  *           application/json:
  *             schema:
@@ -67,31 +65,31 @@ const router = express.Router();
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Registrazione avvenuta con successo"
+ *                   example: "Client registration successful"
  *                 id:
  *                   type: integer
  *                   example: 1
  *       400:
- *         description: La mail con cui ci si sta cercando di registrarsi è già utilizzata
+ *         description: The email used for registration is already in use
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Email già in uso"
+ *               example: "This email address is already in use"
  *       401:
- *         description: L'operazione di registrazione può avvenire solo dopo aver eseguito il logout
+ *         description: Registration can only be done after logging out
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Questa operazione richiede il logout"
+ *               example: "This operation requires you to log out first"
  *       500:
- *         description: Errore interno del server
+ *         description: Internal server error
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Errore interno del server"
+ *               example: "Internal server error"
  */
 router.post('/register', registerCliente);
 
@@ -100,8 +98,8 @@ router.post('/register', registerCliente);
  * /auth/clienti/login:
  *   post:
  *     tags:
- *      - Auth
- *     summary: Login di un cliente
+ *      - AuthClienti
+ *     summary: Client login
  *     requestBody:
  *       required: true
  *       content:
@@ -111,15 +109,15 @@ router.post('/register', registerCliente);
  *             properties:
  *               EMAIL:
  *                 type: string
- *                 description: L'indirizzo email del cliente
+ *                 description: The client's email address
  *                 example: "giulia.rossi@example.com"
  *               PASSWORD_HASH:
  *                 type: string
- *                 description: La password del cliente
+ *                 description: The client's password
  *                 example: "TavoloBlu1!"
  *     responses:
  *       200:
- *         description: La login del cliente è avvenuta con successo
+ *         description: The client's login was successful
  *         content:
  *           application/json:
  *             schema:
@@ -127,126 +125,39 @@ router.post('/register', registerCliente);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Login avvenuto con successo"
+ *                   example: "Login successful"
  *                 id:
  *                   type: integer
  *                   example: 1
  *       400:
- *         description: L'utente che sta cercando di fare la login non è ancora registrato
+ *         description: The user trying to log in is not registered
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Utente non registrato"
+ *               example: "User not registered"
+ *       403:
+ *         description: The inserted login credentials are invalid
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Invalid credentials"
  *       401:
- *         description: L'operazione di login può avvenire solo dopo aver eseguita il logout
+ *         description: The login operation can only be performed after logging out
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Questa operazione richiede il logout"
+ *               example: "This operation requires you to log out first"
  *       500:
- *         description: Errore interno del server
+ *         description: Internal server error
  *         content:
  *           application/text:
  *             schema:
  *               type: string
- *               example: "Errore interno del server"
+ *               example: "Internal server error"
  */
 router.post('/login', loginCliente);
-
-/**
- * @swagger
- * /auth/clienti/logout:
- *   post:
- *     tags:
- *      - Auth
- *     summary: Logout di un cliente
- *     description: Logout di un cliente utilizzando l'access token salvato nel browser
- *     responses:
- *       200:
- *         description: Logout del cliente avvenuto con successo
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Logout avvenuto con successo"
- *       401:
- *         description: L'operazione di login può avvenire solo dopo aver eseguita il logout
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Questa operazione richiede il logout"
- *       500:
- *         description: Errore interno del server
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Errore interno del server"
- */
-router.post('/logout', logoutCliente);
-
-/**
- * @swagger
- * /auth/clienti/getProfile:
- *   get:
- *     tags:
- *      - Auth
- *     summary: Ritorna il profilo corrente del cliente
- *     responses:
- *       200:
- *         description: Dati del cliente correntemente loggato
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   CODICE_CLIENTE:
- *                     type: integer
- *                     description: Il codice cliente univoco
- *                     example: 1
- *                   NOME:
- *                     type: string
- *                     description: Il nome del cliente
- *                     example: "Luca"
- *                   COGNOME:
- *                     type: string
- *                     description: Il cognome del cliente
- *                     example: "Verdi"
- *                   CAP:
- *                     type: integer
- *                     description: Il codice postale del cliente
- *                     example: 20100
- *                   CODICE_ISTAT:
- *                     type: integer
- *                     description: Il codice ISTAT del cliente
- *                     example: 12345
- *                   EMAIL:
- *                     type: string
- *                     description: L'indirizzo email del cliente
- *                     example: "luca.verdi@example.com"
- *                   PHONE_NUMBER:
- *                     type: integer
- *                     description: Il numero di telefono del cliente (se disponibile)
- *                     example: 1234567890
- *                   DATA_INSERIMENTO:
- *                     type: string
- *                     format: date-time
- *                     description: Data e ora dell'inserimento del cliente
- *                     example: "2024-12-29T12:34:56Z"
- *                   DATA_ULTIMA_MODIFICA:
- *                     type: string
- *                     format: date-time
- *                     description: Data e ora dell'ultima modifica al cliente
- *                     example: "2024-12-29T12:34:56Z"
- */
-router.get('/getProfile', getProfileCliente);
 
 export default router;
