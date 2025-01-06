@@ -46,7 +46,7 @@ function logout() {
           </li>
           <!-- TODO replace with icon -->
           <li class="nav-item mx-2" v-if="!isLoggedIn" @click="confStore.updatePage(page.LOGIN)">
-            <RouterLink to="/login" class="nav-link inactive-page" active-class="active-page">Accedi</RouterLink>
+            <RouterLink to="/loginCostumer" class="nav-link inactive-page" active-class="active-page">Accedi</RouterLink>
           </li>
           <li class="nav-item mx-2" v-if="isLoggedIn" @click="logout">
             <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">Logout</RouterLink>

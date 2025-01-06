@@ -37,7 +37,17 @@ const dropDownString = computed(() => getDropdownString.value);
                 Continua
             </button>
         </div>
-        <RouterLink to="/login" class="nav-link inactive-page" active-class="active-page">
+        <RouterLink v-if="registration.userType == UserType.COSTUMER" to="/loginCostumer" class="nav-link inactive-page" active-class="active-page">
+            <p class="form-alternative">
+                Hai già un account?<br /><span class="form-alternative-a">Accedi</span>
+            </p>
+        </RouterLink>
+        <RouterLink v-if="registration.userType == UserType.SUPPLIER" to="/loginSupplier" class="nav-link inactive-page" active-class="active-page">
+            <p class="form-alternative">
+                Hai già un account?<br /><span class="form-alternative-a">Accedi</span>
+            </p>
+        </RouterLink>
+        <RouterLink v-if="registration.userType != UserType.COSTUMER && registration.userType != UserType.SUPPLIER" to="/loginSupplier" class="nav-link inactive-page" active-class="active-page">
             <p class="form-alternative">
                 Hai già un account?<br /><span class="form-alternative-a">Accedi</span>
             </p>
