@@ -14,7 +14,7 @@ export const getAll = async (req, res) => {
     const localita = await getAllLocalita();
 
     // Send the retrieved locations as a JSON response
-    res.json(localita);
+    res.status(200).json(localita);
   } catch (error) {
     // Log any error that occurs during the data retrieval process
     console.error('Error occurred while retrieving locations:', error);
@@ -41,11 +41,11 @@ export const getById = async (req, res) => {
 
     // If the location is not found, return a 404 response
     if (!localita) {
-      return res.status(404).json({ message: 'Location not found' });
+      return res.status(404).send('Location not found');
     }
 
     // If the location is found, send it back in the response
-    res.json(localita);
+    res.status(200).json(localita);
   } catch (error) {
     // Log any error that occurs during the data retrieval process
     console.error('Error occurred while retrieving the location:', error);
@@ -72,7 +72,7 @@ export const getByCap = async (req, res) => {
 
     // If the location is not found, return a 404 response
     if (!localita) {
-      return res.status(404).json({ message: 'Location not found' });
+      return res.status(404).json('Location not found');
     }
 
     // If the location is found, send it back in the response
@@ -103,11 +103,11 @@ export const getByCapDenominazione = async (req, res) => {
 
     // If the location is not found, return a 404 response
     if (!localita) {
-      return res.status(404).json({ message: 'Location not found' });
+      return res.status(404).send('Location not found');
     }
 
     // If the location is found, send it back in the response
-    res.json(localita);
+    res.status(200).json(localita);
   } catch (error) {
     // Log any error that occurs during the data retrieval process
     console.error('Error occurred while retrieving the location:', error);

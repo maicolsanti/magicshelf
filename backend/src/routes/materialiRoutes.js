@@ -60,6 +60,20 @@ const router = express.Router();
  *                     type: string
  *                     format: date-time
  *                     description: The date and time when the material's information was last updated.
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getAll', getAll);
 
@@ -118,6 +132,20 @@ router.get('/getAll', getAll);
  *                   type: string
  *                   format: date-time
  *                   description: The date and time when the material's information was last updated.
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       404:
+ *         description: Material not found
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Material not found"
  *       500:
  *         description: Internal server error
  *         content:
@@ -183,6 +211,13 @@ router.get('/getById/:codice_materiale', getById);
  *                   type: integer
  *                   description: The unique identifier of the created material.
  *                   example: 1
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       500:
  *         description: Internal server error
  *         content:
@@ -251,6 +286,13 @@ router.post('/create', create);
  *               properties:
  *                 message:
  *                   type: string
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: Material not found
  *         content:
@@ -292,6 +334,13 @@ router.put('/update/:codice_materiale', update);
  *               properties:
  *                 message:
  *                   type: string
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: Material not found
  *         content:

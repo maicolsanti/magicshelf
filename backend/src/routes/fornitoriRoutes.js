@@ -83,6 +83,20 @@ const router = express.Router();
  *                     format: date-time
  *                     description: The date and time when the supplier's information was last updated.
  *                     example: "2024-12-29T12:34:56Z"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       403:
+ *         description: The user has not the permission
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Insufficient permission"
  *       500:
  *         description: Internal server error
  *         content:
@@ -166,6 +180,20 @@ router.get('/getAll', getAll);
  *                   format: date-time
  *                   description: The date and time when the supplier's information was last updated.
  *                   example: "2024-12-29T12:34:56Z"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       403:
+ *         description: The user has not the permission
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Insufficient permission"
  *       404:
  *         description: Supplier not found
  *         content:
@@ -251,6 +279,20 @@ router.get('/getById/:codice_fornitore', getById);
  *                 id:
  *                   type: integer
  *                   example: 1
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       403:
+ *         description: The user has not the permission
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Insufficient permission"
  *       500:
  *         description: Internal server error
  *         content:
@@ -326,6 +368,20 @@ router.post('/create', create);
  *                 message:
  *                   type: string
  *                   example: "Supplier successfully updated"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       403:
+ *         description: The user has not the permission
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Insufficient permission"
  *       404:
  *         description: Supplier not found
  *         content:
@@ -369,6 +425,20 @@ router.put('/update/:codice_fornitore', update);
  *                 message:
  *                   type: string
  *                   example: "Supplier successfully removed"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       403:
+ *         description: The user has not the permission
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Insufficient permission"
  *       404:
  *         description: Supplier not found
  *         content:

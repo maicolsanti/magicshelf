@@ -71,6 +71,13 @@ const router = express.Router();
  *                     format: date-time
  *                     description: The date and time when the client's information was last updated.
  *                     example: "2024-12-29T12:34:56Z"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       500:
  *         description: Internal server error
  *         content:
@@ -142,6 +149,13 @@ router.get('/getAll', getAll);
  *                   format: date-time
  *                   description: The date and time when the client's information was last updated.
  *                   example: "2024-12-29T12:34:56Z"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: Client not found
  *         content:
@@ -215,6 +229,20 @@ router.get('/getById/:codice_cliente', getById);
  *                 id:
  *                   type: integer
  *                   example: 1
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       403:
+ *         description: The user has not the permission
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Insufficient permission"
  *       500:
  *         description: Internal server error
  *         content:
@@ -280,6 +308,20 @@ router.post('/create', create);
  *                 message:
  *                   type: string
  *                   example: "Client successfully updated"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       403:
+ *         description: The user has not the permission
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Insufficient permission"
  *       404:
  *         description: Client not found
  *         content:
@@ -323,6 +365,20 @@ router.put('/update/:codice_cliente', update);
  *                 message:
  *                   type: string
  *                   example: "Client successfully deleted"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       403:
+ *         description: The user has not the permission
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Insufficient permission"
  *       404:
  *         description: Client not found
  *         content:

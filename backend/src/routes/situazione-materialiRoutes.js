@@ -42,6 +42,13 @@ const router = express.Router();
  *                     format: date-time
  *                     description: Date and time of the last modification
  *                     example: "2025-01-02T14:35:00Z"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       500:
  *         description: Internal server error
  *         content:
@@ -89,6 +96,13 @@ router.get('/getAll', getAll);
  *                   format: date-time
  *                   description: Date and time of the last modification
  *                   example: "2025-01-02T14:35:00Z"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: Material situation not found
  *         content:
@@ -144,6 +158,13 @@ router.get('/getById/:codice_materiale', getById);
  *                   type: integer
  *                   description: The unique ID of the newly created material situation
  *                   example: 123
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       500:
  *         description: Internal server error
  *         content:
@@ -194,6 +215,13 @@ router.post('/create', create);
  *                   type: string
  *                   description: Success message
  *                   example: "Material situation successfully updated"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: Material not found
  *         content:
@@ -238,6 +266,13 @@ router.put('/update/:codice_materiale', update);
  *                   type: string
  *                   description: Success message
  *                   example: "Material situation successfully deleted"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: Material not found
  *         content:
