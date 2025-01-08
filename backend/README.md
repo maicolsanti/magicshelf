@@ -51,14 +51,22 @@ http://localhost:3000
 
 ```text
 /backend
+  |-- /db
+  |     |-- /sql           # Database DDL query
   |-- /src
+  |     |-- /config        # Configuration file
   |     |-- /routes        # API route definitions
   |     |-- /controllers   # Route handlers
   |     |-- /models        # Database models
   |     |-- /middleware    # Custom middleware
   |     |-- /utils         # Utilities and helpers
+  |     |-- app.js         # Start point
+  |     |-- swagger.js     # Swagger docs configuration
+  |-- .gitignore           # Ignored files from git
   |-- .env                 # DB and auth sensitive info
   |-- package.json         # Dependency configuration
+  |-- package-lock.json    # Dependency tree
+  |-- README.md
 ```
 
 ## API Reference
@@ -96,10 +104,8 @@ Retrieve all clients.
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -134,18 +140,14 @@ Retrieve a client by ID.
 
   - **404 Not Found**:
 
-    ```json
-    { 
-        "message": "Cliente non trovato" 
-    }
+    ```text
+    Cliente non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -187,10 +189,8 @@ Create a new client.
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -227,18 +227,14 @@ Update an existing client.
 
   - **404 Not Found**:
 
-    ```json
-    {
-        "message": "Cliente non trovato"
-    }
+    ```text
+    Cliente non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -262,18 +258,15 @@ Delete a client.
 
   - **404 Not Found**:
 
-    ```json
-    {
-        "message": "Cliente non trovato"
-    }
+    ```text
+    Cliente non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
+    ```
 
 Delete a client.
 Description: Delete a specific client from the database.
@@ -319,10 +312,8 @@ Retrieve all suppliers.
 
   - **500 Internal Server Error**:
 
-    ```json
-    { 
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -356,18 +347,14 @@ Retrieve a supplier by ID.
 
   - **404 Not Found**:
 
-    ```json
-    { 
-        "message": "Fornitore non trovato" 
-    }
+    ```text
+    Fornitore non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -410,10 +397,8 @@ Create a new supplier.
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -451,18 +436,14 @@ Update an existing supplier.
 
   - **404 Not Found**:
 
-    ```json
-    {
-        "message": "Fornitore non trovato"
-    }
+    ```text
+    Fornitore non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -486,18 +467,15 @@ Delete a supplier.
 
   - **404 Not Found**:
 
-    ```json
-    {
-        "message": "Fornitore non trovato"
-    }
+    ```text
+    Fornitore non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
+    ```
 
 ### Location Endpoints
 
@@ -532,10 +510,8 @@ Retrieve all locations.
 
   - **500 Internal Server Error**:
 
-    ```json
-    { 
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -563,18 +539,14 @@ Retrieve a location by ID.
 
   - **404 Not Found**:
 
-    ```json
-    { 
-        "message": "Localita non trovata" 
-    }
+    ```text
+    Localita non trovata
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ### Materials Management Endpoints
@@ -606,10 +578,8 @@ Retrieve all materials.
 
   - **500 Internal Server Error**:
 
-    ```json
-    { 
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -640,18 +610,14 @@ Retrieve a material by ID.
 
   - **404 Not Found**:
 
-    ```json
-    { 
-        "message": "Materiale non trovato" 
-    }
+    ```text
+    Materiale non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -690,10 +656,8 @@ Create a new material.
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -730,18 +694,14 @@ Update an existing material.
 
   - **404 Not Found**:
 
-    ```json
-    {
-        "message": "Materiale non trovato"
-    }
+    ```text
+    Materiale non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -765,18 +725,15 @@ Delete a material.
 
   - **404 Not Found**:
 
-    ```json
-    {
-        "message": "Materiale non trovato"
-    }
+    ```text
+    Materiale non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
+    ```
 
 ### Materials Situation Management Endpoints
 
@@ -807,10 +764,8 @@ Retrieve all materials situations.
 
   - **500 Internal Server Error**:
 
-    ```json
-    { 
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -836,18 +791,14 @@ Retrieve a material situation by ID.
 
   - **404 Not Found**:
 
-    ```json
-    { 
-        "message": "Materiale non trovato" 
-    }
+    ```text
+    Materiale non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -884,10 +835,8 @@ Create a new material situation.
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -924,18 +873,14 @@ Update an existing material situation.
 
   - **404 Not Found**:
 
-    ```json
-    {
-        "message": "Materiale non trovato"
-    }
+    ```text
+    Materiale non trovato
     ```
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
+    ```text
+    Errore interno del server
     ```
 
 ---
@@ -967,8 +912,6 @@ Delete a material situation.
 
   - **500 Internal Server Error**:
 
-    ```json
-    {
-        "error": "Errore interno del server"
-    }
-
+    ```text
+    Errore interno del server
+    ```

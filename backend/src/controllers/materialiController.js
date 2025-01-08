@@ -14,7 +14,7 @@ export const getAll = async (req, res) => {
     const materiali = await getAllMateriali();
 
     // Send the retrieved materials as a JSON response
-    res.json(materiali);
+    res.status(200).json(materiali);
   } catch (error) {
     // Log any error that occurs during the retrieval process
     console.error('Error occurred while retrieving materials:', error);
@@ -39,11 +39,11 @@ export const getById = async (req, res) => {
 
     // If no material is found, send a 404 error
     if (!materiale) {
-      return res.status(404).json({ message: 'Material not found' });
+      return res.status(404).send('Material not found');
     }
 
     // Send the material data as a JSON response
-    res.json(materiale);
+    res.status(200).json(materiale);
   } catch (error) {
     // Log any error that occurs during the retrieval process
     console.error('Error occurred while retrieving the material:', error);
@@ -67,7 +67,7 @@ export const create = async (req, res) => {
     const id = await createMateriale(custom_data);
 
     // If successful, send a response with the success message and the newly created material's ID
-    res.json({ message: 'Material successfully created', id });
+    res.status(200).json({ message: 'Material successfully created', id });
   } catch (error) {
     // Log any error that occurs during the creation process
     console.error('Error occurred while creating the material:', error);
@@ -93,11 +93,11 @@ export const update = async (req, res) => {
 
     // If no rows were affected, send a 404 response indicating the material was not found
     if (affectedRows === 0) {
-      return res.status(404).json({ message: 'Material not found' });
+      return res.status(404).send('Material not found');
     }
 
     // If the update was successful, send a success message
-    res.json({ message: 'Material successfully updated' });
+    res.status(200).json({ message: 'Material successfully updated' });
   } catch (error) {
     // Log any error that occurs during the update process
     console.error('Error occurred while updating the material:', error);
@@ -122,11 +122,11 @@ export const remove = async (req, res) => {
 
     // If no rows were affected, send a 404 response indicating the material was not found
     if (affectedRows === 0) {
-      return res.status(404).json({ message: 'Material not found' });
+      return res.status(404).send('Material not found');
     }
 
     // If the deletion was successful, send a success message
-    res.json({ message: 'Material successfully deleted' });
+    res.status(200).json({ message: 'Material successfully deleted' });
   } catch (error) {
     // Log any error that occurs during the deletion process
     console.error('Error occurred while deleting the material:', error);

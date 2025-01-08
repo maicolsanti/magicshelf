@@ -30,7 +30,7 @@ export const getAll = async (req, res) => {
     const clienti = await getAllClienti();
 
     // Respond with the list of clients
-    res.json(clienti);
+    res.status(200).json(clienti);
   } catch (error) {
     // Log the error and send a generic server error response
     console.error('Error retrieving clients data:', error);
@@ -49,22 +49,16 @@ export const getById = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
-    }
-
     // Retrieve the client by their ID from the database
     const cliente = await getClienteById(codice_cliente);
 
     // If no client is found, return a 404 Not Found error with a message
     if (!cliente) {
-      return res.status(404).json({ message: 'Client not found' });
+      return res.status(404).send('Client not found');
     }
 
     // Respond with the client data
-    res.json(cliente);
+    res.status(200).json(cliente);
   } catch (error) {
     // Log the error and send a generic server error response
     console.error('Error retrieving client:', error);
@@ -93,7 +87,7 @@ export const create = async (req, res) => {
     const id = await createCliente(custom_data);
 
     // Respond with a success message and the created client's ID
-    res.json({ message: 'Client successfully created', id });
+    res.status(200).json({ message: 'Client successfully created', id });
   } catch (error) {
     // Log the error and send a generic server error response
     console.error('Error creating client:', error);
@@ -124,11 +118,11 @@ export const update = async (req, res) => {
 
     // If no rows were affected, return a 404 Not Found error with a message
     if (rowsAffected === 0) {
-      return res.status(404).json({ message: 'Client not found' });
+      return res.status(404).send('Client not found');
     }
 
     // Respond with a success message
-    res.json({ message: 'Client successfully updated' });
+    res.status(200).json({ message: 'Client successfully updated' });
   } catch (error) {
     // Log the error and send a generic server error response
     console.error("Error updating client:", error);
@@ -158,11 +152,11 @@ export const remove = async (req, res) => {
 
     // If no rows were affected, return a 404 Not Found error with a message
     if (rowsAffected === 0) {
-      return res.status(404).json({ message: 'Client not found' });
+      return res.status(404).send('Client not found');
     }
 
     // Respond with a success message indicating the client has been deleted
-    res.json({ message: 'Client successfully deleted' });
+    res.status(200).json({ message: 'Client successfully deleted' });
   } catch (error) {
     // Log the error and send a generic server error response
     console.error("Error deleting client:", error);
