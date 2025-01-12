@@ -122,7 +122,7 @@ router.post('/register', registerFornitore);
  *               CODICE_FISCALE:
  *                 type: string
  *                 description: The supplier's tax code
- *                 example: "giulia.rossi@example.com"
+ *                 example: "SNTMCL02M28C573I"
  *               PASSWORD_HASH:
  *                 type: string
  *                 description: The supplier's password
