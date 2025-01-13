@@ -4,7 +4,16 @@ import pool from '../config/db.js';
 export const getAllMateriali = async () => {
   // Execute a query to fetch all materials from the database
   const [rows] = await pool.promise().query('SELECT * FROM ANAGRAFICA_MATERIALI');
-  return rows;
+
+  // Convert image BLOB to Base64 string for each row
+  const materiali = rows.map((row) => {
+    if (row.IMMAGINE) {
+      row.IMMAGINE = row.IMMAGINE.toString('base64'); // Convert BLOB to Base64
+    }
+    return row;
+  });
+
+  return materiali;
 };
 
 // Get a specific material by its code
@@ -14,12 +23,28 @@ export const getMaterialeById = async (codice_materiale) => {
     'SELECT * FROM ANAGRAFICA_MATERIALI WHERE CODICE_MATERIALE = ?',
     [codice_materiale]
   );
-  // Return the material if found, otherwise return null
-  return rows.length > 0 ? rows[0] : null;
+
+  // If a material is found, convert its image BLOB to a Base64 string
+  if (rows.length > 0) {
+    const materiale = rows[0];
+    if (materiale.IMMAGINE) {
+      materiale.IMMAGINE = materiale.IMMAGINE.toString('base64'); // Convert BLOB to Base64
+    }
+    return materiale;
+  }
+
+  // Return null if no material is found
+  return null;
 };
 
 // Add a new material
-export const createMateriale = async (custom_data) => {
+export const createMateriale = async (custom_data, imageBuffer) => {
+  // Ensure custom_data is an object and add the image field
+  if (typeof custom_data === 'string') {
+    custom_data = JSON.parse(custom_data); // Parse custom_data if it's a string
+  }
+  custom_data.IMMAGINE = imageBuffer; // Add image buffer to custom_data
+
   // Extract fields and values from the custom data
   const fields = Object.keys(custom_data).join(', ');
   const values = Object.values(custom_data);
@@ -36,7 +61,12 @@ export const createMateriale = async (custom_data) => {
 };
 
 // Update an existing material
-export const updateMateriale = async (codice_materiale, custom_data) => {
+export const updateMateriale = async (codice_materiale, custom_data, imageBuffer) => {
+  // Add image buffer to custom data if it exists
+  if (imageBuffer) {
+    custom_data.IMMAGINE = imageBuffer;
+  }
+
   // Prepare the set clause for the update query
   const setClause = Object.keys(custom_data)
     .map((key) => `\`${key}\` = ?`)
