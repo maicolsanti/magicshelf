@@ -1,14 +1,7 @@
 import { getAllLocalita, getLocalitaById, getLocalitaByCap, getLocalitaByCapDenominazione } from '../models/localitaModel.js';
-import { getUser } from '../utils/auth.js';
 
 export const getAll = async (req, res) => {
   try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
 
     // Fetch all locations from the database
     const localita = await getAllLocalita();
@@ -29,12 +22,6 @@ export const getById = async (req, res) => {
   const { codice_istat } = req.params;
 
   try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
 
     // Fetch the location by its 'codice_istat'
     const localita = await getLocalitaById(codice_istat);
@@ -60,12 +47,6 @@ export const getByCap = async (req, res) => {
   const { cap } = req.params;
 
   try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
 
     // Fetch the location by its postal code (CAP)
     const localita = await getLocalitaByCap(cap);
@@ -91,12 +72,6 @@ export const getByCapDenominazione = async (req, res) => {
   const { cap, denominazione } = req.params;
 
   try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
 
     // Fetch the location using the postal code (CAP) and denomination
     const localita = await getLocalitaByCapDenominazione(cap, denominazione);

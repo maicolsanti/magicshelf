@@ -77,10 +77,9 @@ export const create = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Create a new client using the provided custom data
@@ -107,10 +106,9 @@ export const update = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Update the client data based on the provided client ID and custom data
@@ -141,10 +139,9 @@ export const remove = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to delete the client by their ID
