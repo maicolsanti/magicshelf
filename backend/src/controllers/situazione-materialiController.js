@@ -1,6 +1,8 @@
 import { getAllSituazioni, getSituazioneById, createSituazione, updateSituazione, deleteSituazione } from '../models/situazione-materialiModel.js';
 import { getUser } from '../utils/auth.js';
 
+ROLE_NAME = 'FORNITORE';
+
 export const getAll = async (req, res) => {
   try {
     const user = getUser(req, res);
@@ -65,6 +67,11 @@ export const create = async (req, res) => {
       return;
     }
 
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
+    }
+
     // Create the material situation in the database
     const id = await createSituazione(custom_data);
     
@@ -89,6 +96,11 @@ export const update = async (req, res) => {
     if (!user) {
       res.status(401).send('This operation requires you to be logged in');
       return;
+    }
+
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Update the material situation in the database
@@ -119,6 +131,11 @@ export const remove = async (req, res) => {
     if (!user) {
       res.status(401).send('This operation requires you to be logged in');
       return;
+    }
+
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Remove the material situation from the database

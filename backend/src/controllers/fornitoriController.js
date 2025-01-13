@@ -81,10 +81,9 @@ export const create = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to create a new supplier in the database
@@ -112,10 +111,9 @@ export const update = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to update the supplier in the database
@@ -147,10 +145,9 @@ export const remove = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to delete the supplier from the database

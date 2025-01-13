@@ -5,6 +5,8 @@ import multer from 'multer';
 const storage = multer.memoryStorage(); // Save image as a buffer in memory
 const upload = multer({ storage });
 
+const ROLE_NAME = 'FORNITORE';
+
 export const getAll = async (req, res) => {
   try {
     const user = getUser(req, res);
@@ -74,6 +76,11 @@ export const create = async (req, res) => {
       custom_data = JSON.parse(custom_data);
     }
 
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
+    }
+
     // Call the model function to create the material
     const id = await createMateriale(custom_data, imageBuffer);
 
@@ -105,6 +112,11 @@ export const update = async (req, res) => {
       custom_data = JSON.parse(custom_data);
     }
 
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
+    }
+
     // Call the model function to update the material
     const affectedRows = await updateMateriale(codice_materiale, custom_data, imageBuffer);
 
@@ -131,6 +143,11 @@ export const remove = async (req, res) => {
     if (!user) {
       res.status(401).send('This operation requires you to be logged in');
       return;
+    }
+
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to delete the material from the database
