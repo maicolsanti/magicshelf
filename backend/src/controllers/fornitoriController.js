@@ -30,7 +30,7 @@ export const getAll = async (req, res) => {
     const fornitori = await getAllFornitori();
     
     // Respond with the list of suppliers in JSON format
-    res.json(fornitori);
+    res.send(200).json(fornitori);
   } catch (error) {
     // Log the error and respond with a 500 Internal Server Error
     console.error('Error retrieving suppliers:', error);
@@ -59,11 +59,11 @@ export const getById = async (req, res) => {
 
     // If the supplier is not found, return a 404 error
     if (!fornitore) {
-      return res.status(404).json({ message: 'Supplier not found' });
+      return res.status(404).send('Supplier not found');
     }
 
     // Return the supplier data as a JSON response
-    res.json(fornitore);
+    res.status(200).json(fornitore);
   } catch (error) {
     // Log the error and respond with a 500 Internal Server Error
     console.error('Error retrieving supplier:', error);
@@ -81,17 +81,16 @@ export const create = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to create a new supplier in the database
     const id = await createFornitore(custom_data);
     
     // Return a success message and the new supplier's ID
-    res.json({ message: 'Supplier successfully created', id });
+    res.status(200).json({ message: 'Supplier successfully created', id });
   } catch (error) {
     // Log any error that occurs during the creation process
     console.error('Error occurred while creating supplier:', error);
@@ -112,10 +111,9 @@ export const update = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to update the supplier in the database
@@ -123,11 +121,11 @@ export const update = async (req, res) => {
 
     // If no rows were affected, return a 404 error indicating the supplier was not found
     if (rowsAffected === 0) {
-      return res.status(404).json({ message: 'Supplier not found' });
+      return res.status(404).send('Supplier not found');
     }
 
     // Return a success message if the supplier was updated
-    res.json({ message: 'Supplier successfully updated' });
+    res.status(200).json({ message: 'Supplier successfully updated' });
   } catch (error) {
     // Log any error that occurs during the update process
     console.error('Error occurred while updating supplier:', error);
@@ -147,10 +145,9 @@ export const remove = async (req, res) => {
       return;
     }
 
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+      return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to delete the supplier from the database
@@ -158,11 +155,11 @@ export const remove = async (req, res) => {
 
     // If no rows were affected, return a 404 error indicating the supplier was not found
     if (rowsAffected === 0) {
-      return res.status(404).json({ message: 'Supplier not found' });
+      return res.status(404).send('Supplier not found');
     }
 
     // Return a success message if the supplier was successfully deleted
-    res.json({ message: 'Supplier successfully removed' });
+    res.status(200).json({ message: 'Supplier successfully removed' });
   } catch (error) {
     // Log any error that occurs during the removal process
     console.error('Error occurred while removing supplier:', error);

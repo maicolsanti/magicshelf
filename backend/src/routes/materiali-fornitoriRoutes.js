@@ -242,10 +242,6 @@ router.get('/getById/:codice_fornitore', getById);
  *                 type: string
  *                 description: The starting zone for the search.
  *                 example: "Roma"
- *               REGIONE:
- *                 type: string
- *                 description: The region of the starting zone.
- *                 example: "Lazio"
  *     responses:
  *       200:
  *         description: A list of materials matching the search criteria.
@@ -256,35 +252,67 @@ router.get('/getById/:codice_fornitore', getById);
  *               items:
  *                 type: object
  *                 properties:
- *                   ID_MATERIALE:
+ *                   CODICE_FORNITORE:
  *                     type: integer
- *                     description: The unique identifier of the material.
+ *                     description: Unique code of the supplier
+ *                     example: 1
+ *                   NOME:
+ *                     type: string
+ *                     description: The supplier's first name
+ *                     example: "Mario"
+ *                   COGNOME:
+ *                     type: string
+ *                     description: The supplier's last name
+ *                     example: "Rossi"
+ *                   RAGIONE_SOCIALE:
+ *                     type: string
+ *                     description: The legal name of the supplier
+ *                     example: "Rossi S.p.A."
+ *                   PARTITA_IVA:
+ *                     type: string
+ *                     description: The supplier's VAT number
+ *                     example: "12345678901"
+ *                   CODICE_FISCALE:
+ *                     type: string
+ *                     description: The supplier's tax code
+ *                     example: "RSSMRA80A01H501Z"
+ *                   CAP:
+ *                     type: integer
+ *                     description: The postal code of the supplier's location
+ *                     example: 40100
+ *                   CODICE_ISTAT:
+ *                     type: integer
+ *                     description: The ISTAT code of the supplier's location
+ *                     example: 12345
+ *                   INDIRIZZO:
+ *                     type: string
+ *                     description: The address of the supplier
+ *                     example: "Via Rossi 124"
+ *                   PHONE_NUMBER:
+ *                     type: integer
+ *                     description: The supplier's phone number (if available)
+ *                     example: 1234567890
+ *                   CODICE_MATERIALE:
+ *                     type: integer
+ *                     description: Unique code of the material for the supplier
  *                     example: 1
  *                   DESCRIZIONE_MATERIALE:
  *                     type: string
- *                     description: The description of the material.
- *                     example: "Gocciole"
+ *                     description: Description of the material provided by the supplier
+ *                     example: "Biscotti Gocciole"
  *                   MARCA:
  *                     type: string
- *                     description: The brand of the material.
+ *                     description: Brand of the product sold
  *                     example: "Pavesi"
- *                   FORNITORE:
+ *                   UNITA_MISURA:
  *                     type: string
- *                     description: The supplier's name.
- *                     example: "Conad"
+ *                     description: Unit of measurement for the product
+ *                     example: "PZ"
  *                   PREZZO_UNITARIO:
  *                     type: number
- *                     format: float
- *                     description: The unit price of the material.
- *                     example: 7.5
- *                   DENOMINAZIONE_LOCALITA:
- *                     type: string
- *                     description: The location of the material.
- *                     example: "Napoli"
- *                   DENOMINAZIONE_REGIONE:
- *                     type: string
- *                     description: The region where the material is located.
- *                     example: "Campania"
+ *                     format: double
+ *                     description: Cost per unit of the product
+ *                     example: 5.00
  *       400:
  *         description: Invalid request or missing filters.
  *         content:

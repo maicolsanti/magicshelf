@@ -47,6 +47,13 @@ const router = express.Router();
  *                     type: string
  *                     description: The name of the locality (e.g., city or town).
  *                     example: "Bologna"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       500:
  *         description: Internal server error
  *         content:
@@ -100,6 +107,13 @@ router.get('/getAll', getAll);
  *                   type: string
  *                   description: The name of the locality (e.g., city or town).
  *                   example: "Bologna"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: The location is not found
  *         content:
@@ -160,6 +174,13 @@ router.get('/getById/:codice_istat', getById);
  *                   type: string
  *                   description: The name of the locality (e.g., city or town).
  *                   example: "Bologna"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: The location is not found
  *         content:
@@ -227,6 +248,13 @@ router.get('/getByCap/:cap', getByCap);
  *                   type: string
  *                   description: The name of the locality (e.g., city or town).
  *                   example: "Bologna"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
  *         description: The location is not found
  *         content:

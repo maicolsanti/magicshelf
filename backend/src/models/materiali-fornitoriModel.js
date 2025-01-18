@@ -19,7 +19,6 @@ export const getFornitoreMaterialiById = async (codice_fornitore) => {
 };
 
 export const getFilteredFornitoreMateriali = async (filters) => {
-    console.log(filters);
     let sql = 'SELECT * FROM MATERIALI_FORNITORI WHERE 1=1'; // Base query
     const params = [];
 
@@ -47,9 +46,6 @@ export const getFilteredFornitoreMateriali = async (filters) => {
         params.push(filters.ZONA_DI_PARTENZA, filters.DENOMINAZIONE_REGIONE);
     }
 
-    console.log(sql);
-    console.log(params);
-
     // Verify if there are not sanitized parameters
     const sanitizedParams = params.map((param) => (param === undefined ? null : param));
 
@@ -57,13 +53,4 @@ export const getFilteredFornitoreMateriali = async (filters) => {
     const [rows] = await pool.promise().execute(sql, sanitizedParams);
 
     return rows;
-    // Execute the query
-    // return new Promise((resolve, reject) => {
-    //     pool.query(sql, params, (error, results) => {
-    //         if (error) {
-    //             return reject(error);
-    //         }
-    //         resolve(results);
-    //     });
-    // });
 };

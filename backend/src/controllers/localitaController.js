@@ -1,20 +1,13 @@
 import { getAllLocalita, getLocalitaById, getLocalitaByCap, getLocalitaByCapDenominazione } from '../models/localitaModel.js';
-import { getUser } from '../utils/auth.js';
 
 export const getAll = async (req, res) => {
   try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
 
     // Fetch all locations from the database
     const localita = await getAllLocalita();
 
     // Send the retrieved locations as a JSON response
-    res.json(localita);
+    res.status(200).json(localita);
   } catch (error) {
     // Log any error that occurs during the data retrieval process
     console.error('Error occurred while retrieving locations:', error);
@@ -29,23 +22,17 @@ export const getById = async (req, res) => {
   const { codice_istat } = req.params;
 
   try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
 
     // Fetch the location by its 'codice_istat'
     const localita = await getLocalitaById(codice_istat);
 
     // If the location is not found, return a 404 response
     if (!localita) {
-      return res.status(404).json({ message: 'Location not found' });
+      return res.status(404).send('Location not found');
     }
 
     // If the location is found, send it back in the response
-    res.json(localita);
+    res.status(200).json(localita);
   } catch (error) {
     // Log any error that occurs during the data retrieval process
     console.error('Error occurred while retrieving the location:', error);
@@ -60,19 +47,13 @@ export const getByCap = async (req, res) => {
   const { cap } = req.params;
 
   try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
 
     // Fetch the location by its postal code (CAP)
     const localita = await getLocalitaByCap(cap);
 
     // If the location is not found, return a 404 response
     if (!localita) {
-      return res.status(404).json({ message: 'Location not found' });
+      return res.status(404).json('Location not found');
     }
 
     // If the location is found, send it back in the response
@@ -91,23 +72,17 @@ export const getByCapDenominazione = async (req, res) => {
   const { cap, denominazione } = req.params;
 
   try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
 
     // Fetch the location using the postal code (CAP) and denomination
     const localita = await getLocalitaByCapDenominazione(cap, denominazione);
 
     // If the location is not found, return a 404 response
     if (!localita) {
-      return res.status(404).json({ message: 'Location not found' });
+      return res.status(404).send('Location not found');
     }
 
     // If the location is found, send it back in the response
-    res.json(localita);
+    res.status(200).json(localita);
   } catch (error) {
     // Log any error that occurs during the data retrieval process
     console.error('Error occurred while retrieving the location:', error);
