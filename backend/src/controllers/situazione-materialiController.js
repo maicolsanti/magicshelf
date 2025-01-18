@@ -1,7 +1,7 @@
 import { getAllSituazioni, getSituazioneById, createSituazione, updateSituazione, deleteSituazione } from '../models/situazione-materialiModel.js';
 import { getUser } from '../utils/auth.js';
 
-ROLE_NAME = 'FORNITORE';
+const ROLE_NAME = 'FORNITORE';
 
 export const getAll = async (req, res) => {
   try {
