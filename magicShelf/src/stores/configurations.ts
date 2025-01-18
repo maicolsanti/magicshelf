@@ -1,5 +1,6 @@
 import { Costumer } from '@/models/costumer';
 import { page } from '@/models/page'
+import { Profile } from '@/models/profile';
 import { Supplier } from '@/models/supplier';
 import { UserType } from '@/models/user-type'
 import axios from 'axios';
@@ -18,15 +19,40 @@ export const useConfigurationStore = defineStore('configurationsStore', {
         companyName: null,
         vatNumber: null,
         fiscalCode: "",
+        cap: "",
+        town: "",
         email: "",
         phoneNumber: "",
-        cap: "",
-        town: ""
       },
       authToken: ''
     }
   }),
   actions: {
+    async getProfile() {
+      try {
+        this.configurations.userData = await axios.get('/api/localita/getAll').then(res => res.data.map((user: any) => new Profile(
+          user.NOME,
+          user.COGNOME,
+          user.RAGIONE_SOCIALE,
+          user.PARTITA_IVA,
+          user.CODICE_FISCALE,
+          user.CAP,
+          user.CODICE_ISTAT,
+          user.INDIRIZZO,
+          user.EMAIL,
+          user.TELEFONO,
+          user.RUOLO == "CLIENTE" ? UserType.COSTUMER : UserType.SUPPLIER
+        )));
+
+        this.configurations.logged = true;
+
+        console.log("fetched user profile");
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+    },
     updatePage(newPageCode) {
       this.configurations.pageCode = newPageCode
       this.updatePageName
@@ -59,7 +85,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     async loginCostumer(username, password) {
 
       try {
-        await axios.post('/auth/clienti/login', {
+        await axios.post('/api/auth/clienti/login', {
           EMAIL: username,
           PASSWORD_HASH: password,
         })
@@ -80,7 +106,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     async loginSupplier(fiscalCode, password) {
 
       try {
-        await axios.post('/auth/fornitori/login', {
+        await axios.post('/api/auth/fornitori/login', {
           CODICE_FISCALE: fiscalCode,
           PASSWORD_HASH: password,
         })
@@ -95,54 +121,6 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       catch (error) {
         alert(error);
         console.log(error);
-      }
-
-    },
-    async fetchUserData(userType) {
-
-      if (userType == UserType.COSTUMER) {
-        try {
-          this.configurations.userData = await axios.get('/api/clienti/getProfifle').then(res => res.data.map((costumer: any) => new Costumer(
-            costumer.CODICE_CLIENTE,
-            costumer.NOME,
-            costumer.COGNOME,
-            costumer.CAP,
-            costumer.CODICE_ISTAT,
-            costumer.EMAIL,
-            costumer.PHONE_NUMBER
-          )));
-
-          console.log("fetched customer profile");
-        }
-        catch (error) {
-          alert(error);
-          console.log(error);
-        }
-
-      } else if (userType == UserType.SUPPLIER) {
-        try {
-          this.configurations.userData = await axios.get('/api/fornitori/getProfifle').then(res => res.data.map((supplier: any) => new Supplier(
-            supplier.CODICE_FORNITORE,
-            supplier.NOME,
-            supplier.COGNOME,
-            supplier.RAGIONE_SOCIALE,
-            supplier.PARTITA_IVA,
-            supplier.CODICE_FISCALE,
-            supplier.PHONE_NUMBER,
-            null,
-            null,
-            supplier.CAP,
-            supplier.CODICE_ISTAT,
-            
-          )));
-
-          console.log("fetched supplier profile");
-        }
-        catch (error) {
-          alert(error);
-          console.log(error);
-        }
-
       }
 
     },

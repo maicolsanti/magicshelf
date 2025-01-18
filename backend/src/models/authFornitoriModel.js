@@ -18,6 +18,13 @@ export const insertFornitore = async (req) => {
     const values = Object.values(req);
 
     // Prepare the query to insert the new supplier into the database
+    for (let i = 0; i < fields.length; i++) {
+      if (typeof values[i] === 'object') {
+        console.log(JSON.stringify(fields[i]) + JSON.stringify(values[i]));
+      }
+    }
+  
+
     const query = `
       INSERT INTO ANAGRAFICA_FORNITORI (${fields})
       VALUES (${values.map(() => '?').join(',')})

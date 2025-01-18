@@ -94,8 +94,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
       this.registration.registrationData.password = passwordInput;
 
       try {
-        await axios.post('/auth/clienti/register', {
-          custom_data: {
+        await axios.post('/api/auth/clienti/register', {
             NOME: nameInput,
             COGNOME: surnameInput,
             CAP: Number(this.registration.registrationData.cap),
@@ -103,7 +102,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
             EMAIL: emailInput,
             PHONE_NUMBER: Number(phoneInput),
             PASSWORD_HASH: passwordInput
-          }
         })
           .then(function (response) {
             console.log("new costumer created");
@@ -129,8 +127,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
         this.registration.registrationData.password = passwordInput;
 
       try {
-        await axios.post('/api/fornitori/create', {
-          custom_data: {
+        await axios.post('/api/auth/fornitori/register', {
             NOME: nameInput,
             COGNOME: surnameInput,
             RAGIONE_SOCIALE: companyNameInput,
@@ -142,7 +139,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
             INDIRIZZO: addressInput,
             PHONE_NUMBER: Number(phoneInput),
             PASSWORD_HASH: passwordInput
-          }
         })
           .then(function (response) {
             console.log("new supplier created");
