@@ -50,8 +50,8 @@ let formData = {
 };
 
 function submit() {
-    registrationStore.registerCostumer(formData.nameInput, formData.surnameInput, formData.emailInput, formData.phoneInput, formData.passwordInput);
-    configurationStore.loginCostumer(formData.emailInput, formData.passwordInput);
+    registrationStore.registerCostumer(formData.nameInput, formData.surnameInput, formData.emailInput, formData.phoneInput, formData.passwordInput).then(() =>
+    configurationStore.getProfile());
     router.push('/');
 }
 
