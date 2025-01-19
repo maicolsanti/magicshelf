@@ -96,10 +96,10 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           .then(function (response) {
             console.log("logged in");
             console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
-
-            this.configurations.logged = true;
-            this.fetchUserData(UserType.COSTUMER);
           })
+
+          this.getProfile();
+          this.configurations.logged = true;
       }
       catch (error) {
         alert(error);
@@ -117,10 +117,10 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           .then(function (response) {
             console.log("logged in");
             console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
-
-            this.configurations.logged = true;
-            this.fetchUserData(UserType.SUPPLIER);
           })
+
+          this.getProfile();
+          this.configurations.logged = true;
       }
       catch (error) {
         alert(error);
@@ -128,10 +128,34 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
 
     },
-    logout() {
-      //TODO: implement logout
-      this.configurations.logged = false;
-    }
+    async logout() {
+
+      try {
+        await axios.post('/api/auth/general/logout')
+          .then(function (response) {
+            console.log("logged out");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+          })
+
+          this.userData = {
+            name: "",
+            surname: "",
+            companyName: null,
+            vatNumber: null,
+            fiscalCode: "",
+            cap: "",
+            town: "",
+            email: "",
+            phoneNumber: "",
+          },
+          this.configurations.logged = false;
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+
+    },
   },
   getters: {
     isLoggedIn() {

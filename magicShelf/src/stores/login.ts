@@ -11,13 +11,6 @@ export const useLoginStore = defineStore('loginStore', {
     toggleShowPassword() {
       this.infos.showPassword = !this.infos.showPassword;
     },
-    login() {
-      this.infos.logged = true;
-    },
-    logout() {
-      this.infos.logged = false;
-      this.infos.authToken = '';
-    }
   },
   getters: {
     getPasswordType() {
