@@ -29,8 +29,11 @@ export const useConfigurationStore = defineStore('configurationsStore', {
   }),
   actions: {
     async getProfile() {
+      console.log("requested getProfile");
       try {
-        this.configurations.userData = await axios.get('/api/localita/getAll').then(res => res.data.map((user: any) => new Profile(
+        this.configurations.userData = await axios.get('/api/auth/general/getProfile').then(res => {
+          const user = res.data;
+          new Profile(
           user.NOME,
           user.COGNOME,
           user.RAGIONE_SOCIALE,
@@ -42,7 +45,8 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           user.EMAIL,
           user.TELEFONO,
           user.RUOLO == "CLIENTE" ? UserType.COSTUMER : UserType.SUPPLIER
-        )));
+          )
+        });
 
         this.configurations.logged = true;
 

@@ -68,8 +68,8 @@ function setFiscalCodeWithVatNumber() {
 }
 
 function submit() {
-    registrationStore.registerSupplier(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.address, formData.passwordInput);
-    configurationStore.getProfile();
+    registrationStore.registerSupplier(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.address, formData.passwordInput).then(() =>
+        configurationStore.getProfile());
     router.push('/');
 }
 </script>
