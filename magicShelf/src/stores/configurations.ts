@@ -31,21 +31,21 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     async getProfile() {
       console.log("requested getProfile");
       try {
-        this.configurations.userData = await axios.get('/api/auth/general/getProfile').then(res => {
+        await axios.get('/api/auth/general/getProfile').then(res => {
           const user = res.data;
-          new Profile(
+          this.configurations.userData = new Profile(
           user.NOME,
           user.COGNOME,
           user.RAGIONE_SOCIALE,
           user.PARTITA_IVA,
           user.CODICE_FISCALE,
-          user.CAP,
+          user.CAP.toString(),
           user.CODICE_ISTAT,
           user.INDIRIZZO,
           user.EMAIL,
           user.TELEFONO,
           user.RUOLO == "CLIENTE" ? UserType.COSTUMER : UserType.SUPPLIER
-          )
+          );
         });
 
         this.configurations.logged = true;
