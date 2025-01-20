@@ -82,7 +82,7 @@ export const create = async (req, res) => {
     }
 
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
       return res.status(403).send('Insufficient permission');
     }
 
@@ -112,7 +112,7 @@ export const update = async (req, res) => {
     }
 
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
       return res.status(403).send('Insufficient permission');
     }
 
@@ -146,7 +146,7 @@ export const remove = async (req, res) => {
     }
 
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore == user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
       return res.status(403).send('Insufficient permission');
     }
 

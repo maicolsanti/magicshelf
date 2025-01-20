@@ -47,7 +47,8 @@ export const updateFornitore = async (codice_fornitore, custom_data) => {
   // Prepare the query to update the supplier data
   const query = `
     UPDATE ANAGRAFICA_FORNITORI
-    SET ${setClause}
+    SET ${setClause},
+        DATA_ULTIMA_MODIFICA = CURRENT_TIMESTAMP()
     WHERE CODICE_FORNITORE = ?
   `;
 

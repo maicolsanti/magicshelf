@@ -47,9 +47,12 @@ export const updateCliente = async (codice_cliente, custom_data) => {
   // Prepare the query to update the client data
   const query = `
     UPDATE ANAGRAFICA_CLIENTI
-    SET ${setClause}
+    SET ${setClause},
+        DATA_ULTIMA_MODIFICA = CURRENT_TIMESTAMP()
     WHERE CODICE_CLIENTE = ?
   `;
+
+  console.log(query);
 
   // Execute the update query and return the number of affected rows
   const [result] = await pool.promise().execute(query, values);

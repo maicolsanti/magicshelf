@@ -77,7 +77,8 @@ export const updateMateriale = async (codice_materiale, custom_data, imageBuffer
   // Prepare the update query
   const query = `
     UPDATE ANAGRAFICA_MATERIALI
-    SET ${setClause}
+    SET ${setClause},
+        DATA_ULTIMA_MODIFICA = CURRENT_TIMESTAMP()
     WHERE CODICE_MATERIALE = ?
   `;
 
