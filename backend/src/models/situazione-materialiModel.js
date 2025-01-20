@@ -47,7 +47,8 @@ export const updateSituazione = async (codice_materiale, custom_data) => {
   // Prepare the update query
   const query = `
     UPDATE SITUAZIONE_MATERIALI
-    SET ${setClause}
+    SET ${setClause},
+        DATA_ULTIMA_MODIFICA = CURRENT_TIMESTAMP()
     WHERE CODICE_MATERIALE = ?
   `;
 

@@ -141,7 +141,6 @@ router.get('/getById/:codice_materiale', getById);
  *                 example:
  *                   CODICE_MATERIALE: 1
  *                   QUANTITA: 200.50
- *                   DATA_ULTIMA_MODIFICA: "2025-01-02T14:00:00Z"
  *     responses:
  *       200:
  *         description: Material situation successfully created
@@ -202,7 +201,6 @@ router.post('/create', create);
  *                 description: Updated data for the material situation
  *                 example:
  *                   QUANTITA: 150.75
- *                   DATA_ULTIMA_MODIFICA: "2025-01-02T16:00:00Z"
  *     responses:
  *       200:
  *         description: Material situation successfully updated
