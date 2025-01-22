@@ -34,6 +34,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
         await axios.get('/api/auth/general/getProfile').then(res => {
           const user = res.data;
           this.configurations.userData = new Profile(
+          user.ID = user.RUOLO === "CLIENTE" ? user.CODICE_CLIENTE : user.CODICE_FORNITORE,
           user.NOME,
           user.COGNOME,
           user.RAGIONE_SOCIALE,
@@ -43,7 +44,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           user.CODICE_ISTAT,
           user.INDIRIZZO,
           user.EMAIL,
-          user.TELEFONO,
+          user.PHONE_NUMBER,
           user.RUOLO == "CLIENTE" ? UserType.COSTUMER : UserType.SUPPLIER
           );
         });

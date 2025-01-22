@@ -1,27 +1,27 @@
 <template>
   <div class="profile-view">
 
-    <!-- Stato di caricamento -->
+    <!-- Loading status -->
     <div v-if="isLoading" class="loading">
       <p>Caricamento...</p>
     </div>
 
-    <!-- Stato di errore -->
+    <!-- Error status -->
     <div v-else-if="error" class="error">
       <p>Si è verificato un errore durante il caricamento del profilo.</p>
     </div>
 
-    <!-- Stato con il profilo -->
+    <!-- Profile status -->
     <div v-else>
-      <!-- Mostra il profilo corretto in base al tipo -->
-      <ClienteProfile v-if="profileType === 'CUSTOMER'" />
-      <FornitoreProfile v-else-if="profileType === 'SUPPLIER'" />
+      <!-- Show correct profile based on type -->
+      <ClienteProfile v-if="profileType === 2" />
+      <FornitoreProfile v-else-if="profileType === 3" />
     </div>
   </div>
 </template>
 
 <script>
-import { useConfigurationStore } from "@/stores/configurations"; // Import dello store Pinia
+import { useConfigurationStore } from "@/stores/configurations";
 import ClienteProfile from "@/components/profile/ClientProfile.vue";
 import FornitoreProfile from "@/components/profile/SupplierProfile.vue";
 
@@ -33,28 +33,28 @@ export default {
   },
   data() {
     return {
-      isLoading: true, // Stato iniziale: caricamento
-      error: false,    // Stato iniziale: nessun errore
-      profileType: "", // Tipo di profilo (CLIENTE o FORNITORE)
+      isLoading: true,
+      error: false,
+      profileType: "",
     };
   },
   methods: {
     async fetchProfile() {
       const configurationStore = useConfigurationStore();
       try {
-        await configurationStore.getProfile(); // Usa l'azione dello store per recuperare il profilo
-        this.profileType = configurationStore.configurations.userData.userType;
-        console.log(this.profileType);
+        await configurationStore.getProfile(); // Retrieve profile
+        this.profileType = configurationStore.configurations.userData.role;
+        console.log(configurationStore.configurations.userData);
       } catch (error) {
         console.error("Errore durante il caricamento del profilo:", error);
-        this.error = true; // Imposta lo stato di errore
+        this.error = true;
       } finally {
-        this.isLoading = false; // Fine del caricamento
+        this.isLoading = false;
       }
     },
   },
   mounted() {
-    this.fetchProfile(); // Chiamata API tramite store quando il componente è montato
+    this.fetchProfile();
   },
 };
 </script>
