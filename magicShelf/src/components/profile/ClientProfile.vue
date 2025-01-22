@@ -1,16 +1,16 @@
 <template>
   <div class="cliente-profile">
     <div class="profile-card">
-      <!-- Header con immagine profilo -->
+      <!-- Header with profile image -->
       <div class="profile-header">
         <div class="profile-image">
           <i class="fa fa-user-circle"></i>
         </div>
       </div>
 
-      <!-- Form per i dati -->
+      <!-- Data form -->
       <form @submit.prevent="saveChanges">
-        <!-- Sezione Anagrafica e Contatto -->
+        <!-- Anagrafica section -->
         <div class="form-section">
           <h2>Anagrafici e di contatto</h2>
           <div class="form-row">
@@ -35,7 +35,7 @@
           </div>
         </div>
 
-        <!-- Sezione Località -->
+        <!-- Locality section -->
         <div class="form-section">
           <h2>Località</h2>
           <div class="form-row">
@@ -50,14 +50,10 @@
           </div>
         </div>
 
-        <!-- Sezione Password -->
+        <!-- Password section -->
         <div class="form-section">
           <h2>Password</h2>
           <div class="form-row">
-            <div class="form-field">
-              <label for="vecchiaPassword">Inserire vecchia password</label>
-              <input type="password" id="vecchiaPassword" v-model="passwords.oldPassword" />
-            </div>
             <div class="form-field">
               <label for="nuovaPassword">Inserire nuova password</label>
               <input type="password" id="nuovaPassword" v-model="passwords.newPassword" />
@@ -69,10 +65,10 @@
           </div>
         </div>
 
-        <!-- Pulsante Salva -->
+        <!-- Save button -->
         <button type="submit" class="btn-save">Salva modifiche</button>
 
-        <!-- Link per eliminare profilo -->
+        <!-- Delete profile link -->
         <p class="delete-profile">
           <a href="#" @click.prevent="deleteProfile">Desideri eliminare il tuo profilo?</a>
         </p>
@@ -92,7 +88,7 @@ export default {
     const configurationStore = useConfigurationStore();
     const profileStore = useProfileStore();
 
-    // Profilo del cliente
+    // Client profile
     const profile = ref({
       id: null,
       name: "",
@@ -104,36 +100,35 @@ export default {
     });
 
     const passwords = ref({
-      oldPassword: "",
       newPassword: "",
       confirmPassword: "",
     });
 
-    const localities = ref(["Comune 1", "Comune 2", "Comune 3"]); // Mock data per comuni
+    const localities = ref(["Comune 1", "Comune 2", "Comune 3"]);
 
-    // Funzione per recuperare i dati del profilo cliente usando configurationStore
+    // Fetch current profile info
     const fetchProfile = async () => {
       try {
-        await configurationStore.getProfile(); // Recupera i dati dal backend tramite lo store
-        Object.assign(profile.value, configurationStore.configurations.userData); // Mappa i dati nel profilo
+        await configurationStore.getProfile(); // Retrieve profile data
+        Object.assign(profile.value, configurationStore.configurations.userData); // Map data
       } catch (error) {
         console.error("Errore durante il recupero del profilo cliente:", error);
       }
     };
 
-    // Salva le modifiche tramite lo store profile
+    // Save changes
     const saveChanges = () => {
       if (profile.value) {
         profileStore.saveChanges("clienti", profile.value);
       }
     };
 
-    // Elimina il profilo tramite lo store profile
+    // Delete profile
     const deleteProfile = () => {
-      profileStore.deleteProfile("clienti");
+      profileStore.deleteProfile("clienti", profile.id);
     };
 
-    // Recupera i dati del profilo al montaggio
+    // Retrieved profile info on mounted
     onMounted(fetchProfile);
 
     return { profile, passwords, localities, saveChanges, deleteProfile };

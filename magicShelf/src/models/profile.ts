@@ -1,4 +1,5 @@
 export class Profile {
+    public id: number;
     public name: string;
     public surname: string;
     public companyName: string | null;
@@ -11,7 +12,8 @@ export class Profile {
     public phoneNumber: string | null;
     public role: number;
 
-    constructor(name: string, surname: string, companyName: string | null, vatNumber: string | null, fiscalCode: string | null,  cap: number, istatCode: number, address: string | null, email: string, phoneNumber: string | null, role: number) {
+    constructor(id: number, name: string, surname: string, companyName: string | null, vatNumber: string | null, fiscalCode: string | null,  cap: number, istatCode: number, address: string | null, email: string, phoneNumber: string | null, role: number) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.companyName = companyName;

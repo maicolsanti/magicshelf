@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import axios from 'axios';
 import { Costumer } from "@/models/costumer";
 import { Supplier } from "@/models/supplier";
 
@@ -9,18 +10,23 @@ export const useProfileStore = defineStore("profile", () => {
   const supplierProfile = ref<Supplier | null>(null);
 
   // Funzione per salvare le modifiche del profilo
-  const saveChanges = async (profileType: "customer" | "supplier", profileData: Costumer | Supplier) => {
+  const saveChanges = async (profileType: "clienti" | "fornitori", profileData: Costumer | Supplier) => {
     try {
-      const endpoint = `/api/${profileType}/profile`;
-      const response = await fetch(endpoint, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(profileData),
-      });
+      const endpoint = `/api/${profileType}/update/${profileData.id}`;
+      const data = {
+        custom_data: {
+          NOME: profileData.name,
+          COGNOME: profileData.surname,
+          CAP: profileData.cap,
+          CODICE_ISTAT: profileData.istatCode,
+          EMAIL: profileData.email,
+          PHONE_NUMBER: profileData.phoneNumber
+        }
+      };
+      console.log(data);
+      const response = await axios.put(endpoint, data);
 
-      if (!response.ok) {
+      if (response.status != 200) {
         throw new Error(`Errore durante il salvataggio del profilo ${profileType}`);
       }
 
@@ -31,19 +37,17 @@ export const useProfileStore = defineStore("profile", () => {
   };
 
   // Funzione per eliminare il profilo
-  const deleteProfile = async (profileType: "customer" | "supplier") => {
+  const deleteProfile = async (profileType: "clienti" | "fornitori", id: number) => {
     try {
-      const endpoint = `/api/${profileType}/profile`;
-      const response = await fetch(endpoint, {
-        method: "DELETE",
-      });
+      const endpoint = `/api/${profileType}/delete/${id}`;
+      const response = await axios.delete(endpoint);
 
-      if (!response.ok) {
+      if (response.status != 200) {
         throw new Error(`Errore durante l'eliminazione del profilo ${profileType}`);
       }
 
       // Resetta lo stato locale dopo l'eliminazione
-      if (profileType === "customer") {
+      if (profileType === "clienti") {
         customerProfile.value = null;
       } else {
         supplierProfile.value = null;
