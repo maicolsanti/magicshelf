@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { useConfigurationStore } from '@/stores/configurations';
 import { useSearchStore } from '@/stores/search';
+import { useProductsStore } from '@/stores/product';
+import { useSupplierStore } from '@/stores/supplier';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { PriceRange } from '@/models/prince-ranges';
 import { DistanceRange } from '@/models/distance-range';
+import SearchedProductCard from '../../components/search/SearchedProductCard.vue'
+import SupplierView from './SupplierView.vue';
 
 const confStore = useConfigurationStore();
 const searchStore = useSearchStore();
+const productStore = useProductsStore();
+const supplierStore = useSupplierStore();
 const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
+const selectedSupplierId = computed(() => supplierStore.selectedSupplierId);
+const selectedProductId = computed(() => supplierStore.selectedProductId);
 
 let user = confStore.getUserData;
 
@@ -57,19 +65,23 @@ function findDistanceString(distanceRange) {
     switch (distanceRange) {
         case DistanceRange.NOTSELECTED:
             return 'Nessun range'
-        case DistanceRange.LESSTHENFIVE:
-            return '< 5km'
-        case DistanceRange.LESSTHENTWENTY:
-            return '< 20km'
-        case DistanceRange.LESSTHENFIFTY:
-            return '< 50km'
-        case DistanceRange.LESSTHENHUNDRED:
-            return '< 100km'
+        case DistanceRange.SAMECAP:
+            return 'Nel tuo CAP'
+        case DistanceRange.SAMEISTATCODE:
+            return 'Nel tuo comune'
+        case DistanceRange.SAMEDISTRICT:
+            return 'Nella tua provincia'
+        case DistanceRange.SAMEREGION:
+            return 'Nella tua regione'
         default:
             return 'Seleziona'
     }
 }
 
+function submit() {
+    productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchFilters.priceRange, searchFilters.distanceRange);
+    productStore.fetchSearchedProducts();
+}
 </script>
 
 <template>
@@ -81,7 +93,7 @@ function findDistanceString(distanceRange) {
                 </button>
             </RouterLink>
         </div>
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn && selectedSupplierId == null">
             <h4 class="welcome d-flex my-5">
                 Cerca qui, gli articoli
             </h4>
@@ -154,7 +166,7 @@ function findDistanceString(distanceRange) {
                                 placeholder="fornitore" required />
                         </div>
                     </div>
-                    <div class="row form-group d-flex  d-flex justify-content-center">
+                    <div class="row form-group d-flex justify-content-center">
                         <div class="col-4 mb-3 form-column">
                             <label for="">CAP</label>
                             <input type="text" class="form-control" id="capInput" v-model="searchFilters.cap"
@@ -170,19 +182,13 @@ function findDistanceString(distanceRange) {
                     </h4>
                 </div>
                 <div class="col-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
+                    <button @click="submit" type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
                 </div>
             </div>
-            <!-- <div class="col-md-4" v-for="prodotto in prodotti" :key="prodotto.id">
-                <div class="card">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Immagine prodotto">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ prodotto.nome }}</h5>
-                        <p class="card-text">{{ prodotto.descrizione }}</p>
-                        <p class="card-text"><strong>€{{ prodotto.prezzo.toFixed(2) }}</strong></p>
-                    </div>
-                </div>
-            </div> -->
+            <SearchedProductCard :cap="searchFilters.cap" />
+        </div>
+        <div v-if="isLoggedIn && selectedSupplierId != null">
+            <SupplierView :supplierId="selectedSupplierId" :productId="selectedProductId" :filterCap="searchFilters.cap" />
         </div>
     </main>
 </template>
