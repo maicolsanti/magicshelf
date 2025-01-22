@@ -19,8 +19,7 @@ const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 const selectedSupplierId = computed(() => supplierStore.selectedSupplierId);
 const selectedProductId = computed(() => supplierStore.selectedProductId);
-
-let user = confStore.getUserData;
+const user = computed(() => confStore.getUserData);
 
 let priceString = "Fascia di prezzo";
 let distanceString = "Zona di ricerca";
@@ -29,7 +28,7 @@ let searchFilters = {
     product: "",
     brand: "",
     supplier: "",
-    cap: user.cap,
+    cap: user.value.cap,
     priceRange: null,
     distanceRange: null
 };

@@ -2,7 +2,7 @@
 import { useRegistrationStore } from '@/stores/registration'
 import { useConfigurationStore } from '@/stores/configurations'
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { addIcons } from 'oh-vue-icons'
 import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 import { useRouter } from 'vue-router'
@@ -11,6 +11,11 @@ addIcons(MdVisibilityRound, MdVisibilityoffRound);
 const registrationStore = useRegistrationStore();
 const configurationStore = useConfigurationStore();
 const { registration, getPasswordType, getVatEquivalence, getTowns, getTown, getTownString } = storeToRefs(registrationStore);
+
+onMounted(() => {
+    registrationStore.fetchTowns();
+    console.log('fetching towns...');
+});
 
 const passwordInputType = computed(() => getPasswordType.value);
 const dropDownString = computed(() => getTownString.value);
@@ -46,6 +51,7 @@ let formData = {
     phoneInput: "",
     CAPInput: "",
     selectedTown: "",
+    address: "",
     passwordInput: "",
 };
 
@@ -62,8 +68,8 @@ function setFiscalCodeWithVatNumber() {
 }
 
 function submit() {
-    registrationStore.setSupplierFormData(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.passwordInput);
-    configurationStore.login(formData.emailInput, formData.passwordInput);
+    registrationStore.registerSupplier(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.address, formData.passwordInput).then(() =>
+        configurationStore.getProfile());
     router.push('/');
 }
 </script>
@@ -138,6 +144,11 @@ function submit() {
                 <h5 class="form-section-title mt-2">Località</h5>
                 <div class="row form-group">
                     <div class="col-4 mb-3 form-column">
+                        <label for="">Indirizzo</label>
+                        <input type="text" class="form-control" id="AddressInput" v-model="formData.address" placeholder="indirizzo"
+                            required />
+                    </div>
+                    <div class="col-4 mb-3 form-column">
                         <label for="">CAP</label>
                         <input type="text" class="form-control" id="CAPInput" v-model="formData.CAPInput" placeholder="cap"
                             required @change="registrationStore.changeCAP(formData.CAPInput)" />
@@ -155,14 +166,13 @@ function submit() {
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
                                 <li v-if="towns.length == 0">
                                     <a class="dropdown-item disabled"
-                                        @click="registrationStore.setSelectedTown('')" href="#">Inserisci il cap</a>
-                                    
+                                        @click="registrationStore.setSelectedTown('', '')" href="#">Inserisci il cap</a>
                                 </li>
                                 <li v-if="towns.length > 0">
-                                    <a v-for="   town    in    towns   " v-bind:key="town.name"
-                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.name)"
+                                    <a v-for="   town    in    towns   " v-bind:key="town.istatCode"
+                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.municipality, town.istatCode)" 
                                         href="#">{{
-                                            town.name }}</a>
+                                            town.municipality }}</a>
                                 </li>
                             </ul>
                         </div>

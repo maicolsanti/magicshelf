@@ -1,5 +1,9 @@
+import { Costumer } from '@/models/costumer';
 import { page } from '@/models/page'
+import { Profile } from '@/models/profile';
+import { Supplier } from '@/models/supplier';
 import { UserType } from '@/models/user-type'
+import axios from 'axios';
 import { defineStore } from 'pinia'
 
 export const useConfigurationStore = defineStore('configurationsStore', {
@@ -15,15 +19,44 @@ export const useConfigurationStore = defineStore('configurationsStore', {
         companyName: null,
         vatNumber: null,
         fiscalCode: "",
+        cap: "",
+        town: "",
         email: "",
         phoneNumber: "",
-        cap: "",
-        town: ""
       },
       authToken: ''
     }
   }),
   actions: {
+    async getProfile() {
+      console.log("requested getProfile");
+      try {
+        await axios.get('/api/auth/general/getProfile').then(res => {
+          const user = res.data;
+          this.configurations.userData = new Profile(
+          user.NOME,
+          user.COGNOME,
+          user.RAGIONE_SOCIALE,
+          user.PARTITA_IVA,
+          user.CODICE_FISCALE,
+          user.CAP.toString(),
+          user.CODICE_ISTAT,
+          user.INDIRIZZO,
+          user.EMAIL,
+          user.TELEFONO,
+          user.RUOLO == "CLIENTE" ? UserType.COSTUMER : UserType.SUPPLIER
+          );
+        });
+
+        this.configurations.logged = true;
+
+        console.log("fetched user profile");
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+    },
     updatePage(newPageCode) {
       this.configurations.pageCode = newPageCode
       this.updatePageName
@@ -53,28 +86,76 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
       return this.configurations.pageString
     },
-    login(username, password) {
-      //TODO: implement login and remove test user
-      if (username == 'test' && password == 'test') {
-        this.configurations.logged = true;
-        this.configurations.userData = {
-          name: "Gianni",
-        surname: "Colo",
-        companyName: null,
-        vatNumber: null,
-        fiscalCode: "BGNMGH01A51C5573T",
-        email: "margheritabagnoliniunibo@gmail.it",
-        phoneNumber: "3342625441",
-        cap: "47020",
-        town: "Longiano",
-        }
-      } else {
+    async loginCostumer(username, password) {
 
+      try {
+        await axios.post('/api/auth/clienti/login', {
+          EMAIL: username,
+          PASSWORD_HASH: password,
+        })
+          .then(function (response) {
+            console.log("logged in");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+          })
+
+          this.getProfile();
+          this.configurations.logged = true;
       }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+
     },
-    logout() {
-      this.configurations.logged = false;
-    }
+    async loginSupplier(fiscalCode, password) {
+
+      try {
+        await axios.post('/api/auth/fornitori/login', {
+          CODICE_FISCALE: fiscalCode,
+          PASSWORD_HASH: password,
+        })
+          .then(function (response) {
+            console.log("logged in");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+          })
+
+          this.getProfile();
+          this.configurations.logged = true;
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+
+    },
+    async logout() {
+
+      try {
+        await axios.post('/api/auth/general/logout')
+          .then(function (response) {
+            console.log("logged out");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+          })
+
+          this.userData = {
+            name: "",
+            surname: "",
+            companyName: null,
+            vatNumber: null,
+            fiscalCode: "",
+            cap: "",
+            town: "",
+            email: "",
+            phoneNumber: "",
+          },
+          this.configurations.logged = false;
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+
+    },
   },
   getters: {
     isLoggedIn() {

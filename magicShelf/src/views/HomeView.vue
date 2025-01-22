@@ -15,7 +15,7 @@ const isLoggedIn = computed(() => confStore.isLoggedIn);
     <h1 class="welcome mb-4">Benvenut*,<br>qui potrai trovare ciò che cerchi
     </h1>
     <div class="d-grid gap-2 mb-1" v-if="!isLoggedIn">
-      <RouterLink to="/login" class="login-link primary-button">
+      <RouterLink to="/loginCostumer" class="login-link primary-button">
         <button type="button" class="btn btn-primary py-2 primary-button">
           Accedi per iniziare la ricerca
         </button>

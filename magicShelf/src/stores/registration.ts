@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { UserType } from '@/models/user-type'
+import axios from "axios"
+import { LocationDetails } from '@/models/location-details';
 
 export const useRegistrationStore = defineStore('registrationStore', {
   state: () => ({
@@ -16,30 +18,11 @@ export const useRegistrationStore = defineStore('registrationStore', {
         phoneNumber: "",
         cap: "",
         town: "",
+        address: "",
+        townCode: "",
         password: ""
       },
-      towns: [
-        {
-          name: "Cesena",
-          caps: ["47520", "47521"]
-        },
-        {
-          name: "Longiano",
-          caps: ["47020"]
-        },
-        {
-          name: "Bologna",
-          caps: ["47120", "47121", "47122", "47123"]
-        },
-        {
-          name: "Cisterna di Latina",
-          caps: ["04012"]
-        },
-        {
-          name: "Como",
-          caps: ["40130", "40131"]
-        }
-      ],
+      towns: [] as LocationDetails[],
       showPassword: false,
       inputPasswordType: 'password',
       vatSameAsFiscalCode: false,
@@ -47,10 +30,10 @@ export const useRegistrationStore = defineStore('registrationStore', {
     }
   }),
   actions: {
-    nextStep(){
+    nextStep() {
       this.registration.step++;
     },
-    previousStep(){
+    previousStep() {
       this.registration.step--;
     },
     setSelectedUserType(userType) {
@@ -72,15 +55,36 @@ export const useRegistrationStore = defineStore('registrationStore', {
     clearVatSameAsFiscalCode() {
       this.registration.vatSameAsFiscalCode = false;
     },
-    setSelectedTown(townName) {
+    async fetchTowns() {
+      try {
+        this.registration.towns = await axios.get('/api/localita/getAll').then(res => res.data.map((locality: any) => new LocationDetails(
+          locality.CODICE_ISTAT,
+          locality.CAP,
+          locality.SIGLA_PROVINCIA,
+          locality.DENOMINAZIONE_REGIONE,
+          locality.DENOMINAZIONE_LOCALITA
+        )));
+
+        console.log("fetched towns");
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+    },
+    setSelectedTown(townName, townCode) {
       this.registration.registrationData.town = townName;
+      this.registration.registrationData.townCode = townCode;
     },
     changeCAP(CAPInput) {
       this.registration.registrationData.town = "";
       this.setSelectedTown("");
       this.registration.registrationData.cap = CAPInput;
     },
-    setCostumerFormData(nameInput, surnameInput, emailInput, phoneInput, passwordInput) {
+    setRegistrationDataError(hasError) {
+      this.registration.registrationDataError = hasError;
+    },
+    async registerCostumer(nameInput, surnameInput, emailInput, phoneInput, passwordInput) {
       this.registration.registrationData.name = nameInput;
       this.registration.registrationData.surname = surnameInput;
       this.registration.registrationData.email = emailInput;
@@ -88,8 +92,28 @@ export const useRegistrationStore = defineStore('registrationStore', {
       // this.registration.registrationData.cap = CAPInput,
       // this.registration.registrationData.town = townInput,
       this.registration.registrationData.password = passwordInput;
+
+      try {
+        await axios.post('/api/auth/clienti/register', {
+            NOME: nameInput,
+            COGNOME: surnameInput,
+            CAP: Number(this.registration.registrationData.cap),
+            CODICE_ISTAT: Number(this.registration.registrationData.townCode),
+            EMAIL: emailInput,
+            PHONE_NUMBER: Number(phoneInput),
+            PASSWORD_HASH: passwordInput
+        })
+          .then(function (response) {
+            console.log("new costumer created");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+          })
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
     },
-    setSupplierFormData(nameInput, surnameInput, companyNameInput, vatNumberInput, fiscalCodeInput, emailInput, phoneInput, passwordInput) {
+    async registerSupplier(nameInput, surnameInput, companyNameInput, vatNumberInput, fiscalCodeInput, emailInput, phoneInput, addressInput, passwordInput) {
       this.registration.registrationData.name = nameInput;
       this.registration.registrationData.surname = surnameInput;
       this.registration.registrationData.companyName = companyNameInput;
@@ -99,10 +123,32 @@ export const useRegistrationStore = defineStore('registrationStore', {
       this.registration.registrationData.phoneNumber = phoneInput;
       // this.registration.registrationData.cap = CAPInput,
       // this.registration.registrationData.town = townInput,
-      this.registration.registrationData.password = passwordInput;
-    },
-    setRegistrationDataError(hasError) {
-      this.registration.registrationDataError = hasError;
+      this.registration.registrationData.address = addressInput,
+        this.registration.registrationData.password = passwordInput;
+
+      try {
+        await axios.post('/api/auth/fornitori/register', {
+            NOME: nameInput,
+            COGNOME: surnameInput,
+            RAGIONE_SOCIALE: companyNameInput,
+            PARTITA_IVA: vatNumberInput,
+            CODICE_FISCALE: fiscalCodeInput,
+            CAP: Number(this.registration.registrationData.cap),
+            CODICE_ISTAT: Number(this.registration.registrationData.townCode),
+            // TODO: add EMAIL: emailInput,
+            INDIRIZZO: addressInput,
+            PHONE_NUMBER: Number(phoneInput),
+            PASSWORD_HASH: passwordInput
+        })
+          .then(function (response) {
+            console.log("new supplier created");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+          })
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
     },
     clearRegistrationData() {
       this.registration.registrationData = {
@@ -120,7 +166,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
     }
   },
   getters: {
-    getDropdownString(){
+    getDropdownString() {
       switch (this.registration.userType) {
         case UserType.NOTSELECTED:
           return 'Seleziona'
@@ -142,13 +188,21 @@ export const useRegistrationStore = defineStore('registrationStore', {
       return this.registration.vatSameAsFiscalCode;
     },
     getTowns() {
-      return this.registration.towns.filter(town => town.caps.includes(this.registration.registrationData.cap));
+      console.log("requested getTowns");
+      if (this.registration.towns.length > 0) {
+        console.log("towns.cap = " + this.registration.towns[0].cap);
+        console.log("equal caps " + JSON.stringify(this.registration.towns.filter(town => town.cap == this.registration.registrationData.cap)));
+        return this.registration.towns.filter(town => town.cap == this.registration.registrationData.cap);
+      } else {
+        console.log("towns is empty");
+        return [] as LocationDetails[];
+      }
     },
     getTown() {
       return this.registration.registrationData.town;
     },
-    getTownString(){
-      if(this.registration.registrationData.town == "") {
+    getTownString() {
+      if (this.registration.registrationData.town == "") {
         return "Seleziona comune";
       } else {
         return this.registration.registrationData.town;

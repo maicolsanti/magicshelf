@@ -21,7 +21,7 @@ let loginData = {
 };
 
 function submit() {
-    configurationStore.login(loginData.usernameInput, loginData.passwordInput);
+    configurationStore.loginCostumer(loginData.usernameInput, loginData.passwordInput);
     router.push('/');
 }
 </script>
