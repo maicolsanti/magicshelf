@@ -25,27 +25,27 @@ function setSelectedProduct(productId, supplierId) {
 
 <template>
 	<div class="">
-	                <div v-for="product in products" :key="product.id">
-	                <div class="product-card px-4 py-2 mx-auto" @click="setSelectedProduct(product.id, product.supplier.id)">
+	                <div v-for="product in products" :key="product.materialId">
+	                <div class="product-card px-4 py-2 mx-auto" @click="setSelectedProduct(product.materialId, product.supplierId)">
 	                    <div class="row align-items-center justify-content-between">
 	                        <div class="col-7">
 	                            <div class="row">
 	                                <div class="col-12 bolder-text">
 	                                    <!-- TODO: add institution -->
-	                                    <span>{{ product.supplier.companyName }}</span> <span class="address">{{ product.supplier.address }}</span>
+	                                    <span>{{ product.supplierCompanyName }}</span> <span class="address">{{ product.supplierAddress }}</span> <span class="address">{{ product.locationName }}</span>
 	                                </div>
 	                                <div class="col-12 bolder-text">
-	                                    {{ product.description }}
+	                                    {{ product.materialDescription }}
 	                                </div>
 	                            </div>
 	                        </div>
 	                        <div class="col-auto"> 
 	                            <div class="row gx-5">
-	                                <div v-if="product.supplier.cap == props.cap" class="col-6">
+	                                <div v-if="product.supplierZipCode == Number(props.cap)" class="col-6">
 	                                    <span class="badge">Nelle tue vicinanze</span>
 	                                </div>
 	                                <div class="col-6">
-	                                    <span class="badge">€ {{ product.unitPrice }}</span>
+	                                    <span class="badge">€ {{ product.materialUnitPrice }}</span>
 	                                </div>
 	                            </div>
 	                        </div>

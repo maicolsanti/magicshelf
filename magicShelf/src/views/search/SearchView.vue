@@ -64,22 +64,21 @@ function findDistanceString(distanceRange) {
     switch (distanceRange) {
         case DistanceRange.NOTSELECTED:
             return 'Nessun range'
-        case DistanceRange.SAMECAP:
-            return 'Nel tuo CAP'
         case DistanceRange.SAMEISTATCODE:
             return 'Nel tuo comune'
-        case DistanceRange.SAMEDISTRICT:
-            return 'Nella tua provincia'
-        case DistanceRange.SAMEREGION:
-            return 'Nella tua regione'
+        case DistanceRange.NOTSAMEISTATCODE:
+            return 'Fuori dal tuo comune'
         default:
             return 'Seleziona'
     }
 }
 
 function submit() {
-    productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchFilters.priceRange, searchFilters.distanceRange);
-    productStore.fetchSearchedProducts();
+    productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchStore.searchAttributes.priceRange, searchStore.searchAttributes.distanceRange).then(() => {
+        productStore.getFilteredProducts();
+    });
+    // productStore.fetchSearchedProducts();
+   
 }
 </script>
 
