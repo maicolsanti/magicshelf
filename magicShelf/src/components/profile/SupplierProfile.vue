@@ -1,16 +1,16 @@
 <template>
   <div class="fornitore-profile">
     <div class="profile-card">
-      <!-- Header con immagine profile -->
+      <!-- Profile image header -->
       <div class="profile-header">
         <div class="profile-image">
           <i class="fa fa-user-circle"></i>
         </div>
       </div>
 
-      <!-- Form per i dati -->
+      <!-- Data form -->
       <form @submit.prevent="saveChanges">
-        <!-- Sezione Anagrafica e Azienda -->
+        <!-- Anagrafica section -->
         <div class="form-section">
           <h2>Anagrafici e di azienda</h2>
           <div class="form-row">
@@ -30,24 +30,16 @@
             </div>
             <div class="form-field">
               <label for="partitaIva">Partita Iva</label>
-              <input type="text" id="partitaIva" v-model="profile.vatCode" placeholder="Partita IVA" />
+              <input type="text" id="partitaIva" v-model="profile.vatNumber" placeholder="Partita IVA" />
             </div>
             <div class="form-field">
               <label for="codiceFiscale">Codice fiscale</label>
-              <input type="text" id="codiceFiscale" v-model="profile.taxCode" placeholder="Codice fiscale" />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>
-                <input type="checkbox" v-model="profile.correspondsTaxCode" />
-                La partita IVA corrisponde al codice fiscale
-              </label>
+              <input type="text" id="codiceFiscale" v-model="profile.fiscalCode" placeholder="Codice fiscale" />
             </div>
           </div>
         </div>
 
-        <!-- Sezione Località -->
+        <!-- Locality section -->
         <div class="form-section">
           <h2>Località</h2>
           <div class="form-row">
@@ -64,7 +56,7 @@
           </div>
         </div>
 
-        <!-- Sezione Contatti -->
+        <!-- Contacts section -->
         <div class="form-section">
           <h2>Di contatto e utente</h2>
           <div class="form-row">
@@ -79,14 +71,10 @@
           </div>
         </div>
 
-        <!-- Sezione Password -->
+        <!-- Password section -->
         <div class="form-section">
           <h2>Password</h2>
           <div class="form-row">
-            <div class="form-field">
-              <label for="vecchiaPassword">Inserire vecchia password</label>
-              <input type="password" id="vecchiaPassword" v-model="passwords.oldPassword" />
-            </div>
             <div class="form-field">
               <label for="nuovaPassword">Inserire nuova password</label>
               <input type="password" id="nuovaPassword" v-model="passwords.newPassword" />
@@ -98,10 +86,10 @@
           </div>
         </div>
 
-        <!-- Pulsante Salva -->
+        <!-- Save button -->
         <button type="submit" class="btn-save">Salva modifiche</button>
 
-        <!-- Link per eliminare profile -->
+        <!-- Delete profile link -->
         <p class="delete-profile">
           <a href="#" @click.prevent="deleteProfile">Desideri eliminare il tuo profilo?</a>
         </p>
@@ -121,15 +109,13 @@ export default {
     const configurationStore = useConfigurationStore();
     const profileStore = useProfileStore();
 
-    // profile e comuni
     const profile = ref({
       id: null,
       name: "",
       surname: "",
       companyName: "",
-      vatCode: "",
-      taxCode: "",
-      correspondsTaxCode: false,
+      vatNumber: "",
+      fiscalCode: "",
       cap: "",
       locality: "",
       email: "",
@@ -142,28 +128,29 @@ export default {
       confirmPassword: "",
     })
 
-    const localities = ref(["Comune 1", "Comune 2", "Comune 3"]); // Mock comuni
+    const localities = ref(["Comune 1", "Comune 2", "Comune 3"]);
 
-    // Carica i dati del profile tramite lo store Pinia
+    // Load profile info
     const fetchProfile = async () => {
       try {
         await configurationStore.getProfile();
-        Object.assign(profile.value, configurationStore.configurations.supplierData); // Mappa dati nello stato locale
+        Object.assign(profile.value, configurationStore.configurations.userData); // Map data
+        console.log(configurationStore.configurations.userData)
       } catch (error) {
         console.error("Errore durante il caricamento del profile fornitore:", error);
       }
     };
 
-    // Salva le modifiche
+    // Save changes
     const saveChanges = () => {
       if (profile.value) {
         profileStore.saveChanges("fornitori", profile.value);
       }
     };
 
-    // Elimina profile
+    // Delete profile
     const deleteProfile = () => {
-      profileStore.deleteProfile("fornitori");
+      profileStore.deleteProfile("fornitori", profile.id);
     };
 
     onMounted(fetchProfile);
@@ -174,7 +161,6 @@ export default {
 </script>
 
 <style scoped>
-/* Gli stili rimangono invariati */
 .fornitore-profile {
   max-width: 800px;
   margin: auto;

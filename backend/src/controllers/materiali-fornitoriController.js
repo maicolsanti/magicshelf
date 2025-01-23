@@ -1,6 +1,6 @@
 import { getAllFornitoriMateriali, getFornitoreMaterialiById, getFilteredFornitoreMateriali } from '../models/materiali-fornitoriModel.js';
 import { getUser } from '../utils/auth.js';
-import { getLocalitaByDenominazione } from '../models/localitaModel.js';
+import { getLocalitaById } from '../models/localitaModel.js';
 
 const ROLE_NAME = 'FORNITORE';
 
@@ -72,7 +72,7 @@ export const getFiltered = async (req, res) => {
     try {
         const reqBody = req.body; // Get filter by request payload
         const start_locality = reqBody.ZONA_DI_PARTENZA;
-        const localities = await getLocalitaByDenominazione(start_locality);
+        const localities = await getLocalitaById(start_locality);
         const locality = localities[0];
 
         const filters = Object.assign(reqBody, locality);
