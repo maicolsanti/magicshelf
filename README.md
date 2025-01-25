@@ -116,8 +116,69 @@ npm run dev
 La documentazioen dettagliata degli endpoit si trova all'interno dello swagger.
 Per visualizzarlo arrivare al passaggio 5 di [Installazione ed Esecuzione](#installazione-ed-esecuzione) e navigare all'indirizzo <http://localhost:3000/api-docs/#/>
 
+### Auth Clienti
+
+- /auth/clienti/register
+- /auth/clienti/login
+
+### Auth Fornitori
+
+- /auth/fornitori/register
+- /auth/fornitori/login
+
+### Auth General
+
+- /auth/general/getProfile
+- /auth/general/getProfile
+
+### Clienti
+
+- /auth/general/getProfile
+- /clienti/getById/{codice_cliente}
+- /clienti/create
+- /clienti/update/{codice_cliente}
+- /clienti/delete/{codice_cliente}
+
+### Fornitori
+
+- /fornitori/getAll
+- /fornitori/getById/{codice_fornitore}
+- /fornitori/create
+- /fornitori/update/{codice_fornitore}
+- /fornitori/delete/{codice_fornitore}
+
+### Località
+
+- /localita/getAll
+- /localita/getById/{codice_istat}
+- /localita/getByCap/{cap}
+- /localita/getByCapDenominazione/{cap}/{denominazione}
+
+### Materiali Fornitori
+
+- /materiali-fornitori/getAll
+- /materiali-fornitori/getById/{codice_fornitore}
+- /materiali-fornitori/getFiltered
+
+### Materiali
+
+- /materiali/getAll
+- /materiali/getById/{codice_materiale}
+- /materiali/create
+- /materiali/update/{codice_materiale}
+- /materiali/remove/{codice_materiale}
+
+### Situazione Materiali
+
+- /situazione-materiali/getAll
+- /situazione-materiali/getById/{codice_materiale}
+- /situazione-materiali/create
+- /situazione-materiali/create
+- /situazione-materiali/remove/{codice_materiale}
 
 ## Database e Schema Er
+
+![Schema ER](./SchemaER.png)
 
 ## Documentazione
 
