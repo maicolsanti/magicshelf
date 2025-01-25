@@ -9,6 +9,8 @@ const confStore = useConfigurationStore();
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 
+const isSupplier = computed(() => confStore.isSupplier);
+
 const router = useRouter()
 
 function logout() {
@@ -32,10 +34,10 @@ function logout() {
           <li class="nav-item mx-2" @click="confStore.updatePage(page.HOME)">
             <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">Home</RouterLink>
           </li>
-          <li class="nav-item mx-2" @click="confStore.updatePage(page.SEARCH)">
+          <li class="nav-item mx-2" v-if="!isSupplier" @click="confStore.updatePage(page.SEARCH)">
             <RouterLink to="/search" class="nav-link inactive-page" active-class="active-page">Ricerca</RouterLink>
           </li>
-          <li class="nav-item mx-2" @click="confStore.updatePage(page.PRODUCTS)">
+          <li class="nav-item mx-2" v-if="isSupplier" @click="confStore.updatePage(page.PRODUCTS)">
             <RouterLink to="/products" class="nav-link inactive-page" active-class="active-page">Prodotti</RouterLink>
           </li>
           <li class="nav-item mx-2" @click="confStore.updatePage(page.PROFILE)">

@@ -164,6 +164,9 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     },
     getUserData() {
       return this.configurations.userData;
-    }
+    },
+    isSupplier() {
+      return this.configurations.userType === UserType.SUPPLIER;
+    },
   }
 });
