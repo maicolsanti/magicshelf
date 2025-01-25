@@ -14,8 +14,8 @@ export const getFornitoreMaterialiById = async (codice_fornitore) => {
         'SELECT * FROM MATERIALI_FORNITORI WHERE CODICE_FORNITORE = ?',
         [codice_fornitore]
     );
-    // Return the material if found, otherwise return null
-    return rows.length > 0 ? rows[0] : null;
+    // Return the materials if found, otherwise return null
+    return rows.length > 0 ? rows : null;
 };
 
 export const getFilteredFornitoreMateriali = async (filters) => {
