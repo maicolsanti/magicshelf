@@ -43,12 +43,6 @@ export const getById = async (req, res) => {
             return;
         }
 
-        // Check if the user is authorized
-        if (user.ROLE != ROLE_NAME) {
-            res.status(403).send('Insufficient permission');
-            return;
-        }
-
         // Retrieve supplier material by its unique identifier (codice_fornitore)
         const fornitore_materiali = await getFornitoreMaterialiById(codice_fornitore);
 
