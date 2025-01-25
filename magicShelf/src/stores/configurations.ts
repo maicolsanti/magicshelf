@@ -121,6 +121,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           })
 
           this.getProfile();
+          this.configurations.userType = UserType.SUPPLIER;
           this.configurations.logged = true;
       }
       catch (error) {
@@ -164,6 +165,9 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     },
     getUserData() {
       return this.configurations.userData;
-    }
+    },
+    isSupplier() {
+      return this.configurations.userType === UserType.SUPPLIER;
+    },
   }
 });
