@@ -6,7 +6,7 @@
  */
 
 import express from 'express';
-import { getProfile, logout } from '../controllers/authGeneralController.js';
+import { changePassword, getProfile, logout } from '../controllers/authGeneralController.js';
 
 const router = express.Router();
 
@@ -160,5 +160,65 @@ router.get('/getProfile', getProfile);
  *               example: "Internal server error"
  */
 router.post('/logout', logout);
+
+/**
+ * @swagger
+ * /auth/general/changePassword:
+ *   post:
+ *     tags:
+ *      - AuthGeneral
+ *     summary: Change password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               OLD_PASSWORD:
+ *                 type: string
+ *                 description: The old password
+ *                 example: "TavoloBlu1!"
+ *               NEW_PASSWORD:
+ *                 type: string
+ *                 description: The new password
+ *                 example: "TavoloVerde2!"
+ *     responses:
+ *       200:
+ *         description: Successfull password change
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Password successfully updated"
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *       403:
+ *         description: The inserted login credentials are invalid
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Incorrect credentials"
+ *       401:
+ *         description: Login can only occur after logging out
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "You must be logged in to change password"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
+ */
+router.post('/changePassword', changePassword);
 
 export default router;
