@@ -144,6 +144,8 @@ export const useRegistrationStore = defineStore('registrationStore', {
             console.log("new supplier created");
             console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
           })
+          this.configurations.userType = UserType.SUPPLIER;
+          this.configurations.logged = true;
       }
       catch (error) {
         alert(error);
