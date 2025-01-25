@@ -4,7 +4,16 @@ import pool from '../config/db.js';
 export const getAllFornitoriMateriali = async () => {
     // Execute a query to fetch all supplier materials from the database
     const [rows] = await pool.promise().query('SELECT * FROM MATERIALI_FORNITORI');
-    return rows;
+
+    // Convert image BLOB to Base64 string for each row
+    const materiali = rows.map((row) => {
+        if (row.IMMAGINE) {
+        row.IMMAGINE = row.IMMAGINE.toString('base64'); // Convert BLOB to Base64
+        }
+        return row;
+    });
+
+    return materiali;
 };
 
 // Get supplier's material by supplier code
@@ -14,8 +23,17 @@ export const getFornitoreMaterialiById = async (codice_fornitore) => {
         'SELECT * FROM MATERIALI_FORNITORI WHERE CODICE_FORNITORE = ?',
         [codice_fornitore]
     );
+
+    // Convert image BLOB to Base64 string for each row
+    const materiali = rows.map((row) => {
+        if (row.IMMAGINE) {
+        row.IMMAGINE = row.IMMAGINE.toString('base64'); // Convert BLOB to Base64
+        }
+        return row;
+    });
+
     // Return the materials if found, otherwise return null
-    return rows.length > 0 ? rows : null;
+    return materiali.length > 0 ? materiali : null;
 };
 
 export const getFilteredFornitoreMateriali = async (filters) => {
@@ -52,5 +70,13 @@ export const getFilteredFornitoreMateriali = async (filters) => {
     // Execute the query with sanitized parameters
     const [rows] = await pool.promise().execute(sql, sanitizedParams);
 
-    return rows;
+    // Convert image BLOB to Base64 string for each row
+    const materiali = rows.map((row) => {
+        if (row.IMMAGINE) {
+        row.IMMAGINE = row.IMMAGINE.toString('base64'); // Convert BLOB to Base64
+        }
+        return row;
+    });
+
+    return materiali;
 };
