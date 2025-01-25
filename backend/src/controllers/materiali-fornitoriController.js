@@ -1,6 +1,7 @@
 import { getAllFornitoriMateriali, getFornitoreMaterialiById, getFilteredFornitoreMateriali } from '../models/materiali-fornitoriModel.js';
 import { getUser } from '../utils/auth.js';
 import { getLocalitaById } from '../models/localitaModel.js';
+import multer from 'multer';
 
 const ROLE_NAME = 'FORNITORE';
 
@@ -10,12 +11,6 @@ export const getAll = async (req, res) => {
         // Check if the user is logged in
         if (!user) {
             res.status(401).send('This operation requires you to be logged in');
-            return;
-        }
-
-        // Check if the user is authorized
-        if (user.ROLE != ROLE_NAME) {
-            res.status(403).send('Insufficient permission');
             return;
         }
 
