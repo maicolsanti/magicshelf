@@ -23,16 +23,14 @@ const props = defineProps({
 
 const supplierStore = useSupplierStore();
 
-const products = computed(() => supplierStore.products);
+const products = computed(() => supplierStore.supplierFetchedProducts);
 const supplier = computed(() => supplierStore.supplier);
 const location = computed(() => supplierStore.location);
 
 console.log("products ", products.value);
 console.log("productId prop ", props.productId);
 
-console.log("caps ", props.filterCap, supplier.value.cap);
-
-const selectedProduct = products.value.find(product => product.id === props.productId);
+const selectedProduct = products.value.find(product => product.materialId === props.productId);
 
 console.log("selectedProduct ", selectedProduct);
 </script>
@@ -61,20 +59,20 @@ console.log("selectedProduct ", selectedProduct);
       </div>
       <div class="row product-highlight justify-content-between align-items-center mx-1 px-4 gx-3">
         <div class="col-6">
-          <span class="text-dark bold">{{ selectedProduct.description  }}</span>
+          <span class="text-dark bold">{{ selectedProduct.materialDescription  }}</span>
         </div>
         <div class="col-6 badge my-3 d-flex justify-content-center align-items-center">
-          <span class="price">€ {{ selectedProduct.unitPrice }}</span>
+          <span class="price">€ {{ selectedProduct.materialUnitPrice }}</span>
         </div>
       </div>
     </div>
 
     <section class="supplier-products mt-5">
       <h3 class="font-lighter">Tutti i prodotti del fornitore</h3>
-        <li v-for="product in products" :key="product.id" class="product-item">
-          <span class="bold">{{ product.description }}</span>
+        <li v-for="product in products" :key="product.materialId" class="product-item">
+          <span class="bold">{{ product.materialDescription }}</span>
           <div class="badge d-flex justify-content-center align-items-center">
-            <span class="price text-light">€ {{ product.unitPrice }}</span>
+            <span class="price text-light">€ {{ product.materialUnitPrice }}</span>
           </div>
         </li>
     </section>

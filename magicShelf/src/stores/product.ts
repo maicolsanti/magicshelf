@@ -67,6 +67,7 @@ export const useProductsStore = defineStore('productStore', {
           product.CODICE_ISTAT,
           product.INDIRIZZO,
           product.PHONE_NUMBER,
+          null,
           product.CODICE_MATERIALE,
           product.DESCRIZIONE_MATERIALE,
           product.MARCA,

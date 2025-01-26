@@ -17,7 +17,6 @@ const products = computed(() => productStore.products);
 function setSelectedProduct(productId, supplierId) {
 	supplierStore.setSelectedProduct(productId, supplierId);
 	supplierStore.fetchSupplierById(supplierId);
-	supplierStore.fetchSupplierProductsById(supplierId);
 	supplierStore.fetchLocationByIstatCode();
 }
 

@@ -9,6 +9,7 @@ export class FoundProduct {
     public supplierIstatCode: number;
     public supplierAddress: string;
     public supplierPhoneNumber: number;
+    public supplierEmail: string | null;
     public materialId: number;
     public materialDescription: string;
     public materialBrand: string;
@@ -31,6 +32,7 @@ export class FoundProduct {
         supplierIstatCode: number,
         supplierAddress: string,
         supplierPhoneNumber: number,
+        supplierEmail: string | null,
         materialId: number,
         materialDescription: string,
         materialBrand: string,
@@ -52,6 +54,7 @@ export class FoundProduct {
         this.supplierIstatCode = supplierIstatCode;
         this.supplierAddress = supplierAddress;
         this.supplierPhoneNumber = supplierPhoneNumber;
+        this.supplierEmail = supplierEmail;
         this.materialId = materialId;
         this.materialDescription = materialDescription;
         this.materialBrand = materialBrand;
