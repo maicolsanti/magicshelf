@@ -18,25 +18,10 @@ let formData = reactive({
   image: null
 })
 
-console.log("opened");
-
 function onFilePicked (event) {
 
   const image = event.target.files[0];
-  const reader = new FileReader();
-  reader.readAsDataURL(image);
   this.formData.image = image;
-  reader.onload = e =>{
-      console.log(e.target.result);
-  };
-
-  // const files = event.target.files
-  // const fileReader = new FileReader()
-  // fileReader.addEventListener('load', () => {
-  //   this.imageUrl = fileReader.result
-  // })
-  // fileReader.readAsDataURL(files[0])
-  // formData.image = files[0]
 }
 
 function addProduct() {

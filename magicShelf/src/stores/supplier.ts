@@ -76,7 +76,26 @@ export const useSupplierStore = defineStore('supplierStore', {
         this.location = fetchedLocation;
         return true;
     },
+    async insertQuantity(id, quantity) {
+      try {
+        await axios.post('/api/situazione-materiali/create', {
+          custom_data: {
+            CODICE_MATERIALE: id,
+            QUANTITA: quantity
+          }
+        })
+          .then(function (response) {
+            console.log("quantity created");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+          })
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+    },
     async insertNewProduct(productDescription, productBrand, productUnit, productPrice, productQuantity, productImage, supplierId) {
+      let responseId = 0;
       let formData = new FormData();
       console.log("supplier id: " + supplierId);
       formData.append(
@@ -93,22 +112,18 @@ export const useSupplierStore = defineStore('supplierStore', {
       try {
         await axios.post('/api/materiali/create', 
           formData,
-        {headers: {
+        {
+          headers: {
           'Content-Type': 'multipart/form-data',
-        },})
+          }
+        })
           .then(function (response) {
             console.log("new product created");
             console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            responseId = response.data.id;
           })
-      }
-      catch (error) {
-        alert(error);
-        console.log(error);
-      }
-    },
-    async insertQuantity(id, quantity) {
-      try {
-
+          this.insertQuantity(responseId, productQuantity);
+          this.fetchSupplierById(supplierId);
       }
       catch (error) {
         alert(error);

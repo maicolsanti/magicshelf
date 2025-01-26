@@ -34,8 +34,9 @@ console.log("products ", products.value);
           Aggiungi un nuovo prodotto
         </button>
         <li v-for="product in products" :key="product.materialId" class="product-item mt-3">
-          <span class="bold">{{ product.materialDescription }}</span>
-          <div class="badge d-flex justify-content-center align-items-center">
+            <img v-bind:src="'data:image/jpeg;base64,'+product.imageBase64" class="product-image"/>
+            <span class="bold">{{ product.materialDescription }}</span>
+            <div class="badge d-flex justify-content-center align-items-center">
             <span class="price text-light">€ {{ product.materialUnitPrice }}</span>
           </div>
         </li>
@@ -128,6 +129,13 @@ console.log("products ", products.value);
 
 .bold {
   font-weight: bold;
+}
+
+.product-image {
+  max-width: 50px;
+  max-height: 50px;
+  margin-right: 10px;
+  object-fit: contain;
 }
 
 </style>
