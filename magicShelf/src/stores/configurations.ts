@@ -14,6 +14,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       logged: false,
       userType: UserType.COSTUMER,
       userData: {
+        id: null,
         name: "",
         surname: "",
         companyName: null,
