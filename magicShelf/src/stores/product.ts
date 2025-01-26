@@ -75,7 +75,8 @@ export const useProductsStore = defineStore('productStore', {
           product.SIGLA_PROVINCIA,
           product.DENOMINAZIONE_PROVINCIA,
           product.DENOMINAZIONE_REGIONE,
-          product.DENOMINAZIONE_LOCALITA
+          product.DENOMINAZIONE_LOCALITA,
+          product.IMMAGINE
         )));
 
         console.log("fetched products");

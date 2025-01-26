@@ -18,6 +18,7 @@ export class FoundProduct {
     public districtName: string;
     public regionName: string;
     public locationName: string;
+    public imageBase64: string;
 
     constructor(
         supplierId: number,
@@ -38,7 +39,8 @@ export class FoundProduct {
         districtAbbreviation: string,
         districtName: string,
         regionName: string,
-        locationName: string
+        locationName: string,
+        imageBase64: string
     ) {
         this.supplierId = supplierId;
         this.supplierName = supplierName;
@@ -59,5 +61,6 @@ export class FoundProduct {
         this.districtName = districtName;
         this.regionName = regionName;
         this.locationName = locationName;
+        this.imageBase64 = imageBase64;
     }
 }

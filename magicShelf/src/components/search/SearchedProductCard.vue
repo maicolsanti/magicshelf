@@ -27,11 +27,11 @@ function setSelectedProduct(productId, supplierId) {
 	<div class="">
 	                <div v-for="product in products" :key="product.materialId">
 	                <div class="product-card px-4 py-2 mx-auto" @click="setSelectedProduct(product.materialId, product.supplierId)">
+						<!-- <img v-if="product.imageBase64" v-bind:src="'data:image/png;base64,'+product.imageBase64" /> -->
 	                    <div class="row align-items-center justify-content-between">
 	                        <div class="col-7">
 	                            <div class="row">
 	                                <div class="col-12 bolder-text">
-	                                    <!-- TODO: add institution -->
 	                                    <span>{{ product.supplierCompanyName }}</span> <span class="address">{{ product.supplierAddress }}</span> <span class="address">{{ product.locationName }}</span>
 	                                </div>
 	                                <div class="col-12 bolder-text">
