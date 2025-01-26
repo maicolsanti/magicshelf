@@ -5,11 +5,11 @@ import { Costumer } from "@/models/costumer";
 import { Supplier } from "@/models/supplier";
 
 export const useProfileStore = defineStore("profile", () => {
-  // Stato per i profili (opzionale per mantenere dati condivisi)
+  // Profile status
   const customerProfile = ref<Costumer | null>(null);
   const supplierProfile = ref<Supplier | null>(null);
 
-  // Funzione per salvare le modifiche del profilo
+  // Profile value change function
   const saveChanges = async (profileType: "clienti" | "fornitori", profileData: Costumer | Supplier) => {
     try {
       const endpoint = `/api/${profileType}/update/${profileData.id}`;
@@ -36,7 +36,7 @@ export const useProfileStore = defineStore("profile", () => {
     }
   };
 
-  // Funzione per eliminare il profilo
+  // Delete profile function
   const deleteProfile = async (profileType: "clienti" | "fornitori", id: number) => {
     try {
       const endpoint = `/api/${profileType}/delete/${id}`;
@@ -46,7 +46,7 @@ export const useProfileStore = defineStore("profile", () => {
         throw new Error(`Errore durante l'eliminazione del profilo ${profileType}`);
       }
 
-      // Resetta lo stato locale dopo l'eliminazione
+      // Reset state
       if (profileType === "clienti") {
         customerProfile.value = null;
       } else {
@@ -56,6 +56,14 @@ export const useProfileStore = defineStore("profile", () => {
       console.log(`Profilo ${profileType} eliminato con successo.`);
     } catch (error) {
       console.error("Errore durante l'eliminazione:", error);
+    }
+  };
+
+  const changePassword = async (profileType: "clienti" | "fornitori", id: number) => {
+    try {
+      const endpoint = `/api/${profileType}/changePassword/${id}`
+    } catch (error) {
+
     }
   };
 
