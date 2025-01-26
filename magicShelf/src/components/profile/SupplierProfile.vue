@@ -9,7 +9,7 @@
       </div>
 
       <!-- Data form -->
-      <form @submit.prevent="saveChanges">
+      <form @submit.prevent="saveProfileChanges">
         <!-- Anagrafica section -->
         <div class="form-section">
           <h2>Anagrafici e di azienda</h2>
@@ -50,7 +50,9 @@
             <div class="form-field">
               <label for="comune">Comune</label>
               <select id="comune" v-model="profile.locality">
-                <option v-for="locality in localities" :key="locality" :value="locality">{{ locality }}</option>
+                <option v-for="locality in localities" :key="locality" :value="locality">
+                  {{ locality }}
+                </option>
               </select>
             </div>
           </div>
@@ -71,10 +73,21 @@
           </div>
         </div>
 
-        <!-- Password section -->
+        <!-- Save profile button -->
+        <div class="save-profile-button">
+          <button type="button" class="btn-save" @click="saveProfileChanges">Salva dati anagrafici</button>
+        </div>
+      </form>
+
+      <!-- Password form -->
+      <form @submit.prevent="savePasswordChanges">
         <div class="form-section">
           <h2>Password</h2>
           <div class="form-row">
+            <div class="form-field">
+              <label for="vecchiaPassword">Inserire vecchia password</label>
+              <input type="password" id="vecchiaPassword" v-model="passwords.oldPassword" />
+            </div>
             <div class="form-field">
               <label for="nuovaPassword">Inserire nuova password</label>
               <input type="password" id="nuovaPassword" v-model="passwords.newPassword" />
@@ -86,20 +99,20 @@
           </div>
         </div>
 
-        <!-- Save button -->
-        <button type="submit" class="btn-save">Salva modifiche</button>
-
-        <!-- Delete profile link -->
-        <p class="delete-profile">
-          <a href="#" @click.prevent="deleteProfile">Desideri eliminare il tuo profilo?</a>
-        </p>
+        <!-- Save password button -->
+        <button type="button" class="btn-save" @click="savePasswordChanges">Salva password</button>
       </form>
+
+      <!-- Delete profile link -->
+      <p class="delete-profile">
+        <a href="#" @click.prevent="deleteProfile">Desideri eliminare il tuo profilo?</a>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useConfigurationStore } from "@/stores/configurations";
 import { useProfileStore } from "@/stores/profile";
 
@@ -118,6 +131,7 @@ export default {
       fiscalCode: "",
       cap: "",
       locality: "",
+      istatCode: null, // Aggiunto il campo istatCode
       email: "",
       phoneNumber: "",
     });
@@ -126,36 +140,99 @@ export default {
       oldPassword: "",
       newPassword: "",
       confirmPassword: "",
-    })
+    });
 
-    const localities = ref(["Comune 1", "Comune 2", "Comune 3"]);
+    const localities = ref([]);
 
-    // Load profile info
+    // Funzione per aggiornare le località basate sul CAP
+    const fetchLocalities = async (cap) => {
+      try {
+        localities.value = await profileStore.getLocalityByCap(cap);
+      } catch (error) {
+        console.error("Errore nel caricamento delle località:", error);
+        localities.value = [];
+      }
+    };
+
+    // Recupera il codice ISTAT basato su CAP e località
+    const fetchIstatCode = async (cap, locality) => {
+      try {
+        const istatCodes = await profileStore.GetLocalityByCapDenominazione(cap, locality);
+        return istatCodes;
+      } catch (error) {
+        console.error("Errore nel recupero del codice ISTAT:", error);
+        return null;
+      }
+    };
+
+    // Salva le modifiche al profilo
+    const saveProfileChanges = async () => {
+      try {
+        // Recupera il codice ISTAT prima di salvare
+        if (profile.value.cap && profile.value.locality) {
+          profile.value.istatCode = await fetchIstatCode(profile.value.cap, profile.value.locality);
+        }
+
+        if (!profile.value.istatCode) {
+          alert("Errore: non è stato possibile recuperare il codice ISTAT.");
+          return;
+        }
+
+        // Salva il profilo
+        profileStore.saveChanges("fornitori", profile.value);
+        alert("Modifiche salvate con successo.");
+      } catch (error) {
+        console.error("Errore durante il salvataggio del profilo:", error);
+        alert("Si è verificato un errore durante il salvataggio.");
+      }
+    };
+
+    // Osserva il cambiamento del CAP per aggiornare le località
+    watch(
+      () => profile.value.cap,
+      (newCap) => {
+        if (newCap && newCap.length === 5) {
+          fetchLocalities(newCap);
+        } else {
+          localities.value = [];
+        }
+      }
+    );
+
+    // Funzione per caricare il profilo
     const fetchProfile = async () => {
       try {
         await configurationStore.getProfile();
-        Object.assign(profile.value, configurationStore.configurations.userData); // Map data
-        console.log(configurationStore.configurations.userData)
+        Object.assign(profile.value, configurationStore.configurations.userData);
       } catch (error) {
-        console.error("Errore durante il caricamento del profile fornitore:", error);
+        console.error("Errore durante il caricamento del profilo:", error);
       }
     };
 
-    // Save changes
-    const saveChanges = () => {
-      if (profile.value) {
-        profileStore.saveChanges("fornitori", profile.value);
+    // Salva le modifiche alla password
+    const savePasswordChanges = () => {
+      if (passwords.value.newPassword === passwords.value.confirmPassword) {
+        profileStore.changePassword(passwords.value);
+      } else {
+        alert("Le password non corrispondono.");
       }
     };
 
-    // Delete profile
+    // Elimina il profilo
     const deleteProfile = () => {
-      profileStore.deleteProfile("fornitori", profile.id);
+      profileStore.deleteProfile("fornitori", profile.value.id);
     };
 
     onMounted(fetchProfile);
 
-    return { profile, passwords, localities, saveChanges, deleteProfile };
+    return {
+      profile,
+      passwords,
+      localities,
+      saveProfileChanges,
+      savePasswordChanges,
+      deleteProfile,
+    };
   },
 };
 </script>
@@ -206,9 +283,13 @@ select {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 10px;
 }
 .btn-save:hover {
   background: #444;
+}
+.save-profile-button {
+  margin-bottom: 40px;
 }
 .delete-profile {
   text-align: center;
