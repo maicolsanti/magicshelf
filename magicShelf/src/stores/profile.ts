@@ -36,11 +36,52 @@ export const useProfileStore = defineStore("profile", () => {
     }
   };
 
+  const getLocalityByCap = async (cap) => {
+    try {
+      const endpoint = `/api/localita/getByCap/${cap}`;
+      const response = await axios.get(endpoint);
+  
+      if (response.status !== 200) {
+        throw new Error(`Errore durante il recupero delle località per il CAP ${cap}`);
+      }
+  
+      // Mappa i dati per estrarre solo i nomi delle località
+      const localities = response.data.map((item) => item.DENOMINAZIONE_LOCALITA);
+  
+      return localities;
+    } catch (error) {
+      console.error("Errore durante il caricamento delle località:", error);
+      throw error;
+    }
+  };  
+
+  const GetLocalityByCapDenominazione = async (cap: number, denominazione: string) => {
+    try {
+      const endpoint = `/api/localita/getByCapDenominazione/${cap}/${denominazione}`;
+      const response = await axios.get(endpoint);
+      console.log(response);
+
+      if (response.status !== 200) {
+        throw new Error('Errore durante il recupero del codice istat');
+      }
+
+      const istat_code = response.data.CODICE_ISTAT;
+      console.log(istat_code);
+
+      return istat_code;
+    } catch (error) {
+      console.error('Errore durante il caricamento del codice istat:', error);
+      throw error;
+    }
+  };
+
   // Delete profile function
   const deleteProfile = async (profileType: "clienti" | "fornitori", id: number) => {
     try {
-      const endpoint = `/api/${profileType}/delete/${id}`;
+      const endpoint = `/api/${profileType}/remove/${id}`;
       const response = await axios.delete(endpoint);
+
+      console.log(response);
 
       if (response.status != 200) {
         throw new Error(`Errore durante l'eliminazione del profilo ${profileType}`);
@@ -59,18 +100,34 @@ export const useProfileStore = defineStore("profile", () => {
     }
   };
 
-  const changePassword = async (profileType: "clienti" | "fornitori", id: number) => {
+  const changePassword = async (passwordData) => {
     try {
-      const endpoint = `/api/${profileType}/changePassword/${id}`
-    } catch (error) {
+      const endpoint = `api/auth/general/changePassword`;
+      console.log(passwordData);
+      const data = {
+        "OLD_PASSWORD": passwordData.oldPassword,
+        "NEW_PASSWORD": passwordData.newPassword
+      };
+      console.log(data);
+      const response = await axios.post(endpoint, data);
 
+      if (response.status != 200) {
+        throw new Error('Errore durante il cambio password');
+      }
+
+      console.log('Password aggiornata correttamente')
+    } catch (error) {
+      console.log('Errore durante il cambio della password:', error);
     }
   };
 
   return {
     customerProfile,
     supplierProfile,
+    getLocalityByCap,
+    GetLocalityByCapDenominazione,
     saveChanges,
     deleteProfile,
+    changePassword
   };
 });

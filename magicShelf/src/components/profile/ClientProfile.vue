@@ -9,7 +9,7 @@
       </div>
 
       <!-- Data form -->
-      <form @submit.prevent="saveChanges">
+      <form @submit.prevent="saveProfileChanges">
         <!-- Anagrafica section -->
         <div class="form-section">
           <h2>Anagrafici e di contatto</h2>
@@ -36,24 +36,36 @@
         </div>
 
         <!-- Locality section -->
-        <div class="form-section">
-          <h2>Località</h2>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="cap">CAP</label>
-              <input type="text" id="cap" v-model="profile.cap" placeholder="CAP" />
-            </div>
-            <div class="form-field">
-              <label for="istatCode">Codice ISTAT</label>
-              <input type="text" id="istatCode" v-model="profile.istatCode" placeholder="Codice ISTAT" />
-            </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="cap">CAP</label>
+            <input type="text" id="cap" v-model="profile.cap" placeholder="CAP" />
+          </div>
+          <div class="form-field">
+            <label for="comune">Comune</label>
+            <select id="comune" v-model="profile.locality">
+              <option v-for="locality in localities" :key="locality" :value="locality">
+                {{ locality }}
+              </option>
+            </select>
           </div>
         </div>
 
-        <!-- Password section -->
+        <!-- Save profile button -->
+        <div class="save-profile-button">
+          <button type="button" class="btn-save" @click="saveProfileChanges">Salva dati anagrafici</button>
+        </div>
+      </form>
+
+      <!-- Password form -->
+      <form @submit.prevent="savePasswordChanges">
         <div class="form-section">
           <h2>Password</h2>
           <div class="form-row">
+            <div class="form-field">
+              <label for="vecchiaPassword">Inserire vecchia password</label>
+              <input type="password" id="vecchiaPassword" v-model="passwords.oldPassword" />
+            </div>
             <div class="form-field">
               <label for="nuovaPassword">Inserire nuova password</label>
               <input type="password" id="nuovaPassword" v-model="passwords.newPassword" />
@@ -65,20 +77,20 @@
           </div>
         </div>
 
-        <!-- Save button -->
-        <button type="submit" class="btn-save">Salva modifiche</button>
-
-        <!-- Delete profile link -->
-        <p class="delete-profile">
-          <a href="#" @click.prevent="deleteProfile">Desideri eliminare il tuo profilo?</a>
-        </p>
+        <!-- Save password button -->
+        <button type="button" class="btn-save" @click="savePasswordChanges">Salva password</button>
       </form>
+
+      <!-- Delete profile link -->
+      <p class="delete-profile">
+        <a href="#" @click.prevent="deleteProfile">Desideri eliminare il tuo profilo?</a>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useConfigurationStore } from "@/stores/configurations";
 import { useProfileStore } from "@/stores/profile";
 
@@ -88,7 +100,6 @@ export default {
     const configurationStore = useConfigurationStore();
     const profileStore = useProfileStore();
 
-    // Client profile
     const profile = ref({
       id: null,
       name: "",
@@ -96,42 +107,107 @@ export default {
       email: "",
       phoneNumber: "",
       cap: "",
-      istatCode: "",
+      locality: "",
+      istatCode: null,
     });
 
     const passwords = ref({
+      oldPassword: "",
       newPassword: "",
       confirmPassword: "",
     });
 
-    const localities = ref(["Comune 1", "Comune 2", "Comune 3"]);
+    const localities = ref([]);
 
-    // Fetch current profile info
+    // Funzione per aggiornare le località basate sul CAP
+    const fetchLocalities = async (cap) => {
+      try {
+        localities.value = await profileStore.getLocalityByCap(cap);
+      } catch (error) {
+        console.error("Errore nel caricamento delle località:", error);
+        localities.value = [];
+      }
+    };
+
+    // Recupera il codice ISTAT basato su CAP e località
+    const fetchIstatCode = async (cap, locality) => {
+      try {
+        const istatCodes = await profileStore.GetLocalityByCapDenominazione(cap, locality);
+        return istatCodes;
+      } catch (error) {
+        console.error("Errore nel recupero del codice ISTAT:", error);
+        return null;
+      }
+    };
+
+    // Salva le modifiche al profilo
+    const saveProfileChanges = async () => {
+      try {
+        // Recupera il codice ISTAT prima di salvare
+        if (profile.value.cap && profile.value.locality) {
+          profile.value.istatCode = await fetchIstatCode(profile.value.cap, profile.value.locality);
+        }
+
+        if (!profile.value.istatCode) {
+          alert("Errore: non è stato possibile recuperare il codice ISTAT.");
+          return;
+        }
+
+        // Salva il profilo
+        await profileStore.saveChanges("clienti", profile.value);
+        alert("Modifiche salvate con successo.");
+      } catch (error) {
+        console.error("Errore durante il salvataggio del profilo:", error);
+        alert("Si è verificato un errore durante il salvataggio.");
+      }
+    };
+
+    // Osserva il cambiamento del CAP per aggiornare le località
+    watch(
+      () => profile.value.cap,
+      (newCap) => {
+        if (newCap && newCap.length === 5) {
+          fetchLocalities(newCap);
+        } else {
+          localities.value = [];
+        }
+      }
+    );
+
+    // Funzione per caricare il profilo
     const fetchProfile = async () => {
       try {
-        await configurationStore.getProfile(); // Retrieve profile data
-        Object.assign(profile.value, configurationStore.configurations.userData); // Map data
+        await configurationStore.getProfile();
+        Object.assign(profile.value, configurationStore.configurations.userData);
       } catch (error) {
-        console.error("Errore durante il recupero del profilo cliente:", error);
+        console.error("Errore durante il caricamento del profilo:", error);
       }
     };
 
-    // Save changes
-    const saveChanges = () => {
-      if (profile.value) {
-        profileStore.saveChanges("clienti", profile.value);
+    // Salva le modifiche alla password
+    const savePasswordChanges = () => {
+      if (passwords.value.newPassword === passwords.value.confirmPassword) {
+        profileStore.changePassword(passwords.value);
+      } else {
+        alert("Le password non corrispondono.");
       }
     };
 
-    // Delete profile
+    // Elimina il profilo
     const deleteProfile = () => {
-      profileStore.deleteProfile("clienti", profile.id);
+      profileStore.deleteProfile("clienti", profile.value.id);
     };
 
-    // Retrieved profile info on mounted
     onMounted(fetchProfile);
 
-    return { profile, passwords, localities, saveChanges, deleteProfile };
+    return {
+      profile,
+      passwords,
+      localities,
+      saveProfileChanges,
+      savePasswordChanges,
+      deleteProfile,
+    };
   },
 };
 </script>
@@ -182,9 +258,13 @@ select {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 20px;
 }
 .btn-save:hover {
   background: #444;
+}
+.save-profile-button {
+  margin-bottom: 20px;
 }
 .delete-profile {
   text-align: center;
