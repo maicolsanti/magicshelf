@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { Supplier } from '@/models/supplier';
 import { Product } from '@/models/product';
-import { SupplierPorducts } from '@/models/supplier-products';
 import { LocationDetails } from '@/models/location-details';
 import axios from 'axios';
 import { FoundProduct } from '@/models/found_product';
@@ -15,7 +14,9 @@ export const useSupplierStore = defineStore('supplierStore', {
     supplier: null,
     products: Product[0],
     location: null,
-    supplierFetchedProducts: [] as FoundProduct[]
+    supplierFetchedProducts: [] as FoundProduct[],
+    newProduct: {} as Product,
+    newProductDialog: false
   }),
   actions: {
     setSelectedProduct(productId, supplierId) {
@@ -69,16 +70,66 @@ export const useSupplierStore = defineStore('supplierStore', {
         console.log(error);
       }
     },
-      async fetchLocationByIstatCode() {
+    async fetchLocationByIstatCode() {
         //TODO add call using this.supplier.istatCode
         var fetchedLocation = new LocationDetails(1, 47020, "FC", "Emilia-Romagna", "Longiano");
         this.location = fetchedLocation;
         return true;
-      },
+    },
+    async insertNewProduct(productDescription, productBrand, productUnit, productPrice, productQuantity, productImage, supplierId) {
+      let formData = new FormData();
+      console.log("supplier id: " + supplierId);
+      formData.append(
+        'custom_data',
+        JSON.stringify({
+            DESCRIZIONE_MATERIALE: productDescription,
+            MARCA: productBrand,
+            CODICE_FORNITORE: supplierId,
+            UNITA_MISURA: productUnit,
+            PREZZO_UNITARIO: productPrice,
+        })
+      );
+      formData.append('image', productImage);
+      try {
+        await axios.post('/api/materiali/create', 
+          formData,
+        {headers: {
+          'Content-Type': 'multipart/form-data',
+        },})
+          .then(function (response) {
+            console.log("new product created");
+            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+          })
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+    },
+    async insertQuantity(id, quantity) {
+      try {
+
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+    },
     setSupplierIdNull() {
       this.selectedSupplierId = null;
+    },
+    openNewProductDialog() {
+      this.newProductDialog = true;
+      console.log("should open")
+    },
+    closeNewProductDialog() {
+      this.newProductDialog = false;
+      console.log("should close")
     }
   },
   getters: {
+    shouldBeOpen() {
+      return this.newProductDialog;
+    }
   },
 });
