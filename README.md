@@ -9,7 +9,7 @@
 - [Installazione ed Esecuzione](#installazione-ed-esecuzione)
 - [API EndPoints](#api-endpoints)
 - [Database e Schema Er](#database-e-schema-er)
-- [Documentazione](#Documentazione)
+- [Documentazione](#documentazione)
 
 ## Informazioni Generali
 
@@ -41,6 +41,7 @@ In un contesto in cui la disponibilità di prodotti è vasta e spesso dispersiva
 - XAMPP ==> Host per Database
 - Node.js ==> Ambiente di esecuzione JavaScript lato server
 - Express ==> Framework server-side
+- Joi ==> Validazione del payload JSON
 - Swagger ==> Documentazione Endpoint [link](http://localhost:3000/api-docs)
 - Pacchetti: bcrypt, cookie-parser, jsonwebtoken, dotenv, multer
 
@@ -113,7 +114,7 @@ npm run dev
 
 ## API Endpoints
 
-La documentazioen dettagliata degli endpoit si trova all'interno dello swagger.
+La documentazione dettagliata degli endpoint si trova all'interno dello swagger.
 Per visualizzarlo arrivare al passaggio 5 di [Installazione ed Esecuzione](#installazione-ed-esecuzione) e navigare all'indirizzo <http://localhost:3000/api-docs/#/>
 
 ### Auth Clienti
@@ -185,6 +186,7 @@ Per visualizzarlo arrivare al passaggio 5 di [Installazione ed Esecuzione](#inst
 - SWAGGER <https://swagger.io/docs/>
 - MYSQL <https://dev.mysql.com/doc/>
 - EXPRESS <https://expressjs.com/it/>
+- JOI <https://joi.dev/>
 - VUE <https://vuejs.org/guide/introduction.html>
 - PINIA <https://pinia.vuejs.org/>
 - BOOTSTRAP <https://getbootstrap.com/docs/5.3/getting-started/introduction/>

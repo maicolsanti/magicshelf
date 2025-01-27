@@ -1,13 +1,15 @@
 import {
   getAllClienti,
   getClienteById,
-  createCliente,
   updateCliente,
   deleteCliente,
 } from '../models/clientiModel.js';
 import {
   getUser
 } from '../utils/auth.js';
+import {
+  clientSchema
+} from '../schemas/clientiSchemas.js';
 
 const ROLE_NAME = 'CLIENTE';
 
@@ -66,34 +68,6 @@ export const getById = async (req, res) => {
   }
 };
 
-export const create = async (req, res) => {
-  const { custom_data } = req.body;
-
-  try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
-
-    // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
-      return res.status(403).send('Insufficient permission');
-    }
-
-    // Create a new client using the provided custom data
-    const id = await createCliente(custom_data);
-
-    // Respond with a success message and the created client's ID
-    res.status(200).json({ message: 'Client successfully created', id });
-  } catch (error) {
-    // Log the error and send a generic server error response
-    console.error('Error creating client:', error);
-    res.status(500).send('Internal server error');
-  }
-};
-
 export const update = async (req, res) => {
   const { codice_cliente } = req.params;  // Extract the client ID from the URL parameters
   const { custom_data } = req.body;       // Extract the custom data from the request body
@@ -107,7 +81,7 @@ export const update = async (req, res) => {
     }
 
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_cliente != user.codice_cliente) {
+    if(ROLE_NAME != user.ROLE_NAME && codice_cliente != user.CODICE_CLIENTE) {
       return res.status(403).send('Insufficient permission');
     }
 
@@ -139,8 +113,8 @@ export const remove = async (req, res) => {
       return;
     }
 
-    // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    // Check if the user role is client and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && codice_cliente != user.CODICE_CLIENTE) {
       return res.status(403).send('Insufficient permission');
     }
 

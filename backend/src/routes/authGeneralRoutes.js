@@ -1,7 +1,7 @@
 /**
  * @swagger
  * tags:
- *   - name: AuthGeneral
+ *   - name: Auth General
  *     description: Suppliers general authentication
  */
 
@@ -15,7 +15,7 @@ const router = express.Router();
  * /auth/general/getProfile:
  *   get:
  *     tags:
- *       - AuthGeneral
+ *       - Auth General
  *     summary: Returns the current user profile based on their role
  *     description: This endpoint returns the profile of the currently logged-in user, either as a supplier (Fornitore) or a client (Cliente), based on the user's role.
  *     responses:
@@ -36,6 +36,7 @@ const router = express.Router();
  *               COGNOME: "Verdi"
  *               RAGIONE_SOCIALE: "Panificio Verdi SRL"
  *               PARTITA_IVA: "IT01020304056"
+ *               EMAIL: "luca.verdi@example.com"
  *               CODICE_FISCALE: "LVSMSE02M28C573I"
  *               CAP: 20100
  *               CODICE_ISTAT: 12345
@@ -82,6 +83,8 @@ const router = express.Router();
  *         RAGIONE_SOCIALE:
  *           type: string
  *         PARTITA_IVA:
+ *           type: string
+ *         EMAIL:
  *           type: string
  *         CODICE_FISCALE:
  *           type: string
@@ -130,7 +133,7 @@ router.get('/getProfile', getProfile);
  * /auth/general/logout:
  *   post:
  *     tags:
- *      - AuthGeneral
+ *      - Auth General
  *     summary: logout
  *     description: logout using the access token saved in the browser
  *     responses:
@@ -166,7 +169,7 @@ router.post('/logout', logout);
  * /auth/general/changePassword:
  *   post:
  *     tags:
- *      - AuthGeneral
+ *      - Auth General
  *     summary: Change password
  *     requestBody:
  *       required: true

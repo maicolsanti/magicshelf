@@ -1,7 +1,7 @@
 /**
  * @swagger
  * tags:
- *   - name: AuthClienti
+ *   - name: Auth Clienti
  *     description: Clients authentication
  */
 
@@ -18,7 +18,7 @@ const router = express.Router();
  * /auth/clienti/register:
  *   post:
  *     tags:
- *      - AuthClienti
+ *      - Auth Clienti
  *     summary: Register a new client
  *     requestBody:
  *       required: true
@@ -98,7 +98,7 @@ router.post('/register', registerCliente);
  * /auth/clienti/login:
  *   post:
  *     tags:
- *      - AuthClienti
+ *      - Auth Clienti
  *     summary: Client login
  *     requestBody:
  *       required: true
