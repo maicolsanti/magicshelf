@@ -1,7 +1,7 @@
 /**
  * @swagger
  * tags:
- *   - name: MaterialiFornitori
+ *   - name: Materiali Fornitori
  *     description: Supplier's material situation
  */
 
@@ -15,7 +15,7 @@ const router = express.Router();
  * /materiali-fornitori/getAll:
  *   get:
  *     tags:
- *      - MaterialiFornitori
+ *      - Materiali Fornitori
  *     summary: Returns all suppliers and their respective materials
  *     responses:
  *       200:
@@ -103,7 +103,7 @@ router.get('/getAll', getAll);
  * /materiali-fornitori/getById/{codice_fornitore}:
  *   get:
  *     tags:
- *      - MaterialiFornitori
+ *      - Materiali Fornitori
  *     summary: Returns all materials for a specific supplier by their unique code
  *     parameters:
  *       - in: path
@@ -205,7 +205,7 @@ router.get('/getById/:codice_fornitore', getById);
  * /materiali-fornitori/getFiltered:
  *   post:
  *     tags:
- *       - MaterialiFornitori
+ *       - Materiali Fornitori
  *     summary: Retrieve materials dynamically based on filters
  *     description: This endpoint allows the client to search for materials in the database using dynamic filters. Filters such as material description, brand, supplier, price range, and location-based criteria can be applied.
  *     requestBody:

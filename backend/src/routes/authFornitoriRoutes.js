@@ -1,7 +1,7 @@
 /**
  * @swagger
  * tags:
- *   - name: AuthFornitori
+ *   - name: Auth Fornitori
  *     description: Suppliers Authentication
  */
 
@@ -18,7 +18,7 @@ const router = express.Router();
  * /auth/fornitori/register:
  *   post:
  *     tags:
- *      - AuthFornitori
+ *      - Auth Fornitori
  *     summary: Register a new supplier
  *     requestBody:
  *       required: true
@@ -43,6 +43,10 @@ const router = express.Router();
  *                 type: string
  *                 description: The supplier's VAT number
  *                 example: IT01020304056
+ *               EMAIL:
+ *                 type: string
+ *                 description: The supplier's email
+ *                 example: "giulia.rossi@example.com"
  *               CODICE_FISCALE:
  *                 type: string
  *                 description: The supplier's tax code
@@ -110,7 +114,7 @@ router.post('/register', registerFornitore);
  * /auth/fornitori/login:
  *   post:
  *     tags:
- *      - AuthFornitori
+ *      - Auth Fornitori
  *     summary: Supplier login
  *     requestBody:
  *       required: true

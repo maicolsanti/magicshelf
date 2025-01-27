@@ -9,7 +9,6 @@ import express from 'express';
 import {
   getAll,
   getById,
-  create,
   update,
   remove,
 } from '../controllers/clientiController.js';
@@ -175,86 +174,6 @@ router.get('/getById/:codice_cliente', getById);
 
 /**
  * @swagger
- * /clienti/create:
- *   post:
- *     tags:
- *      - Clienti
- *     summary: Creates a new client
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               custom_data:
- *                 type: object
- *                 description: Custom data for the client creation.
- *                 properties:
- *                   NOME:
- *                     type: string
- *                     description: The first name of the client.
- *                     example: "Giulia"
- *                   COGNOME:
- *                     type: string
- *                     description: The last name of the client.
- *                     example: "Rossi"
- *                   CAP:
- *                     type: integer
- *                     description: The postal code of the client's location.
- *                     example: 30100
- *                   CODICE_ISTAT:
- *                     type: integer
- *                     description: The ISTAT code of the locality.
- *                     example: 23456
- *                   EMAIL:
- *                     type: string
- *                     description: The email address of the client.
- *                     example: "giulia.rossi@example.com"
- *                   PHONE_NUMBER:
- *                     type: integer
- *                     description: The client's phone number (if available).
- *                     example: 987654321
- *     responses:
- *       200:
- *         description: Client created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Client successfully created"
- *                 id:
- *                   type: integer
- *                   example: 1
- *       401:
- *         description: The user is not logged in
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "This operation requires you to be logged in"
- *       403:
- *         description: The user has not the permission
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Insufficient permission"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Internal server error"
- */
-router.post('/create', create);
-
-/**
- * @swagger
  * /clienti/update/{codice_cliente}:
  *   put:
  *     tags:
@@ -341,7 +260,7 @@ router.put('/update/:codice_cliente', update);
 
 /**
  * @swagger
- * /clienti/delete/{codice_cliente}:
+ * /clienti/remove/{codice_cliente}:
  *   delete:
  *     tags:
  *      - Clienti

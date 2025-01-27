@@ -1,4 +1,5 @@
 import { getAllSituazioni, getSituazioneById, createSituazione, updateSituazione, deleteSituazione } from '../models/situazione-materialiModel.js';
+import { getMaterialeById } from '../models/materialiModel.js';
 import { getUser } from '../utils/auth.js';
 
 const ROLE_NAME = 'FORNITORE';
@@ -67,8 +68,15 @@ export const create = async (req, res) => {
       return;
     }
 
+    // Retrieve the material details from the database
+    const materiale = await getMaterialeById(custom_data.CODICE_MATERIALE);
+
+    if (materiale.length === 0) {
+      res.status(404).send('Material not found');
+    }
+
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && materiale.CODICE_FORNITORE != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
@@ -98,8 +106,16 @@ export const update = async (req, res) => {
       return;
     }
 
+    // Retrieve the material details from the database
+    const materiale = await getMaterialeById(codice_materiale);
+
+    // If no rows are affected, the material is not found
+    if (materiale.length === 0) {
+      res.status(404).send('Material not found');
+    }
+
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && materiale.CODICE_FORNITORE != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
@@ -108,7 +124,7 @@ export const update = async (req, res) => {
     
     // If no rows are affected, the material is not found
     if (affectedRows === 0) {
-      return res.status(404).send('Material not found');
+      throw new Error('An error occured during updating the material situation');
     }
 
     // Return success message after updating the material situation
@@ -133,17 +149,24 @@ export const remove = async (req, res) => {
       return;
     }
 
+    // Retrieve the material details from the database
+    const materiale = await getMaterialeById(codice_materiale);
+
+    // If no rows are affected, the material is not found
+    if (materiale.length === 0) {
+      res.status(404).send('Material not found');
+    }
+
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && materiale.CODICE_FORNITORE != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
     // Remove the material situation from the database
     const affectedRows = await deleteSituazione(codice_materiale);
     
-    // If no rows are affected, the material is not found
     if (affectedRows === 0) {
-      return res.status(404).send('Material not found');
+      throw new Error('An error occured during deleting the material situation');
     }
 
     // Return success message after deleting the material situation
