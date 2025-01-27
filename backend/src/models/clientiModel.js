@@ -18,23 +18,6 @@ export const getClienteById = async (codice_cliente) => {
   return rows.length > 0 ? rows[0] : null;
 };
 
-// Create a new client
-export const createCliente = async (custom_data) => {
-  // Get the fields and values from the custom data
-  const fields = Object.keys(custom_data).join(', ');
-  const values = Object.values(custom_data);
-
-  // Prepare the query to insert a new client into the database
-  const query = `
-    INSERT INTO ANAGRAFICA_CLIENTI (${fields})
-    VALUES (${values.map(() => '?').join(',')})
-  `;
-
-  // Execute the query to insert the new client and return the inserted ID
-  const [result] = await pool.promise().execute(query, values);
-  return result.insertId;
-};
-
 // Update an existing client
 export const updateCliente = async (codice_cliente, custom_data) => {
   // Prepare the set clause for the update query

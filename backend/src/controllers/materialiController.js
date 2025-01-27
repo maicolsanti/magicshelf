@@ -77,7 +77,7 @@ export const create = async (req, res) => {
     }
 
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && custom_data.CODICE_FORNITORE != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
@@ -106,6 +106,14 @@ export const update = async (req, res) => {
     const { codice_materiale } = req.params; // Extract material code from request parameters
     let { custom_data } = req.body;         // Extract custom data from request body
     const imageBuffer = req.file?.buffer || null; // Extract image buffer or null if no image is provided
+    
+    // Retrieve the material details from the database
+    const materiale = await getMaterialeById(codice_materiale);
+
+    // If no rows were affected, send a 404 response indicating the material was not found
+    if(materiale.length === 0) {
+      return res.status(404).send('Material not found');
+    }
 
     // Parse custom_data if it's a string
     if (typeof custom_data === 'string') {
@@ -113,7 +121,7 @@ export const update = async (req, res) => {
     }
 
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && materiale.CODICE_FORNITORE != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
@@ -122,7 +130,7 @@ export const update = async (req, res) => {
 
     // If no rows were affected, send a 404 response indicating the material was not found
     if (affectedRows === 0) {
-      return res.status(404).send('Material not found');
+      throw new Error('An error occured during the material update');
     }
 
     // If the update was successful, send a success message
@@ -145,17 +153,24 @@ export const remove = async (req, res) => {
       return;
     }
 
+    // Retrieve the material details from the database
+    const materiale = await getMaterialeById(codice_materiale);
+
+    // If no rows were affected, send a 404 response indicating the material was not found
+    if (materiale.length === 0) {
+      return res.status(404).send('Material not found');
+    }
+
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && materiale.CODICE_FORNITORE != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
     // Attempt to delete the material from the database
     const affectedRows = await deleteMateriale(codice_materiale);
 
-    // If no rows were affected, send a 404 response indicating the material was not found
     if (affectedRows === 0) {
-      return res.status(404).send('Material not found');
+      throw new Error('An error occured during deleting the material');
     }
 
     // If the deletion was successful, send a success message

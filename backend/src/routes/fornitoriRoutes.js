@@ -9,7 +9,6 @@ import express from 'express';
 import {
   getAll,
   getById,
-  create,
   update,
   remove,
 } from '../controllers/fornitoriController.js';
@@ -213,98 +212,6 @@ router.get('/getById/:codice_fornitore', getById);
 
 /**
  * @swagger
- * /fornitori/create:
- *   post:
- *     tags:
- *      - Fornitori
- *     summary: Creates a new supplier
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               custom_data:
- *                 type: object
- *                 description: Custom data for the supplier creation.
- *                 properties:
- *                   NOME:
- *                     type: string
- *                     description: The first name of the supplier.
- *                     example: "Giuseppe"
- *                   COGNOME:
- *                     type: string
- *                     description: The last name of the supplier.
- *                     example: "Bianchi"
- *                   RAGIONE_SOCIALE:
- *                     type: string
- *                     description: The business name of the supplier.
- *                     example: "Bianchi S.r.l."
- *                   PARTITA_IVA:
- *                     type: string
- *                     description: The VAT number of the supplier.
- *                     example: "12345678901"
- *                   CODICE_FISCALE:
- *                     type: string
- *                     description: The tax code of the supplier (if available).
- *                     example: "BNCGPP75A01H501Z"
- *                   CAP:
- *                     type: integer
- *                     description: The postal code of the supplier's location.
- *                     example: 50100
- *                   CODICE_ISTAT:
- *                     type: integer
- *                     description: The ISTAT code of the locality.
- *                     example: 23456
- *                   INDIRIZZO:
- *                     type: string
- *                     description: L'indirizzo del fornitore
- *                     example: "Via Rossi 124"
- *                   PHONE_NUMBER:
- *                     type: integer
- *                     description: The supplier's phone number (if available).
- *                     example: 987654321
- *     responses:
- *       200:
- *         description: Supplier created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Supplier successfully created"
- *                 id:
- *                   type: integer
- *                   example: 1
- *       401:
- *         description: The user is not logged in
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "This operation requires you to be logged in"
- *       403:
- *         description: The user has not the permission
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Insufficient permission"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Internal server error"
- */
-router.post('/create', create);
-
-/**
- * @swagger
  * /fornitori/update/{codice_fornitore}:
  *   put:
  *     tags:
@@ -401,7 +308,7 @@ router.put('/update/:codice_fornitore', update);
 
 /**
  * @swagger
- * /fornitori/delete/{codice_fornitore}:
+ * /fornitori/remove/{codice_fornitore}:
  *   delete:
  *     tags:
  *      - Fornitori

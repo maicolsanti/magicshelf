@@ -1,7 +1,6 @@
 import {
   getAllFornitori,
   getFornitoreById,
-  createFornitore,
   updateFornitore,
   deleteFornitore,
 } from '../models/fornitoriModel.js';
@@ -71,35 +70,6 @@ export const getById = async (req, res) => {
   }
 };
 
-export const create = async (req, res) => {
-  const { custom_data } = req.body;  // Extract custom data from the request body
-  try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
-
-    // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
-      return res.status(403).send('Insufficient permission');
-    }
-
-    // Attempt to create a new supplier in the database
-    const id = await createFornitore(custom_data);
-    
-    // Return a success message and the new supplier's ID
-    res.status(200).json({ message: 'Supplier successfully created', id });
-  } catch (error) {
-    // Log any error that occurs during the creation process
-    console.error('Error occurred while creating supplier:', error);
-
-    // Send a generic error message to the client
-    res.status(500).send('Internal server error');
-  }
-};
-
 export const update = async (req, res) => {
   const { codice_fornitore } = req.params;  // Extract the supplier's ID from the route parameters
   const { custom_data } = req.body;  // Extract the updated data from the request body
@@ -112,7 +82,7 @@ export const update = async (req, res) => {
     }
 
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && codice_fornitore != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
@@ -146,7 +116,7 @@ export const remove = async (req, res) => {
     }
 
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.codice_fornitore != user.codice_fornitore) {
+    if(ROLE_NAME != user.ROLE_NAME && codice_fornitore != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 

@@ -18,23 +18,6 @@ export const getFornitoreById = async (codice_fornitore) => {
   return rows.length > 0 ? rows[0] : null;
 };
 
-// Create a new supplier
-export const createFornitore = async (custom_data) => {
-  // Get the fields and values from the custom data
-  const fields = Object.keys(custom_data).join(', ');
-  const values = Object.values(custom_data);
-
-  // Prepare the query to insert a new supplier into the database
-  const query = `
-    INSERT INTO ANAGRAFICA_FORNITORI (${fields})
-    VALUES (${values.map(() => '?').join(',')})
-  `;
-
-  // Execute the query to insert the new supplier and return the inserted ID
-  const [result] = await pool.promise().execute(query, values);
-  return result.insertId;
-};
-
 // Update an existing supplier
 export const updateFornitore = async (codice_fornitore, custom_data) => {
   // Prepare the set clause for the update query
