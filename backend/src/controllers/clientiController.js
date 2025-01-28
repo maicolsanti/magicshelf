@@ -8,7 +8,7 @@ import {
   getUser
 } from '../utils/auth.js';
 import {
-  clientSchema
+  updateSchema
 } from '../schemas/clientiSchemas.js';
 
 const ROLE_NAME = 'CLIENTE';
@@ -70,9 +70,20 @@ export const getById = async (req, res) => {
 
 export const update = async (req, res) => {
   const { codice_cliente } = req.params;  // Extract the client ID from the URL parameters
-  const { custom_data } = req.body;       // Extract the custom data from the request body
 
   try {
+
+    // Validate data
+    const { error, value } = updateSchema.validate(req.body.custom_data, { stripUnknown: true });
+
+    if (error) {
+        // If validation error
+        return res.status(400).json({
+        message: 'Validation error',
+        details: error.details.map((detail) => detail.message),
+        });
+    }
+
     const user = getUser(req, res);
     // Check if the user is logged in
     if (!user) {
@@ -86,7 +97,7 @@ export const update = async (req, res) => {
     }
 
     // Update the client data based on the provided client ID and custom data
-    const rowsAffected = await updateCliente(codice_cliente, custom_data);
+    const rowsAffected = await updateCliente(codice_cliente, value);
 
     // If no rows were affected, return a 404 Not Found error with a message
     if (rowsAffected === 0) {

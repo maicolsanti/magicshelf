@@ -8,7 +8,7 @@ const ROLE_NAME = 'CLIENTE';
 export const registerCliente = async (req, res) => {
     try {
         // Validate data
-        const { error, value } = registerSchema.validate(req.body);
+        const { error, value } = registerSchema.validate(req.body, { stripUnknown: true });
     
         if (error) {
             // If validation error
@@ -67,7 +67,7 @@ export const loginCliente = async (req, res) => {
     try {
 
         // Validate data
-        const { error, value } = loginSchema.validate(req.body);
+        const { error, value } = loginSchema.validate(req.body, { stripUnknown: true });
     
         if (error) {
             // If validation error

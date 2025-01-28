@@ -1,5 +1,6 @@
 import { getAllSituazioni, getSituazioneById, createSituazione, updateSituazione, deleteSituazione } from '../models/situazione-materialiModel.js';
 import { getMaterialeById } from '../models/materialiModel.js';
+import { situazioneMaterialiSchema } from '../schemas/situazione-materialiSchemas.js';
 import { getUser } from '../utils/auth.js';
 
 const ROLE_NAME = 'FORNITORE';
@@ -58,9 +59,21 @@ export const getById = async (req, res) => {
 };
 
 export const create = async (req, res) => {
-  const { custom_data } = req.body;
   
   try {
+
+    let body;
+    // Validate data
+    const { error, value } = situazioneMaterialiSchema.validate(req.body.custom_data, { stripUnknown: true });
+
+    if (error) {
+        // If validation error
+        return res.status(400).json({
+        message: 'Validation error',
+        details: error.details.map((detail) => detail.message),
+        });
+    }
+
     const user = getUser(req, res);
     // Check if the user is logged in
     if (!user) {
@@ -69,7 +82,7 @@ export const create = async (req, res) => {
     }
 
     // Retrieve the material details from the database
-    const materiale = await getMaterialeById(custom_data.CODICE_MATERIALE);
+    const materiale = await getMaterialeById(value.CODICE_MATERIALE);
 
     if (materiale.length === 0) {
       res.status(404).send('Material not found');
@@ -81,7 +94,7 @@ export const create = async (req, res) => {
     }
 
     // Create the material situation in the database
-    const id = await createSituazione(custom_data);
+    const id = await createSituazione(value);
     
     // Return success message with the ID of the newly created situation
     res.status(200).json({ message: 'Material situation successfully created', id });
@@ -96,9 +109,21 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   const { codice_materiale } = req.params;
-  const { custom_data } = req.body;
 
   try {
+
+    let body;
+    // Validate data
+    const { error, value } = situazioneMaterialiSchema.validate(req.body.custom_data, { stripUnknown: true });
+
+    if (error) {
+        // If validation error
+        return res.status(400).json({
+        message: 'Validation error',
+        details: error.details.map((detail) => detail.message),
+        });
+    }
+
     const user = getUser(req, res);
     // Check if the user is logged in
     if (!user) {
@@ -120,7 +145,7 @@ export const update = async (req, res) => {
     }
 
     // Update the material situation in the database
-    const affectedRows = await updateSituazione(codice_materiale, custom_data);
+    const affectedRows = await updateSituazione(codice_materiale, value);
     
     // If no rows are affected, the material is not found
     if (affectedRows === 0) {
