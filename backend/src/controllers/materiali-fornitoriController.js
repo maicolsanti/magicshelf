@@ -1,6 +1,7 @@
 import { getAllFornitoriMateriali, getFornitoreMaterialiById, getFilteredFornitoreMateriali } from '../models/materiali-fornitoriModel.js';
 import { getUser } from '../utils/auth.js';
 import { getLocalitaById } from '../models/localitaModel.js';
+import { getFilteredSchema } from '../schemas/materiali-fornitoriSchemas.js';
 import multer from 'multer';
 
 const ROLE_NAME = 'FORNITORE';
@@ -59,7 +60,19 @@ export const getById = async (req, res) => {
 
 export const getFiltered = async (req, res) => {
     try {
-        const reqBody = req.body; // Get filter by request payload
+
+        // Validate data
+        const { error, value } = getFilteredSchema.validate(req.body, { stripUnknown: true });
+
+        if (error) {
+            // If validation error
+            return res.status(400).json({
+            message: 'Validation error',
+            details: error.details.map((detail) => detail.message),
+            });
+        }
+
+        const reqBody = value; // Get filter by request payload
         const start_locality = reqBody.ZONA_DI_PARTENZA;
         const localities = await getLocalitaById(start_locality);
         const locality = localities[0];

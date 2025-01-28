@@ -1,6 +1,7 @@
 import { getUser, unsetUser } from "../utils/auth.js";
 import { getClienteById, updateCliente } from "../models/clientiModel.js";
 import { getFornitoreById, updateFornitore } from "../models/fornitoriModel.js";
+import { changePasswordSchema } from "../schemas/authGeneralSchemas.js";
 import bcrypt from "bcrypt";
 
 export const getProfile = async (req, res) => {
@@ -48,6 +49,19 @@ export const logout = async (req, res) => {
 
 export const changePassword = async (req, res) => {
     try {
+
+        // Validate data
+        const { error, value } = changePasswordSchema.validate(req.body, { stripUnknown: true });
+    
+        if (error) {
+            // If validation error
+            return res.status(400).json({
+            stripUnknown: true,
+            message: 'Validation error',
+            details: error.details.map((detail) => detail.message),
+            });
+        }
+
         // Retrieve the current logged-in user
         const user = getUser(req, res);
         // Check if the user is logged in
@@ -64,12 +78,9 @@ export const changePassword = async (req, res) => {
             userVal = await getFornitoreById(user.CODICE_FORNITORE);
         }
         const currentPassword = userVal.PASSWORD_HASH;
-        console.log(currentPassword);
-        console.log(req.body.OLD_PASSWORD);
 
         // Compare the provided password with the stored hashed password
-        const newPassword = req.body.NEW_PASSWORD;
-        const correctPassword = await bcrypt.compare(req.body.OLD_PASSWORD, currentPassword);
+        const correctPassword = await bcrypt.compare(value.OLD_PASSWORD, currentPassword);
         if (!correctPassword) {
             res.status(403).send('Incorrect credentials');
             return;
@@ -80,11 +91,11 @@ export const changePassword = async (req, res) => {
         // Update the password
         if(user.RUOLO == 'CLIENTE') {
             rowsAffected = updateCliente(user.CODICE_CLIENTE, {
-                "PASSWORD_HASH": currentPassword
+                "PASSWORD_HASH": value.NEW_PASSWORD
             });
         } else {
             rowsAffected = updateFornitore(user.CODICE_FORNITORE, {
-                "PASSWORD_HASH": currentPassword
+                "PASSWORD_HASH": value.NEW_PASSWORD
             });
         }
 
