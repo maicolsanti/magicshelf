@@ -1,4 +1,5 @@
 import { getAllMateriali, getMaterialeById, createMateriale, updateMateriale, deleteMateriale } from '../models/materialiModel.js';
+import { materialeSchema } from '../schemas/materialiSchemas.js';
 import { getUser } from '../utils/auth.js';
 import multer from 'multer';
 
@@ -61,6 +62,23 @@ export const getById = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
+
+    // Parse custom_data if it's a string
+    if (typeof req.body.custom_data === 'string') {
+      req.body.custom_data = JSON.parse(req.body.custom_data);
+    }
+
+    // Validate data
+    const { error, value } = materialeSchema.validate(req.body.custom_data, { stripUnknown: true });
+
+    if (error) {
+        // If validation error
+        return res.status(400).json({
+        message: 'Validation error',
+        details: error.details.map((detail) => detail.message),
+        });
+    }
+
     const user = getUser(req, res);
 
     // Check if the user is logged in
@@ -68,21 +86,15 @@ export const create = async (req, res) => {
       return res.status(401).send('This operation requires you to be logged in');
     }
 
-    let { custom_data } = req.body; // Extract custom data from the request body
     const imageBuffer = req.file?.buffer || null; // Get the image buffer or null if no image is provided
 
-    // Parse custom_data if it's a string
-    if (typeof custom_data === 'string') {
-      custom_data = JSON.parse(custom_data);
-    }
-
     // Check if the user role is supplier and the user id is equal to the request id
-    if(ROLE_NAME != user.ROLE_NAME && custom_data.CODICE_FORNITORE != user.CODICE_FORNITORE) {
+    if(ROLE_NAME != user.ROLE_NAME && value.CODICE_FORNITORE != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
     // Call the model function to create the material
-    const id = await createMateriale(custom_data, imageBuffer);
+    const id = await createMateriale(value, imageBuffer);
 
     // Send success response
     res.status(200).json({ message: 'Material successfully created', id });
@@ -96,6 +108,23 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
+
+    // Parse custom_data if it's a string
+    if (typeof req.body.custom_data === 'string') {
+      req.body.custom_data = JSON.parse(req.body.custom_data);
+    }
+
+    // Validate data
+    const { error, value } = materialeSchema.validate(req.body.custom_data, { stripUnknown: true });
+
+    if (error) {
+        // If validation error
+        return res.status(400).json({
+        message: 'Validation error',
+        details: error.details.map((detail) => detail.message),
+        });
+    }
+
     const user = getUser(req, res);
 
     // Check if the user is logged in
@@ -104,7 +133,6 @@ export const update = async (req, res) => {
     }
 
     const { codice_materiale } = req.params; // Extract material code from request parameters
-    let { custom_data } = req.body;         // Extract custom data from request body
     const imageBuffer = req.file?.buffer || null; // Extract image buffer or null if no image is provided
     
     // Retrieve the material details from the database
@@ -115,18 +143,13 @@ export const update = async (req, res) => {
       return res.status(404).send('Material not found');
     }
 
-    // Parse custom_data if it's a string
-    if (typeof custom_data === 'string') {
-      custom_data = JSON.parse(custom_data);
-    }
-
     // Check if the user role is supplier and the user id is equal to the request id
     if(ROLE_NAME != user.ROLE_NAME && materiale.CODICE_FORNITORE != user.CODICE_FORNITORE) {
       return res.status(403).send('Insufficient permission');
     }
 
     // Call the model function to update the material
-    const affectedRows = await updateMateriale(codice_materiale, custom_data, imageBuffer);
+    const affectedRows = await updateMateriale(codice_materiale, value, imageBuffer);
 
     // If no rows were affected, send a 404 response indicating the material was not found
     if (affectedRows === 0) {

@@ -1,11 +1,23 @@
 import bcrypt from 'bcrypt';
-import { getUser, setUser, unsetUser } from "../utils/auth.js";
+import { getUser, setUser } from "../utils/auth.js";
 import { getFornitoreByEmail, insertFornitore } from "../models/authFornitoriModel.js";
+import { registerSchema, loginSchema } from "../schemas/authFornitoriSchemas.js";
 
 const SUPPLIER_NAME = 'FORNITORE';
 
 export const registerFornitore = async (req, res) => {
     try {
+        // Validate data
+        const { error, value } = registerSchema.validate(req.body, { stripUnknown: true });
+    
+        if (error) {
+            // If validation error
+            return res.status(400).json({
+            message: 'Validation error',
+            details: error.details.map((detail) => detail.message),
+            });
+        }
+
         // Check if the user is already logged in
         const checklogout = getUser(req, res);
         if (checklogout) {
@@ -14,27 +26,26 @@ export const registerFornitore = async (req, res) => {
         }
 
         // Check if the "codice fiscale" is already in use
-        const codice_fiscale = req.body.CODICE_FISCALE;
-        const rows = await getFornitoreByEmail(codice_fiscale);
+        const rows = await getFornitoreByEmail(value.CODICE_FISCALE);
         if (rows && rows.length > 0) {
             res.status(400).send('The provided "codice fiscale" is already in use');
             return;
         }
 
         // Hash the provided password
-        const password = req.body.PASSWORD_HASH;
+        const password = value.PASSWORD_HASH;
         const passwordHash = await bcrypt.hash(password, 10);
-        req.body.PASSWORD_HASH = passwordHash;
+        value.PASSWORD_HASH = passwordHash;
 
         // Insert the new fornitore into the database
-        const result = await insertFornitore(req.body);
+        const result = await insertFornitore(value);
         if (!(result.affectedRows > 0)) {
             throw new Error('Error while inserting data into the database');
         }
 
         // Retrieve the newly registered fornitore by "codice fiscale"
         const id = result.insertId;
-        const users = await getFornitoreByEmail(codice_fiscale);
+        const users = await getFornitoreByEmail(value.CODICE_FISCALE);
         const userData = users[0];
         userData.RUOLO = SUPPLIER_NAME;
 
@@ -52,6 +63,18 @@ export const registerFornitore = async (req, res) => {
 
 export const loginFornitore = async (req, res) => {
     try {
+
+        // Validate data
+        const { error, value } = loginSchema.validate(req.body, { stripUnknown: true });
+    
+        if (error) {
+            // If validation error
+            return res.status(400).json({
+            message: 'Validation error',
+            details: error.details.map((detail) => detail.message),
+            });
+        }
+
         // Check if the user is already logged in
         const checklogout = getUser(req, res);
         if (checklogout) {
@@ -60,8 +83,7 @@ export const loginFornitore = async (req, res) => {
         }
 
         // Retrieve the fornitore using their "codice fiscale"
-        const codice_fiscale = req.body.CODICE_FISCALE;
-        const users = await getFornitoreByEmail(codice_fiscale);
+        const users = await getFornitoreByEmail(value.CODICE_FISCALE);
         
         // Check if the user exists
         if (!users.length > 0) {
@@ -72,7 +94,7 @@ export const loginFornitore = async (req, res) => {
         const user = users[0];
         
         // Compare the provided password with the stored hashed password
-        const password = req.body.PASSWORD_HASH;
+        const password = value.PASSWORD_HASH;
         const correctPassword = await bcrypt.compare(password, user.PASSWORD_HASH);
         if (!correctPassword) {
             res.status(403).send('Incorrect credentials');

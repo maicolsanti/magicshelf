@@ -7,6 +7,9 @@ import {
 import {
   getUser
 } from '../utils/auth.js';
+import {
+  updateSchema
+} from '../schemas/fornitoriSchemas.js'
 
 const ROLE_NAME = 'FORNITORE';
 
@@ -72,8 +75,20 @@ export const getById = async (req, res) => {
 
 export const update = async (req, res) => {
   const { codice_fornitore } = req.params;  // Extract the supplier's ID from the route parameters
-  const { custom_data } = req.body;  // Extract the updated data from the request body
+
   try {
+
+    // Validate data
+    const { error, value } = updateSchema.validate(req.body.custom_data, { stripUnknown: true });
+
+    if (error) {
+        // If validation error
+        return res.status(400).json({
+        message: 'Validation error',
+        details: error.details.map((detail) => detail.message),
+        });
+    }
+
     const user = getUser(req, res);
     // Check if the user is logged in
     if (!user) {
@@ -87,7 +102,7 @@ export const update = async (req, res) => {
     }
 
     // Attempt to update the supplier in the database
-    const rowsAffected = await updateFornitore(codice_fornitore, custom_data);
+    const rowsAffected = await updateFornitore(codice_fornitore, value);
 
     // If no rows were affected, return a 404 error indicating the supplier was not found
     if (rowsAffected === 0) {
