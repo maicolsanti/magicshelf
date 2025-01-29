@@ -106,7 +106,22 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async fetchLocationByIstatCode() {
-        //TODO add call using this.supplier.istatCode
+        try {
+          await axios.get('/api/localita/getById/' + this.supplier.istatCode).then(res => {
+            this.location = new LocationDetails(
+            res.data.CODICE_ISTAT,
+            res.data.CAP,
+            res.data.PROVINCIA,
+            res.data.REGIONE,
+            res.data.LOCALITA
+            );
+          });
+          console.log("fetched location as " + JSON.stringify(location));
+        }
+        catch (error) {
+          alert(error);
+          console.log(error);
+        }
         var fetchedLocation = new LocationDetails(1, 47020, "FC", "Emilia-Romagna", "Longiano");
         this.location = fetchedLocation;
         return true;
