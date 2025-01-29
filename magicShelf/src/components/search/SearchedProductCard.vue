@@ -15,8 +15,9 @@ const props = defineProps({
 const products = computed(() => productStore.products);
 
 function setSelectedProduct(productId, supplierId) {
-	supplierStore.setSelectedProduct(productId, supplierId);
-	supplierStore.fetchSupplierById(supplierId);
+	supplierStore.fetchSupplierById(supplierId).then(() => {
+		supplierStore.setSelectedProduct(productId, supplierId);
+	});
 	supplierStore.fetchLocationByIstatCode();
 }
 
