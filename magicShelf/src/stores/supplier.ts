@@ -27,7 +27,7 @@ export const useSupplierStore = defineStore('supplierStore', {
     setSelectedProduct(productId, supplierId) {
         this.selectedProductId = productId;
         this.selectedSupplierId = supplierId;
-        console.log("setted selected product " + productId);
+        console.log("Settato il prodotto selezionato: ", productId);
     },
     async fetchSupplierById(id: Number) {
       try {
@@ -69,11 +69,11 @@ export const useSupplierStore = defineStore('supplierStore', {
           this.supplierFetchedProducts[0].supplierIstatCode
         )
 
-        console.log("fetched supplier products");
+        console.log("Materiali fornitore recuperati con successo.");
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nel recupero dei materiali del fornitore: ", error);
       }
     },
     async fetchMaterialSituation(id: Number) {
@@ -85,11 +85,11 @@ export const useSupplierStore = defineStore('supplierStore', {
           situation.QUANTITA
           );
         });
-        console.log("fetched material situation " + this.productMaterialSituation.materialQuantity);
+        console.log("Situazione materiale recuperata con successo.");
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nel recupero della situazione materiale: ", error);
       }
     },
     async fetchAllMaterialSituations() {
@@ -98,11 +98,11 @@ export const useSupplierStore = defineStore('supplierStore', {
           fetchedSituation.CODICE_MATERIALE,
           fetchedSituation.QUANTITA
         )));
-        console.log("fetched all material situations");
+        console.log("Recuperate tutte le situazioni materiali.");
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nel recupero delle situazioni materiali: ", error);
       }
     },
     async fetchLocationByIstatCode() {
@@ -116,14 +116,12 @@ export const useSupplierStore = defineStore('supplierStore', {
             res.data.LOCALITA
             );
           });
-          console.log("fetched location as " + JSON.stringify(location));
+          console.log("Località recuperata con successo.");
         }
         catch (error) {
           alert(error);
-          console.log(error);
+          console.error("Errore nel recupero della località: ", error);
         }
-        var fetchedLocation = new LocationDetails(1, 47020, "FC", "Emilia-Romagna", "Longiano");
-        this.location = fetchedLocation;
         return true;
     },
     async insertQuantity(id, quantity) {
@@ -135,13 +133,12 @@ export const useSupplierStore = defineStore('supplierStore', {
           }
         })
           .then(function (response) {
-            console.log("quantity created");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Situazione materiale creata con successo.");
           })
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella registrazione del cliente: ", error);
       }
     },
     async editQuantity(id, quantity) {
@@ -153,19 +150,17 @@ export const useSupplierStore = defineStore('supplierStore', {
           }
         })
           .then(function (response) {
-            console.log("quantity created");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Situazione materiale modificata con successo.");
           })
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella modifica della situazione materiale: ", error);
       }
     },
     async insertNewProduct(productDescription, productBrand, productUnit, productPrice, productQuantity, productImage, supplierId) {
       let responseId = 0;
       let formData = new FormData();
-      console.log("supplier id: " + supplierId);
       formData.append(
         'custom_data',
         JSON.stringify({
@@ -176,7 +171,6 @@ export const useSupplierStore = defineStore('supplierStore', {
             PREZZO_UNITARIO: productPrice,
         })
       );
-      console.log("product form data: " + JSON.stringify(formData));
       formData.append('image', productImage);
       try {
         await axios.post('/api/materiali/create', 
@@ -187,8 +181,7 @@ export const useSupplierStore = defineStore('supplierStore', {
           }
         })
           .then(function (response) {
-            console.log("new product created");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Materiale creato con successo.");
             responseId = response.data.id;
           })
           this.insertQuantity(responseId, productQuantity);
@@ -196,7 +189,7 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella creazione del materiale: ", error);
       }
     },
     async editProduct(productId,productDescription, productBrand, productUnit, productPrice, productQuantity, productImage, originalProduct) {
@@ -220,8 +213,7 @@ export const useSupplierStore = defineStore('supplierStore', {
           }
         })
           .then(function (response) {
-            console.log("product edited");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Materiale modificato con successo.");
           })
           if (this.productMaterialSituation.materialQuantity != productQuantity){
             this.editQuantity(productId, productQuantity);
@@ -230,35 +222,33 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella modifica del materiale: ", error);
       }
     },
     async deleteMaterialSituation(materialId) {
       try {
         await axios.delete('/api/situazione-materiali/remove/' + materialId)
           .then(function (response) {
-            console.log("material situation deleted");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Materiale eliminato con successo.");
             this.deleteMaterial(materialId);
           })
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nell'eliminazione del materiale': ", error);
       }
     },
     async deleteMaterial(materialId) {
       try {
         await axios.delete('/api/materiali/remove/' + materialId)
           .then(function (response) {
-            console.log("material situation deleted");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Situazione materiale eliminata con successo.");
             this.fetchSupplierById(this.supplier.id);
           })
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nell'eliminazione della situazione materiale': ", error);
       }
     },
     setSupplierIdNull() {
@@ -266,25 +256,20 @@ export const useSupplierStore = defineStore('supplierStore', {
     },
     openNewProductDialog() {
       this.newProductDialog = true;
-      console.log("should open")
     },
     openEditProductDialog(id) {
       this.fetchMaterialSituation(id).then(() => {
         this.editProductDialog = true;
-      console.log("edit open")
       });
     },
     openDeleteProductDialog(id) {
       this.deleteProductDialog = true;
-      console.log("delete open " + this.deleteProductDialog)
     },
     closeNewProductDialog() {
       this.newProductDialog = false;
-      console.log("should close")
     },
     closeEditProductDialog() {
       this.editProductDialog = false;
-      console.log("edit close")
     },
     closeDeleteProductDialog() {
       this.deleteProductDialog = false;
