@@ -34,8 +34,10 @@ function openEditPDialog(product) {
   supplierStore.openEditProductDialog(productSelected.materialId);
 }
 
-function openDeletePDialog(materialId) {
-  supplierStore.openDeleteProductDialog(materialId);
+function openDeletePDialog(product) {
+  productSelected = product;
+  console.log("FOR DELETE - detail product id: ", productSelected.materialId);
+  supplierStore.openDeleteProductDialog(productSelected.materialId);
 }
 
 </script>
@@ -56,8 +58,8 @@ function openDeletePDialog(materialId) {
             <div class="badge d-flex justify-content-center align-items-center">
             <span class="price text-light">€ {{ product.materialUnitPrice }}</span>
           </div>
-            <v-icon name="md-deleteforever-outlined" class="edit-icon" @click="openDeletePDialog(product.materialId)"/>
-            <v-icon name="fa-edit" class="edit-icon" @click="openEditPDialog(product)"/>
+            <v-icon name="md-deleteforever-outlined" class="icon delete-icon" @click="openDeletePDialog(product)"/>
+            <v-icon name="fa-edit" class="icon edit-icon" @click="openEditPDialog(product)"/>
           </div>
         </li>
     </section>
@@ -130,6 +132,8 @@ function openDeletePDialog(materialId) {
 
 .product-item {
   display: flex;
+  flex-wrap: wrap;
+  min-width: 165px;
   justify-content: space-between;
   padding: 16px;
   border: 1px solid var(--bs-secondary);
@@ -169,9 +173,17 @@ function openDeletePDialog(materialId) {
   gap: 10px;
 }
 
-.edit-icon {
+.icon {
   height: 24px;
   width: 24px;
+}
+
+.edit-icon:active {
+  color: var(--bs-primary);
+}
+
+.delete-icon:active {
+  color: red;
 }
 
 </style>

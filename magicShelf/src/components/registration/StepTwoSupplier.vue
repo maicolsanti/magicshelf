@@ -6,6 +6,7 @@ import { computed, onMounted } from 'vue';
 import { addIcons } from 'oh-vue-icons'
 import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 import { useRouter } from 'vue-router'
+import { UserType } from '@/models/user-type';
 
 addIcons(MdVisibilityRound, MdVisibilityoffRound);
 const registrationStore = useRegistrationStore();
@@ -68,8 +69,10 @@ function setFiscalCodeWithVatNumber() {
 }
 
 function submit() {
-    registrationStore.registerSupplier(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.address, formData.passwordInput).then(() =>
-        configurationStore.getProfile());
+    registrationStore.registerSupplier(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.address, formData.passwordInput).then(() => {
+        configurationStore.setUserType(UserType.SUPPLIER);
+        configurationStore.getProfile();
+    });
     router.push('/');
 }
 </script>
