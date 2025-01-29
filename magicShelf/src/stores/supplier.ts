@@ -148,6 +148,7 @@ export const useSupplierStore = defineStore('supplierStore', {
       try {
         await axios.put('/api/situazione-materiali/update/' + id, {
           custom_data: {
+            CODICE_MATERIALE: id,
             QUANTITA: quantity
           }
         })
