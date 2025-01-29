@@ -153,12 +153,6 @@ function openDeletePDialog(materialId) {
   font-weight: bold;
 }
 
-.product-image {
-  max-width: 50px;
-  max-height: 50px;
-  object-fit: contain;
-}
-
 .product-details {
   display: flex;
   align-items: center;

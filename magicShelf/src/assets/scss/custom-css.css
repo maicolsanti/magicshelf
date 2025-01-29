@@ -11896,4 +11896,11 @@ textarea.form-control-lg {
   align-items: center;
 }
 
+.product-image {
+  max-width: 50px;
+  max-height: 50px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 /*# sourceMappingURL=custom-css.css.map */

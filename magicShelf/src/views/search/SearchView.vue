@@ -94,8 +94,6 @@ function submit() {
             <h4 class="welcome d-flex my-5">
                 Cerca qui, gli articoli
             </h4>
-
-
             <form id="searchFilters" class="form-g mb-5" action="" method="post">
                 <div class="container">
                     <div class="row form-group  d-flex justify-content-center">
@@ -103,10 +101,9 @@ function submit() {
                             <label for="">Cosa cerchi?</label>
                             <input type="text" class="form-control mb-3" id="productInput"
                                 v-model="searchFilters.product" placeholder="prodotto" required />
-                            <div class="row d-flex justify-content-center">
-
+                            <div class="row d-flex">
                                 <div id="firstColumn" class="col-2 form-column small">
-                                    <div class="dropdown small d-flex justify-content-center mb-3">
+                                    <div class="dropdown d-flex mb-3">
                                         <button
                                             class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
                                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -128,11 +125,10 @@ function submit() {
                                     </div>
                                 </div>
                                 <div id="secondColumn" class="col-2 form-column small">
-                                    <div class="dropdown small d-flex justify-content-center mb-3">
+                                    <div class="dropdown d-flex mb-3">
                                         <button
                                             class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
-                                            type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                            aria-expanded="true">
+                                            type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown">
                                             <span class="dropdown-text"
                                                 :class="{ 'not-selected': searchFilters.distanceRange == '' }">{{
                                                     distanceString }}</span>
@@ -222,15 +218,11 @@ label {
     height: 36px;
     border-color: var(--bs-primary);
     border-radius: 6px;
-    padding-left: 10px;
 }
 
 .cap-dropdown {
     max-width: 350px;
     width: 350px;
-    align-content: start;
-    align-items: start;
-    justify-items: stretch;
     border-color: var(--bs-primary);
 }
 
@@ -240,6 +232,6 @@ label {
 }
 
 .small {
-    max-width: 165px;
+    max-width: 175px;
 }
 </style>
