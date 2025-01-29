@@ -77,7 +77,6 @@ function submit() {
     productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchStore.searchAttributes.priceRange, searchStore.searchAttributes.distanceRange).then(() => {
         productStore.getFilteredProducts();
     });
-    // productStore.fetchSearchedProducts();
    
 }
 </script>
@@ -185,7 +184,7 @@ function submit() {
             </div>
             <SearchedProductCard :cap="searchFilters.cap" />
         </div>
-        <div v-if="isLoggedIn && selectedSupplierId != null">
+        <div v-if="isLoggedIn && selectedSupplierId != null && selectedProductId != null">
             <SupplierView :supplierId="selectedSupplierId" :productId="selectedProductId" :filterCap="searchFilters.cap" />
         </div>
     </main>
