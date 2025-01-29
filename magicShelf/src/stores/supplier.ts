@@ -16,6 +16,7 @@ export const useSupplierStore = defineStore('supplierStore', {
     products: Product[0],
     location: null,
     supplierFetchedProducts: [] as FoundProduct[],
+    materialSituations: [] as MaterialSituation[],
     productMaterialSituation: {} as MaterialSituation,
     newProduct: {} as Product,
     newProductDialog: false,
@@ -26,6 +27,7 @@ export const useSupplierStore = defineStore('supplierStore', {
     setSelectedProduct(productId, supplierId) {
         this.selectedProductId = productId;
         this.selectedSupplierId = supplierId;
+        console.log("setted selected product " + productId);
     },
     async fetchSupplierById(id: Number) {
       try {
@@ -84,6 +86,19 @@ export const useSupplierStore = defineStore('supplierStore', {
           );
         });
         console.log("fetched material situation " + this.productMaterialSituation.materialQuantity);
+      }
+      catch (error) {
+        alert(error);
+        console.log(error);
+      }
+    },
+    async fetchAllMaterialSituations() {
+      try {
+        this.materialSituations = await axios.get('/api/situazione-materiali/getAll/').then(res => res.data.map((fetchedSituation: any) => new MaterialSituation(
+          fetchedSituation.CODICE_MATERIALE,
+          fetchedSituation.QUANTITA
+        )));
+        console.log("fetched all material situations");
       }
       catch (error) {
         alert(error);
