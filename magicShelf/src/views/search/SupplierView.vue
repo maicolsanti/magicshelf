@@ -26,11 +26,17 @@ const supplierStore = useSupplierStore();
 const products = computed(() => supplierStore.supplierFetchedProducts);
 const supplier = computed(() => supplierStore.supplier);
 const location = computed(() => supplierStore.location);
+const materialSituations = computed(() => supplierStore.materialSituations);
 
 console.log("products ", products.value);
 console.log("productId prop ", props.productId);
 
-const selectedProduct = products.value.find(product => product.materialId === props.productId);
+let selectedProduct = products.value.find(product => product.materialId === props.productId);
+
+function setSelectedProduct(productId, supplierId) {
+    supplierStore.setSelectedProduct(productId, supplierId);
+    selectedProduct = products.value.find(product => product.materialId === productId);
+}
 
 console.log("selectedProduct ", selectedProduct);
 </script>
@@ -57,20 +63,30 @@ console.log("selectedProduct ", selectedProduct);
       <div v-if="supplier.cap == props.filterCap">
         <p class="text-center bold">Nelle tue vicinanze</p>
       </div>
-      <div class="row product-highlight justify-content-between align-items-center mx-1 px-4 gx-3">
+      <div class="row product-highlight justify-content-between align-items-center mx-1 px-4 py-1">
+        <div class="m-1">
+          <img  v-if="selectedProduct.imageBase64 != null" v-bind:src="'data:image/jpeg;base64,'+selectedProduct.imageBase64" class="selected-product-image"/>
+        </div>
         <div class="col-6">
           <span class="text-dark bold">{{ selectedProduct.materialDescription  }}</span>
         </div>
-        <div class="col-6 badge my-3 d-flex justify-content-center align-items-center">
+        <div class="col-6 badge my-1 d-flex justify-content-center align-items-center">
           <span class="price">€ {{ selectedProduct.materialUnitPrice }}</span>
+        </div>
+        <div class="d-flex justify-content-between my-1">
+          <span class="text-dark light">{{ selectedProduct.materialBrand  }}</span>
+          <span class="text-dark light">{{ selectedProduct.materialUnitOfMeasure  }}</span>
         </div>
       </div>
     </div>
-
     <section class="supplier-products mt-5">
       <h3 class="font-lighter">Tutti i prodotti del fornitore</h3>
-        <li v-for="product in products" :key="product.materialId" class="product-item">
-          <span class="bold">{{ product.materialDescription }}</span>
+        <li v-for="product in products" :key="product.materialId" class="product-item" @click="setSelectedProduct(product.materialId, props.supplierId)">
+        <div v-if="materialSituations.find(materialSituation => materialSituation.materialId === product.materialId).materialQuantity > 0">
+          <img  v-if="product.imageBase64 != null" v-bind:src="'data:image/jpeg;base64,'+product.imageBase64" class="product-image"/>
+          <span class="bold product-description">{{ product.materialDescription }}</span>
+          <span class="light product-description">{{ product.materialBrand }}</span>
+        </div>
           <div class="badge d-flex justify-content-center align-items-center">
             <span class="price text-light">€ {{ product.materialUnitPrice }}</span>
           </div>
@@ -124,7 +140,6 @@ button {
 .product-highlight {
   background-color: #fff;
   border-radius: 30px;
-  max-height: 60px;
 }
 
 .price {
@@ -147,6 +162,7 @@ button {
 .product-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 16px;
   border: 1px solid var(--bs-secondary);
   border-radius: 8px;
@@ -168,4 +184,17 @@ button {
 .bold {
   font-weight: bold;
 }
+
+.product-description {
+  margin-left: 10px;
+}
+
+.selected-product-image {
+  display: block;
+  margin: 0 auto 10px auto; /* Centra l'immagine e aggiunge un margine inferiore */
+  max-width: 100px; /* Adatta la dimensione secondo necessità */
+  height: auto;
+  border-radius: 8px; /* Opzionale per angoli arrotondati */
+}
+
 </style>

@@ -77,6 +77,7 @@ function submit() {
     productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchStore.searchAttributes.priceRange, searchStore.searchAttributes.distanceRange).then(() => {
         productStore.getFilteredProducts();
     });
+    supplierStore.fetchAllMaterialSituations();
    
 }
 </script>
