@@ -2,6 +2,7 @@
 import SearchInstructions from '@/components/home/SearchInstructions.vue'
 import SupplierLink from '@/components/home/SupplierLink.vue'
 import { useConfigurationStore } from '@/stores/configurations'
+import AboutView from './AboutView.vue';
 import { computed } from 'vue';
 
 const confStore = useConfigurationStore();
@@ -39,7 +40,7 @@ const isLoggedIn = computed(() => confStore.isLoggedIn);
     </div>
     <SupplierLink v-if="!isLoggedIn" />
     <SearchInstructions v-if="!isLoggedIn" />
-    <!-- TODO: add about us for when user is logged in -->
+    <AboutView v-if="isLoggedIn" class="mt-5"/>
   </main>
 </template>
 

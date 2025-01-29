@@ -82,6 +82,5 @@ function logout() {
 
 .navbar {
   width: 100vw;
-  /* position:fixed; TODO: fix position */
 }
 </style>
