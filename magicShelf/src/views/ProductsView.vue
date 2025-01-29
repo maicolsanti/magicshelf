@@ -3,10 +3,12 @@ import { useSupplierStore } from '@/stores/supplier';
 import { useConfigurationStore } from '@/stores/configurations';
 import { computed } from 'vue';
 import { addIcons} from 'oh-vue-icons';
-import { FaEdit } from 'oh-vue-icons/icons';
+import { FaEdit, MdDeleteforeverOutlined } from 'oh-vue-icons/icons';
 import AddProductDialog from '@/components/supplier-products/AddProductDialog.vue';
+import EditProductDialog from '@/components/supplier-products/EditProductDialog.vue';
+import DeleteProductDialog from '@/components/supplier-products/DeleteProductDialog.vue';
 
-addIcons(FaEdit);
+addIcons(FaEdit, MdDeleteforeverOutlined);
 
 const supplierStore = useSupplierStore();
 const configStore = useConfigurationStore();
@@ -17,12 +19,24 @@ supplierStore.fetchSupplierById(supplierId);
 
 const products = computed(() => supplierStore.supplierFetchedProducts);
 const openNewDialog = computed(() => supplierStore.shouldBeOpen);
+const openEditDialog = computed(() => supplierStore.editShouldBeOpen);
+const openDeleteDialog = computed(() => supplierStore.deleteShouldBeOpen);
+
+let productSelected = null;
 
 function openNewPDialog() {
-    supplierStore.openNewProductDialog();
+  supplierStore.openNewProductDialog();
 }
 
-console.log("products ", products.value);
+function openEditPDialog(product) {
+  productSelected = product;
+  console.log("detail product id: ", productSelected.materialId);
+  supplierStore.openEditProductDialog(productSelected.materialId);
+}
+
+function openDeletePDialog(materialId) {
+  supplierStore.openDeleteProductDialog(materialId);
+}
 
 </script>
 
@@ -34,14 +48,22 @@ console.log("products ", products.value);
           Aggiungi un nuovo prodotto
         </button>
         <li v-for="product in products" :key="product.materialId" class="product-item mt-3">
+          <div class="product-details">
             <img v-bind:src="'data:image/jpeg;base64,'+product.imageBase64" class="product-image"/>
-            <span class="bold">{{ product.materialDescription }}</span>
+            <span class="bold product-description">{{ product.materialDescription }}</span>
+          </div>
+          <div class="icons">
             <div class="badge d-flex justify-content-center align-items-center">
             <span class="price text-light">€ {{ product.materialUnitPrice }}</span>
+          </div>
+            <v-icon name="md-deleteforever-outlined" class="edit-icon" @click="openDeletePDialog(product.materialId)"/>
+            <v-icon name="fa-edit" class="edit-icon" @click="openEditPDialog(product)"/>
           </div>
         </li>
     </section>
     <AddProductDialog v-if="openNewDialog"></AddProductDialog>
+    <EditProductDialog v-if="openEditDialog" v-bind:product="productSelected"></EditProductDialog>
+    <DeleteProductDialog v-if="openDeleteDialog" v-bind:productId="productSelected.materialId"></DeleteProductDialog>
   </main>
 </template>
 
@@ -134,8 +156,28 @@ console.log("products ", products.value);
 .product-image {
   max-width: 50px;
   max-height: 50px;
-  margin-right: 10px;
   object-fit: contain;
+}
+
+.product-details {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-description {
+  flex: 1;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edit-icon {
+  height: 24px;
+  width: 24px;
 }
 
 </style>
