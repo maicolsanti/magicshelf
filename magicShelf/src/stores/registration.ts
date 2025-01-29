@@ -135,7 +135,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
             CODICE_FISCALE: fiscalCodeInput,
             CAP: Number(this.registration.registrationData.cap),
             CODICE_ISTAT: Number(this.registration.registrationData.townCode),
-            // TODO: add EMAIL: emailInput,
+            EMAIL: emailInput,
             INDIRIZZO: addressInput,
             PHONE_NUMBER: Number(phoneInput),
             PASSWORD_HASH: passwordInput

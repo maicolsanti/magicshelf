@@ -159,6 +159,9 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
 
     },
+    setUserType(userType) {
+      this.configurations.userType = userType;
+    }
   },
   getters: {
     isLoggedIn() {

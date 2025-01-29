@@ -175,6 +175,7 @@ export const useSupplierStore = defineStore('supplierStore', {
             PREZZO_UNITARIO: productPrice,
         })
       );
+      console.log("product form data: " + JSON.stringify(formData));
       formData.append('image', productImage);
       try {
         await axios.post('/api/materiali/create', 
@@ -251,6 +252,7 @@ export const useSupplierStore = defineStore('supplierStore', {
           .then(function (response) {
             console.log("material situation deleted");
             console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            this.fetchSupplierById(this.supplier.id);
           })
       }
       catch (error) {
@@ -273,6 +275,7 @@ export const useSupplierStore = defineStore('supplierStore', {
     },
     openDeleteProductDialog(id) {
       this.deleteProductDialog = true;
+      console.log("delete open " + this.deleteProductDialog)
     },
     closeNewProductDialog() {
       this.newProductDialog = false;
