@@ -30,13 +30,11 @@ function openNewPDialog() {
 
 function openEditPDialog(product) {
   productSelected = product;
-  console.log("detail product id: ", productSelected.materialId);
   supplierStore.openEditProductDialog(productSelected.materialId);
 }
 
 function openDeletePDialog(product) {
   productSelected = product;
-  console.log("FOR DELETE - detail product id: ", productSelected.materialId);
   supplierStore.openDeleteProductDialog(productSelected.materialId);
 }
 

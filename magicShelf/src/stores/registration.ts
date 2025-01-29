@@ -65,11 +65,11 @@ export const useRegistrationStore = defineStore('registrationStore', {
           locality.DENOMINAZIONE_LOCALITA
         )));
 
-        console.log("fetched towns");
+        console.log("Località recuperate con successo.");
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella richiesta delle località: ", error);
       }
     },
     setSelectedTown(townName, townCode) {
@@ -104,13 +104,12 @@ export const useRegistrationStore = defineStore('registrationStore', {
             PASSWORD_HASH: passwordInput
         })
           .then(function (response) {
-            console.log("new costumer created");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Cliente creato con successo.");
           })
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella registrazione del cliente: ", error);
       }
     },
     async registerSupplier(nameInput, surnameInput, companyNameInput, vatNumberInput, fiscalCodeInput, emailInput, phoneInput, addressInput, passwordInput) {
@@ -141,13 +140,12 @@ export const useRegistrationStore = defineStore('registrationStore', {
             PASSWORD_HASH: passwordInput
         })
           .then(function (response) {
-            console.log("new supplier created");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Fornitore creato con successo.");
           })
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella registrazione del fornitore: ", error);
       }
     },
     clearRegistrationData() {
@@ -188,13 +186,10 @@ export const useRegistrationStore = defineStore('registrationStore', {
       return this.registration.vatSameAsFiscalCode;
     },
     getTowns() {
-      console.log("requested getTowns");
       if (this.registration.towns.length > 0) {
-        console.log("towns.cap = " + this.registration.towns[0].cap);
-        console.log("equal caps " + JSON.stringify(this.registration.towns.filter(town => town.cap == this.registration.registrationData.cap)));
         return this.registration.towns.filter(town => town.cap == this.registration.registrationData.cap);
       } else {
-        console.log("towns is empty");
+        console.info("Non sono state trovate località.");
         return [] as LocationDetails[];
       }
     },

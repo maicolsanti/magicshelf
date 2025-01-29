@@ -15,7 +15,6 @@ const { registration, getPasswordType, getVatEquivalence, getTowns, getTown, get
 
 onMounted(() => {
     registrationStore.fetchTowns();
-    console.log('fetching towns...');
 });
 
 const passwordInputType = computed(() => getPasswordType.value);
@@ -38,7 +37,6 @@ function checkDataValidity() {
             valid = false;
         }
     });
-    console.log(valid);
     registrationStore.setRegistrationDataError(!valid);
 }
 
