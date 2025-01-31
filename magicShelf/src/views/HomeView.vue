@@ -7,6 +7,8 @@ import { computed } from 'vue';
 
 const confStore = useConfigurationStore();
 
+confStore.getProfile();
+
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 
 </script>

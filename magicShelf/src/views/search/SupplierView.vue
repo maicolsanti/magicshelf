@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSupplierStore } from '@/stores/supplier';
+import { useConfigurationStore } from '@/stores/configurations';
 import { computed } from 'vue';
 import { addIcons} from 'oh-vue-icons';
 import { HiLocationMarker, IoArrowBackCircleOutline, IoArrowBackCircle } from 'oh-vue-icons/icons';
@@ -22,6 +23,9 @@ const props = defineProps({
 });
 
 const supplierStore = useSupplierStore();
+const confStore = useConfigurationStore();
+
+confStore.getProfile();
 
 const products = computed(() => supplierStore.supplierFetchedProducts);
 const supplier = computed(() => supplierStore.supplier);
