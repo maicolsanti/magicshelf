@@ -15,6 +15,7 @@ const configStore = useConfigurationStore();
 
 const supplierId = configStore.isLoggedIn ? configStore.configurations.userData.id : null;
 
+configStore.getProfile();
 supplierStore.fetchSupplierById(supplierId);
 
 const products = computed(() => supplierStore.supplierFetchedProducts);

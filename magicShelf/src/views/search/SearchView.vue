@@ -16,6 +16,8 @@ const productStore = useProductsStore();
 const supplierStore = useSupplierStore();
 const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 
+confStore.getProfile();
+
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 const selectedSupplierId = computed(() => supplierStore.selectedSupplierId);
 const selectedProductId = computed(() => supplierStore.selectedProductId);

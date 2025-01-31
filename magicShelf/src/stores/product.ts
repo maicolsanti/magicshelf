@@ -39,7 +39,7 @@ export const useProductsStore = defineStore('productStore', {
         default:
           priceRange = [0, 100];
       }
-      const distanceRange = this.filters.distanceRange == DistanceRange.SAMEISTATCODE ? "Dentro al comune" : "Fuori dal comune";
+      const distanceRange = this.filters.distanceRange == DistanceRange.SAMEISTATCODE ? "Dentro al Comune" : "Fuori dal Comune";
       const filters = {
         "DESCRIZIONE_MATERIALE": this.filters.productName,
         "MARCA": this.filters.brand,

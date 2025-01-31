@@ -49,7 +49,9 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           );
         });
 
-        this.configurations.logged = true;
+        if (this.configurations.userData.id != null) {
+          this.configurations.logged = true;
+        }
 
         console.log(`Profilo recuperato con successo.`);
       }
