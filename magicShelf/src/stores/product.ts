@@ -54,7 +54,6 @@ export const useProductsStore = defineStore('productStore', {
         }
         return acc;
       }, {} as Record<string, any>);
-      console.log("filters:" + JSON.stringify(requestBodyFilters));
       try {
         this.products = await axios.post('/api/materiali-fornitori/getFiltered', requestBodyFilters).then(res => res.data.map((product: any) => new FoundProduct(
           product.CODICE_FORNITORE,
@@ -80,11 +79,11 @@ export const useProductsStore = defineStore('productStore', {
           product.IMMAGINE
         )));
 
-        console.log("fetched products");
+        console.log("Materiali recuperati con successo.");
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella richiesta dei materiali: ", error);
       }
     },
     async setFilters(productName, brand, supplier, cap, priceRange, distanceRange) {

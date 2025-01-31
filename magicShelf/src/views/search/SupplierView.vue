@@ -28,17 +28,12 @@ const supplier = computed(() => supplierStore.supplier);
 const location = computed(() => supplierStore.location);
 const materialSituations = computed(() => supplierStore.materialSituations);
 
-console.log("products ", products.value);
-console.log("productId prop ", props.productId);
-
 let selectedProduct = products.value.find(product => product.materialId === props.productId);
 
 function setSelectedProduct(productId, supplierId) {
     supplierStore.setSelectedProduct(productId, supplierId);
     selectedProduct = products.value.find(product => product.materialId === productId);
 }
-
-console.log("selectedProduct ", selectedProduct);
 </script>
 
 <template>

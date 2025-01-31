@@ -30,7 +30,6 @@ export const useConfigurationStore = defineStore('configurationsStore', {
   }),
   actions: {
     async getProfile() {
-      console.log("requested getProfile");
       try {
         await axios.get('/api/auth/general/getProfile').then(res => {
           const user = res.data;
@@ -52,11 +51,11 @@ export const useConfigurationStore = defineStore('configurationsStore', {
 
         this.configurations.logged = true;
 
-        console.log("fetched user profile");
+        console.log(`Profilo recuperato con successo.`);
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nella richiesta del profilo: ", error);
       }
     },
     updatePage(newPageCode) {
@@ -96,8 +95,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           PASSWORD_HASH: password,
         })
           .then(function (response) {
-            console.log("logged in");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Cliente loggato con successo.");
           })
 
           this.getProfile();
@@ -105,7 +103,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nel login: ", error);
       }
 
     },
@@ -117,8 +115,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           PASSWORD_HASH: password,
         })
           .then(function (response) {
-            console.log("logged in");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Fornitore loggato con successo.");
           })
 
           this.getProfile();
@@ -127,17 +124,15 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nel login: ", error);
       }
 
     },
     async logout() {
-
       try {
         await axios.post('/api/auth/general/logout')
           .then(function (response) {
-            console.log("logged out");
-            console.log("response - status: " + JSON.stringify(response.status) + " - message:" + JSON.stringify(response.data.message));
+            console.log("Logout effettuato con successo.");
           })
 
           this.userData = {
@@ -155,7 +150,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
       catch (error) {
         alert(error);
-        console.log(error);
+        console.error("Errore nel logout del profilo: ", error);
       }
 
     },
