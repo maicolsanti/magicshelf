@@ -197,9 +197,6 @@ router.post('/logout', logout);
  *                 message:
  *                   type: string
  *                   example: "Password successfully updated"
- *                 id:
- *                   type: integer
- *                   example: 1
  *       403:
  *         description: The inserted login credentials are invalid
  *         content:

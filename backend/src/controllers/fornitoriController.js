@@ -1,6 +1,4 @@
 import {
-  getAllFornitori,
-  getFornitoreById,
   updateFornitore,
   deleteFornitore,
 } from '../models/fornitoriModel.js';
@@ -12,66 +10,6 @@ import {
 } from '../schemas/fornitoriSchemas.js'
 
 const ROLE_NAME = 'FORNITORE';
-
-export const getAll = async (req, res) => {
-  try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
-
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
-    }
-
-    // Attempt to retrieve all suppliers from the database
-    const fornitori = await getAllFornitori();
-    
-    // Respond with the list of suppliers in JSON format
-    res.send(200).json(fornitori);
-  } catch (error) {
-    // Log the error and respond with a 500 Internal Server Error
-    console.error('Error retrieving suppliers:', error);
-    res.status(500).send('Internal server error');
-  }
-};
-
-export const getById = async (req, res) => {
-  const { codice_fornitore } = req.params;
-  try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
-
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
-    }
-
-    // Attempt to retrieve the supplier by their unique ID
-    const fornitore = await getFornitoreById(codice_fornitore);
-
-    // If the supplier is not found, return a 404 error
-    if (!fornitore) {
-      return res.status(404).send('Supplier not found');
-    }
-
-    // Return the supplier data as a JSON response
-    res.status(200).json(fornitore);
-  } catch (error) {
-    // Log the error and respond with a 500 Internal Server Error
-    console.error('Error retrieving supplier:', error);
-    res.status(500).send('Internal server error');
-  }
-};
 
 export const update = async (req, res) => {
   const { codice_fornitore } = req.params;  // Extract the supplier's ID from the route parameters

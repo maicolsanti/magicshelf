@@ -1,6 +1,4 @@
 import {
-  getAllClienti,
-  getClienteById,
   updateCliente,
   deleteCliente,
 } from '../models/clientiModel.js';
@@ -12,61 +10,6 @@ import {
 } from '../schemas/clientiSchemas.js';
 
 const ROLE_NAME = 'CLIENTE';
-
-export const getAll = async (req, res) => {
-  try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
-
-    // Check if the user is authorized
-    if(user.ROLE != ROLE_NAME) {
-      res.status(403).send('Insufficient permission');
-      return;
-    }
-
-    // Retrieve all clients from the database
-    const clienti = await getAllClienti();
-
-    // Respond with the list of clients
-    res.status(200).json(clienti);
-  } catch (error) {
-    // Log the error and send a generic server error response
-    console.error('Error retrieving clients data:', error);
-    res.status(500).send('Internal server error');
-  }
-};
-
-export const getById = async (req, res) => {
-  const { codice_cliente } = req.params;
-
-  try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
-
-    // Retrieve the client by their ID from the database
-    const cliente = await getClienteById(codice_cliente);
-
-    // If no client is found, return a 404 Not Found error with a message
-    if (!cliente) {
-      return res.status(404).send('Client not found');
-    }
-
-    // Respond with the client data
-    res.status(200).json(cliente);
-  } catch (error) {
-    // Log the error and send a generic server error response
-    console.error('Error retrieving client:', error);
-    res.status(500).send('Internal server error');
-  }
-};
 
 export const update = async (req, res) => {
   const { codice_cliente } = req.params;  // Extract the client ID from the URL parameters

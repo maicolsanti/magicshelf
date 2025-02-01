@@ -1,12 +1,5 @@
 import pool from '../config/db.js';
 
-// Get all suppliers
-export const getAllFornitori = async () => {
-  // Execute a query to fetch all suppliers
-  const [rows] = await pool.promise().query('SELECT * FROM ANAGRAFICA_FORNITORI');
-  return rows;
-};
-
 // Get supplier by ID
 export const getFornitoreById = async (codice_fornitore) => {
   // Execute a query to fetch the supplier with the given supplier code (ID)
