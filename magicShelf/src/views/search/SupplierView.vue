@@ -25,6 +25,7 @@ const props = defineProps({
 const supplierStore = useSupplierStore();
 const confStore = useConfigurationStore();
 
+// Get or Update profile store data
 confStore.getProfile();
 
 const products = computed(() => supplierStore.supplierFetchedProducts);
@@ -32,8 +33,10 @@ const supplier = computed(() => supplierStore.supplier);
 const location = computed(() => supplierStore.location);
 const materialSituations = computed(() => supplierStore.materialSituations);
 
+// Set selected product from props productId
 let selectedProduct = products.value.find(product => product.materialId === props.productId);
 
+// Set different selected product
 function setSelectedProduct(productId, supplierId) {
     supplierStore.setSelectedProduct(productId, supplierId);
     selectedProduct = products.value.find(product => product.materialId === productId);

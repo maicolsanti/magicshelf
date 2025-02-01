@@ -15,7 +15,10 @@ const configStore = useConfigurationStore();
 
 const supplierId = configStore.isLoggedIn ? configStore.configurations.userData.id : null;
 
+// Get or Update profile store data
 configStore.getProfile();
+
+// Fetch supplier data and products
 supplierStore.fetchSupplierById(supplierId);
 
 const products = computed(() => supplierStore.supplierFetchedProducts);
@@ -23,17 +26,21 @@ const openNewDialog = computed(() => supplierStore.shouldBeOpen);
 const openEditDialog = computed(() => supplierStore.editShouldBeOpen);
 const openDeleteDialog = computed(() => supplierStore.deleteShouldBeOpen);
 
+// Selected product for edit and delete
 let productSelected = null;
 
+// New Product Dialog
 function openNewPDialog() {
   supplierStore.openNewProductDialog();
 }
 
+// Edit Product Dialog
 function openEditPDialog(product) {
   productSelected = product;
   supplierStore.openEditProductDialog(productSelected.materialId);
 }
 
+// Delete Product Dialog
 function openDeletePDialog(product) {
   productSelected = product;
   supplierStore.openDeleteProductDialog(productSelected.materialId);

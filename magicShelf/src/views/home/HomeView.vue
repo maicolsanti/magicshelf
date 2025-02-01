@@ -6,8 +6,9 @@ import AboutView from '../about_us/AboutView.vue';
 import { computed } from 'vue';
 
 const confStore = useConfigurationStore();
+
+// Check if user is logged in (valid authToken)
 confStore.getProfile();
-console.log("Home page caricata.");
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 

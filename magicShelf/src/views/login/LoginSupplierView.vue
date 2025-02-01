@@ -15,11 +15,13 @@ const passwordInputType = computed(() => getPasswordType.value);
 
 const router = useRouter()
 
+// Form data
 let loginData = {
     fiscalCodeInput: "",
     passwordInput: "",
 };
 
+// Login
 function submit() {
     configurationStore.loginSupplier(loginData.fiscalCodeInput, loginData.passwordInput);
     router.push('/');

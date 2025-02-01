@@ -16,6 +16,7 @@ const productStore = useProductsStore();
 const supplierStore = useSupplierStore();
 const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 
+// Get or Update user data
 confStore.getProfile();
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
@@ -23,9 +24,11 @@ const selectedSupplierId = computed(() => supplierStore.selectedSupplierId);
 const selectedProductId = computed(() => supplierStore.selectedProductId);
 const user = computed(() => confStore.getUserData);
 
+// Defaults dropdowns strings
 let priceString = "Fascia di prezzo";
 let distanceString = "Zona di ricerca";
 
+// Filters
 let searchFilters = {
     product: "",
     brand: "",
@@ -35,18 +38,21 @@ let searchFilters = {
     distanceRange: null
 };
 
+// Set Price Range
 function changePriceRange(priceRange) {
     searchFilters.priceRange = priceRange;
     priceString = findPriceString(priceRange);
     searchStore.changePriceRange(priceRange);
 }
 
+// Set Distance Range
 function changeDistanceRange(distanceRange) {
     searchFilters.distanceRange = distanceRange;
     distanceString = findDistanceString(distanceRange);
     searchStore.changeDistanceRange(distanceRange);
 }
 
+// Get price range string
 function findPriceString(priceRange) {
     switch (priceRange) {
         case PriceRange.NOTSELECTED:
@@ -62,6 +68,7 @@ function findPriceString(priceRange) {
     }
 }
 
+// Get distance range string
 function findDistanceString(distanceRange) {
     switch (distanceRange) {
         case DistanceRange.NOTSELECTED:
@@ -75,12 +82,12 @@ function findDistanceString(distanceRange) {
     }
 }
 
+// Search
 function submit() {
     productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchStore.searchAttributes.priceRange, searchStore.searchAttributes.distanceRange).then(() => {
         productStore.getFilteredProducts();
     });
     supplierStore.fetchAllMaterialSituations();
-   
 }
 </script>
 
