@@ -1,32 +1,9 @@
-import { getAllSituazioni, getSituazioneById, createSituazione, updateSituazione, deleteSituazione } from '../models/situazione-materialiModel.js';
+import { getSituazioneById, createSituazione, updateSituazione, deleteSituazione } from '../models/situazione-materialiModel.js';
 import { getMaterialeById } from '../models/materialiModel.js';
 import { situazioneMaterialiSchema } from '../schemas/situazione-materialiSchemas.js';
 import { getUser } from '../utils/auth.js';
 
 const ROLE_NAME = 'FORNITORE';
-
-export const getAll = async (req, res) => {
-  try {
-    const user = getUser(req, res);
-    // Check if the user is logged in
-    if (!user) {
-      res.status(401).send('This operation requires you to be logged in');
-      return;
-    }
-
-    // Fetch all material situations from the database
-    const situazioni = await getAllSituazioni();
-    
-    // Return the fetched data as JSON
-    res.status(200).json(situazioni);
-  } catch (error) {
-    // Log any error that occurs during data retrieval
-    console.error('Error occurred while retrieving material situations:', error);
-    
-    // Send a generic error message to the client
-    res.status(500).send('Internal server error');
-  }
-};
 
 export const getById = async (req, res) => {
   const { codice_materiale } = req.params;

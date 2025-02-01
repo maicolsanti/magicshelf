@@ -66,9 +66,6 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                   example: "Client registration successful"
- *                 id:
- *                   type: integer
- *                   example: 1
  *       400:
  *         description: The email used for registration is already in use
  *         content:

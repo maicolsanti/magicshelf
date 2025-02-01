@@ -142,9 +142,6 @@ router.post('/register', registerFornitore);
  *                 message:
  *                   type: string
  *                   example: "Login successful"
- *                 id:
- *                   type: integer
- *                   example: 1
  *       400:
  *         description: The supplier trying to log in is not registered yet
  *         content:
