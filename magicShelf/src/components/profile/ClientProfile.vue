@@ -166,7 +166,7 @@ export default {
       try {
         localities.value = await profileStore.getLocalityByCap(cap);
       } catch (error) {
-        console.error("Error fetching localities:", error);
+        console.error("Errore durante il recupero delle localita:", error);
         localities.value = [];
       }
     };
@@ -177,7 +177,7 @@ export default {
         const istatCodes = await profileStore.GetLocalityByCapDenominazione(cap, locality);
         return istatCodes;
       } catch (error) {
-        console.error("Error fetching ISTAT code:", error);
+        console.error("Errore durante il recupero del codice ISTAT:", error);
         return null;
       }
     };
@@ -191,16 +191,16 @@ export default {
         }
 
         if (!profile.value.istatCode) {
-          alert("Error: could not retrieve ISTAT code.");
+          alert("Errore: impossibile recuperare il codice ISTAT.");
           return;
         }
 
         // Save the profile
         await profileStore.saveChanges("clienti", profile.value);
-        alert("Changes saved successfully.");
+        alert("Modifiche salvate con successo.");
       } catch (error) {
-        console.error("Error saving profile:", error);
-        alert("An error occurred while saving.");
+        console.error("Errore durante il salvataggio del profilo:", error);
+        alert("Errore durante il salvataggio delle modifiche al profilo.");
       }
     };
 
@@ -222,7 +222,7 @@ export default {
         await configurationStore.getProfile();
         Object.assign(profile.value, configurationStore.configurations.userData);
       } catch (error) {
-        console.error("Error loading profile:", error);
+        console.error("Errore durante il caricamento del profilo:", error);
       }
     };
 
@@ -231,7 +231,7 @@ export default {
       if (passwords.value.newPassword === passwords.value.confirmPassword) {
         profileStore.changePassword(passwords.value);
       } else {
-        alert("Passwords do not match.");
+        alert("Le password non corrispondono.");
       }
     };
 

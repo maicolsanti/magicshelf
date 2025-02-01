@@ -274,8 +274,8 @@ export default {
       profile,
       passwords,
       localities,
-      passwordVisibility, // Visibility state
-      toggleVisibility,    // Toggle method
+      passwordVisibility,
+      toggleVisibility,
       saveProfileChanges,
       savePasswordChanges,
       deleteProfile,

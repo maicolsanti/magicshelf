@@ -3,11 +3,14 @@ import { ref } from "vue";
 import axios from 'axios';
 import { Costumer } from "@/models/costumer";
 import { Supplier } from "@/models/supplier";
+import { useConfigurationStore } from '@/stores/configurations';
 
 export const useProfileStore = defineStore("profile", () => {
   // Profile status
   const customerProfile = ref<Costumer | null>(null);
   const supplierProfile = ref<Supplier | null>(null);
+
+  const configurationStore = useConfigurationStore();
 
   // Profile value change function
   const saveChanges = async (profileType: "clienti" | "fornitori", profileData: Costumer | Supplier) => {
@@ -94,7 +97,9 @@ export const useProfileStore = defineStore("profile", () => {
         supplierProfile.value = null;
       }
 
-      console.log(`Profilo ${profileType} eliminato con successo.`);
+      alert(`Profilo ${profileType} eliminato con successo.`);
+
+      configurationStore.logout();
     } catch (error) {
       console.error("Errore durante l'eliminazione:", error);
     }
