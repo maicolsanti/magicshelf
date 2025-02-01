@@ -72,7 +72,6 @@ export const useSupplierStore = defineStore('supplierStore', {
         console.log("Materiali fornitore recuperati con successo.");
       }
       catch (error) {
-        alert(error);
         console.error("Errore nel recupero dei materiali del fornitore: ", error);
       }
     },
@@ -88,7 +87,6 @@ export const useSupplierStore = defineStore('supplierStore', {
         console.log("Situazione materiale recuperata con successo.");
       }
       catch (error) {
-        alert(error);
         console.error("Errore nel recupero della situazione materiale: ", error);
       }
     },
@@ -101,7 +99,6 @@ export const useSupplierStore = defineStore('supplierStore', {
         console.log("Recuperate tutte le situazioni materiali.");
       }
       catch (error) {
-        alert(error);
         console.error("Errore nel recupero delle situazioni materiali: ", error);
       }
     },
@@ -119,7 +116,6 @@ export const useSupplierStore = defineStore('supplierStore', {
           console.log("Località recuperata con successo.");
         }
         catch (error) {
-          alert(error);
           console.error("Errore nel recupero della località: ", error);
         }
         return true;
@@ -137,7 +133,6 @@ export const useSupplierStore = defineStore('supplierStore', {
           })
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella registrazione del cliente: ", error);
       }
     },
@@ -154,7 +149,6 @@ export const useSupplierStore = defineStore('supplierStore', {
           })
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella modifica della situazione materiale: ", error);
       }
     },
@@ -188,7 +182,6 @@ export const useSupplierStore = defineStore('supplierStore', {
           this.fetchSupplierById(supplierId);
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella creazione del materiale: ", error);
       }
     },
@@ -221,7 +214,6 @@ export const useSupplierStore = defineStore('supplierStore', {
           this.fetchSupplierById(this.supplierFetchedProducts[0].supplierId);
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella modifica del materiale: ", error);
       }
     },
@@ -234,7 +226,6 @@ export const useSupplierStore = defineStore('supplierStore', {
           })
       }
       catch (error) {
-        alert(error);
         console.error("Errore nell'eliminazione del materiale': ", error);
       }
     },
@@ -247,7 +238,6 @@ export const useSupplierStore = defineStore('supplierStore', {
           })
       }
       catch (error) {
-        alert(error);
         console.error("Errore nell'eliminazione della situazione materiale': ", error);
       }
     },

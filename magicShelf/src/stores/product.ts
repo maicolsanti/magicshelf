@@ -82,7 +82,6 @@ export const useProductsStore = defineStore('productStore', {
         console.log("Materiali recuperati con successo.");
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella richiesta dei materiali: ", error);
       }
     },

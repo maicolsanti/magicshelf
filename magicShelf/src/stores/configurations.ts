@@ -56,7 +56,6 @@ export const useConfigurationStore = defineStore('configurationsStore', {
         console.log(`Profilo recuperato con successo.`);
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella richiesta del profilo: ", error);
       }
     },
@@ -104,7 +103,6 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           this.configurations.logged = true;
       }
       catch (error) {
-        alert(error);
         console.error("Errore nel login: ", error);
       }
 
@@ -125,7 +123,6 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           this.configurations.logged = true;
       }
       catch (error) {
-        alert(error);
         console.error("Errore nel login: ", error);
       }
 
@@ -151,7 +148,6 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           this.configurations.logged = false;
       }
       catch (error) {
-        alert(error);
         console.error("Errore nel logout del profilo: ", error);
       }
 
