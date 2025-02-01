@@ -87,7 +87,7 @@ function submit() {
 <template>
     <main class="margin-content">
         <div class="d-grid gap-2 mb-1" v-if="!isLoggedIn">
-            <RouterLink to="/login" class="login-link login-button">
+            <RouterLink to="/loginCostumer" class="login-link login-button">
                 <button type="button" class="btn btn-primary py-2 login-button">
                     Accedi per iniziare la ricerca
                 </button>
