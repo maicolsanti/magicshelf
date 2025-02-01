@@ -14,9 +14,10 @@ const isSupplier = computed(() => confStore.isSupplier);
 const router = useRouter()
 
 function logout() {
-  confStore.updatePage(page.HOME)
-  confStore.logout();
-  router.push('/');
+  confStore.logout().then(() => {
+    confStore.updatePage(page.HOME)
+    router.push('/');
+  })
 }
 
 </script>
@@ -50,8 +51,8 @@ function logout() {
           <li class="nav-item mx-2" v-if="!isLoggedIn" @click="confStore.updatePage(page.LOGIN)">
             <RouterLink to="/loginCostumer" class="nav-link inactive-page" active-class="active-page">Accedi</RouterLink>
           </li>
-          <li class="nav-item mx-2" v-if="isLoggedIn" @click="logout">
-            <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">Logout</RouterLink>
+          <li class="nav-item mx-2" v-if="isLoggedIn" @click="logout()">
+            <p class="nav-link inactive-page" active-class="active-page">Logout</p>
           </li>
         </ul>
       </div>
