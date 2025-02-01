@@ -91,11 +91,11 @@ export const changePassword = async (req, res) => {
         // Update the password
         if(user.RUOLO == 'CLIENTE') {
             rowsAffected = updateCliente(user.CODICE_CLIENTE, {
-                "PASSWORD_HASH": value.NEW_PASSWORD
+                "PASSWORD_HASH": await bcrypt.hash(value.NEW_PASSWORD, 10)
             });
         } else {
             rowsAffected = updateFornitore(user.CODICE_FORNITORE, {
-                "PASSWORD_HASH": value.NEW_PASSWORD
+                "PASSWORD_HASH": await bcrypt.hash(value.NEW_PASSWORD, 10)
             });
         }
 

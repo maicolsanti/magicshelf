@@ -43,9 +43,10 @@ export default {
       try {
         await configurationStore.getProfile(); // Retrieve profile
         this.profileType = configurationStore.configurations.userData.role;
-        console.log(configurationStore.configurations.userData);
+        if(this.profileType == null) {
+          throw new Error;
+        }
       } catch (error) {
-        console.error("Errore durante il caricamento del profilo:", error);
         this.error = true;
       } finally {
         this.isLoading = false;
