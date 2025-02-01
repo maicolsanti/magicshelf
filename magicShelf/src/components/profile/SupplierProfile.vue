@@ -84,17 +84,50 @@
         <div class="form-section">
           <h2>Password</h2>
           <div class="form-row">
+            
+            <!-- Old password field with toggle button -->
             <div class="form-field">
               <label for="vecchiaPassword">Inserire vecchia password</label>
-              <input type="password" id="vecchiaPassword" v-model="passwords.oldPassword" />
+              <div class="input-with-button">    
+                <input
+                  :type="passwordVisibility.old ? 'text' : 'password'"
+                  id="vecchiaPassword"
+                  v-model="passwords.oldPassword"
+                />
+                <button type="button" class="btn-toggle" @click="toggleVisibility('old')">
+                  {{ passwordVisibility.old ? 'Hide' : 'Show' }}
+                </button>
+              </div>
             </div>
+
+            <!-- New password field with toggle button -->
             <div class="form-field">
               <label for="nuovaPassword">Inserire nuova password</label>
-              <input type="password" id="nuovaPassword" v-model="passwords.newPassword" />
+              <div class="input-with-button">
+                <input
+                  :type="passwordVisibility.new ? 'text' : 'password'"
+                  id="nuovaPassword"
+                  v-model="passwords.newPassword"
+                />
+                <button type="button" class="btn-toggle" @click="toggleVisibility('new')">
+                  {{ passwordVisibility.new ? 'Hide' : 'Show' }}
+                </button>
+              </div>
             </div>
+
+            <!-- Confirm password field with toggle button -->
             <div class="form-field">
               <label for="confermaPassword">Re inserire nuova password</label>
-              <input type="password" id="confermaPassword" v-model="passwords.confirmPassword" />
+              <div class="input-with-button">
+                <input
+                  :type="passwordVisibility.confirm ? 'text' : 'password'"
+                  id="confermaPassword"
+                  v-model="passwords.confirmPassword"
+                />
+                <button type="button" class="btn-toggle" @click="toggleVisibility('confirm')">
+                  {{ passwordVisibility.confirm ? 'Hide' : 'Show' }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -131,7 +164,7 @@ export default {
       fiscalCode: "",
       cap: "",
       locality: "",
-      istatCode: null, // Aggiunto il campo istatCode
+      istatCode: null,
       email: "",
       phoneNumber: "",
     });
@@ -144,7 +177,19 @@ export default {
 
     const localities = ref([]);
 
-    // Funzione per aggiornare le località basate sul CAP
+    // Each password field has its own visibility state
+    const passwordVisibility = ref({
+      old: false,
+      new: false,
+      confirm: false,
+    });
+
+    // Method to toggle visibility for a specific field
+    const toggleVisibility = (field) => {
+      passwordVisibility.value[field] = !passwordVisibility.value[field];
+    };
+
+    // Fetch localities based on CAP
     const fetchLocalities = async (cap) => {
       try {
         localities.value = await profileStore.getLocalityByCap(cap);
@@ -154,7 +199,7 @@ export default {
       }
     };
 
-    // Recupera il codice ISTAT basato su CAP e località
+    // Retrieve ISTAT code by CAP and locality
     const fetchIstatCode = async (cap, locality) => {
       try {
         const istatCodes = await profileStore.GetLocalityByCapDenominazione(cap, locality);
@@ -165,10 +210,10 @@ export default {
       }
     };
 
-    // Salva le modifiche al profilo
+    // Save profile changes
     const saveProfileChanges = async () => {
       try {
-        // Recupera il codice ISTAT prima di salvare
+        // Retrieve ISTAT code before saving
         if (profile.value.cap && profile.value.locality) {
           profile.value.istatCode = await fetchIstatCode(profile.value.cap, profile.value.locality);
         }
@@ -178,8 +223,8 @@ export default {
           return;
         }
 
-        // Salva il profilo
-        profileStore.saveChanges("fornitori", profile.value);
+        // Save profile data
+        await profileStore.saveChanges("fornitori", profile.value);
         alert("Modifiche salvate con successo.");
       } catch (error) {
         console.error("Errore durante il salvataggio del profilo:", error);
@@ -187,7 +232,7 @@ export default {
       }
     };
 
-    // Osserva il cambiamento del CAP per aggiornare le località
+    // Watch CAP changes to update localities
     watch(
       () => profile.value.cap,
       (newCap) => {
@@ -199,7 +244,7 @@ export default {
       }
     );
 
-    // Funzione per caricare il profilo
+    // Load profile data
     const fetchProfile = async () => {
       try {
         await configurationStore.getProfile();
@@ -209,7 +254,7 @@ export default {
       }
     };
 
-    // Salva le modifiche alla password
+    // Save password changes
     const savePasswordChanges = () => {
       if (passwords.value.newPassword === passwords.value.confirmPassword) {
         profileStore.changePassword(passwords.value);
@@ -218,7 +263,7 @@ export default {
       }
     };
 
-    // Elimina il profilo
+    // Delete profile
     const deleteProfile = () => {
       profileStore.deleteProfile("fornitori", profile.value.id);
     };
@@ -229,6 +274,8 @@ export default {
       profile,
       passwords,
       localities,
+      passwordVisibility, // Visibility state
+      toggleVisibility,    // Toggle method
       saveProfileChanges,
       savePasswordChanges,
       deleteProfile,
@@ -239,7 +286,7 @@ export default {
 
 <style scoped>
 .fornitore-profile {
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
   background: #f7f7f7;
   padding: 20px;
@@ -276,6 +323,25 @@ select {
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+.input-with-button {
+  display: flex;
+  align-items: center;
+}
+.input-with-button input {
+  flex: 1;
+}
+.btn-toggle {
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.btn-toggle:hover {
+  background: #444;
+}
 .btn-save {
   background: #000;
   color: #fff;
@@ -288,6 +354,7 @@ select {
 .btn-save:hover {
   background: #444;
 }
+
 .save-profile-button {
   margin-bottom: 40px;
 }

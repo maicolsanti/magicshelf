@@ -1,29 +1,34 @@
 <template>
-  <div class="profile-view">
+  <div class="profile-page">
     <h1>Profilo Utente</h1>
-    <!-- Caricamento del componente corretto in base al tipo di profilo -->
-    <Profile />
+    <ProfileComponent />
   </div>
 </template>
 
 <script>
-import Profile from "@/components/Profile.vue";
+import ProfileComponent from "@/components/Profile.vue";
 
 export default {
   name: "ProfileView",
   components: {
-    Profile,
+    ProfileComponent,
   },
 };
 </script>
 
 <style scoped>
-.profile-view {
+.profile-page {
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
 }
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 h1 {
   text-align: center;
   margin-bottom: 20px;
