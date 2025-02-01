@@ -68,7 +68,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
         console.log("Località recuperate con successo.");
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella richiesta delle località: ", error);
       }
     },
@@ -108,7 +107,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
           })
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella registrazione del cliente: ", error);
       }
     },
@@ -144,7 +142,6 @@ export const useRegistrationStore = defineStore('registrationStore', {
           })
       }
       catch (error) {
-        alert(error);
         console.error("Errore nella registrazione del fornitore: ", error);
       }
     },
