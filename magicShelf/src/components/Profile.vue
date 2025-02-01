@@ -1,6 +1,5 @@
 <template>
-  <div class="profile-view">
-
+  <div class="profile-content">
     <!-- Loading status -->
     <div v-if="isLoading" class="loading">
       <p>Caricamento...</p>
@@ -60,16 +59,6 @@ export default {
 </script>
 
 <style scoped>
-.profile-view {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
 .loading,
 .error {
   text-align: center;
