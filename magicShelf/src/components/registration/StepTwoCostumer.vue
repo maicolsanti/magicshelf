@@ -166,61 +166,7 @@ input {
     height: 40px;
     max-width: 350px;
 }
-
-::placeholder {
-    color: var(--bs-secondary);
-    opacity: 0.4;
-}
-
 label {
     color: var(--bs-secondary);
-}
-
-.visibility-icon {
-    color: var(--bs-secondary);
-}
-
-.icon-button {
-    height: 40px;
-    border-color: var(--bs-secondary);
-    border-width: 1px;
-    border-top-left-radius: 0%;
-    border-bottom-left-radius: 0%;
-    border-left: none;
-}
-
-.dropdown {
-    max-width: 350px;
-    height: 40px;
-}
-
-.dropdown-select {
-    max-width: 350px;
-    height: 36px;
-    border-color: var(--bs-secondary);
-    border-radius: 6px;
-    padding-left: 10px;
-}
-
-.cap-dropdown {
-    max-width: 350px;
-    width: 350px;
-    align-content: start;
-    align-items: start;
-    justify-items: stretch;
-    border-color: var(--bs-secondary);
-}
-
-.town-not-selected {
-    color: var(--bs-secondary);
-    opacity: 0.5;
-}
-
-.input-group {
-    max-width: 350px;
-}
-
-.alert {
-    color: red;
 }
 </style>

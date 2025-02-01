@@ -205,29 +205,12 @@ input {
     max-width: 350px;
 }
 
-::placeholder {
-    color: var(--bs-primary);
-    opacity: 0.4;
-}
-
 label {
     color: var(--bs-primary);
 }
 
-.input-group {
-    max-width: 350px;
-}
-
-.dropdown {
-    max-width: 350px;
-    height: 40px;
-}
-
 .dropdown-select {
-    max-width: 350px;
-    height: 36px;
-    border-color: var(--bs-primary);
-    border-radius: 6px;
+    padding-left: 0px;
 }
 
 .cap-dropdown {

@@ -1,6 +1,6 @@
-@import url('http://fonts.googleapis.com/css?family=Rubik:300,400,700');
+@import url("http://fonts.googleapis.com/css?family=Rubik:300,400,700");
 
-$font-family-base: 'Rubik', sans-serif !important;
+$font-family-base: "Rubik", sans-serif !important;
 
 $primary: #eb6424;
 $dark: #2a2b2a;
@@ -48,21 +48,136 @@ $body-color: $dark;
     flex-grow: 1;
     justify-content: center;
     align-items: center;
-  }
-
-.dialog-button {
-    max-width: 100px;
-    max-height: 40px;
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    justify-content: center;
-    align-items: center;
 }
 
 .product-image {
-	max-width: 50px;
-	max-height: 50px;
-	object-fit: contain;
-	border-radius: 8px;
+    max-width: 50px;
+    max-height: 50px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.input-with-button {
+    display: flex;
+    align-items: center;
+}
+
+.input-with-button input {
+    flex: 1;
+}
+
+.input-group {
+    max-width: 350px;
+}
+
+::placeholder {
+    color: var(--bs-secondary);
+    opacity: 0.4;
+}
+
+.visibility-icon {
+    color: var(--bs-secondary);
+}
+
+.icon-button {
+    height: 40px;
+    border-color: var(--bs-secondary);
+    border-width: 1px;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+    border-left: none;
+}
+
+.dropdown {
+    max-width: 350px;
+    height: 40px;
+}
+
+.dropdown-menu {
+    width: 200px;
+}
+
+.dropdown-select {
+    max-width: 350px;
+    height: 36px;
+    border-color: var(--bs-secondary);
+    border-radius: 6px;
+    padding-left: 10px;
+}
+
+.cap-dropdown {
+    max-width: 350px;
+    width: 350px;
+    align-content: start;
+    align-items: start;
+    justify-items: stretch;
+    border-color: var(--bs-secondary);
+}
+
+.town-not-selected {
+    color: var(--bs-secondary);
+    opacity: 0.5;
+}
+
+.alert {
+    color: red;
+}
+
+.dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog .dialog-content {
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.profile-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-field {
+    flex: 1;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.profile-image {
+    font-size: 80px;
+    color: #ccc;
 }

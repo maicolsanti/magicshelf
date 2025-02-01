@@ -77,26 +77,8 @@ input {
     color: var(--bs-primary);
     min-width: 350px;
 }
-
-::placeholder {
-    color: var(--bs-secondary);
-    opacity: 0.4;
-}
-
 label {
     color: var(--bs-primary);
 }
 
-.visibility-icon {
-    color: var(--bs-secondary);
-}
-
-.icon-button {
-    height: 40px;
-    border-color: var(--bs-secondary);
-    border-width: 1px;
-    border-top-left-radius: 0%;
-    border-bottom-left-radius: 0%;
-    border-left: none;
-}
 </style>

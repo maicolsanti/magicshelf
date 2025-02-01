@@ -61,10 +61,6 @@ const dropDownString = computed(() => getDropdownString.value);
     font-weight: lighter;
 }
 
-.dropdown-menu {
-    width: 200px;
-}
-
 .user-type-dropdown {
     width: 200px;
     align-content: start;

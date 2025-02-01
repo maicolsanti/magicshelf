@@ -1,5 +1,5 @@
 <template>
-  <div class="cliente-profile">
+  <div class="profile-container">
     <div class="profile-card">
       <!-- Header with profile image -->
       <div class="profile-header">
@@ -257,43 +257,11 @@ export default {
 </script>
 
 <style scoped>
-.cliente-profile {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: #f7f7f7;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.profile-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-.profile-image {
-  font-size: 80px;
-  color: #ccc;
-}
-.form-section {
-  margin-bottom: 20px;
-}
-.form-row {
-  display: flex;
-  gap: 20px;
-}
-.form-field {
-  flex: 1;
-}
+
 label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-}
-.input-with-button {
-  display: flex;
-  align-items: center;
-}
-.input-with-button input {
-  flex: 1;
 }
 .btn-toggle {
   background: #000;

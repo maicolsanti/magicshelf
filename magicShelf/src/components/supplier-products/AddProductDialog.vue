@@ -81,8 +81,8 @@ function closeDialog() {
         />
       </div>
         <div class="button-group">
-          <button type="reset" @click="closeDialog()" class="btn btn-secondary dialog-button">Annulla</button>
-          <button type="submit" @click="addProduct()" class="btn btn-primary dialog-button">Salva</button>
+          <button type="reset" @click="closeDialog()" class="btn btn-secondary primary-button">Annulla</button>
+          <button type="submit" @click="addProduct()" class="btn btn-primary primary-button">Salva</button>
         </div>
           
       </form>
@@ -92,34 +92,6 @@ function closeDialog() {
 
 <style scoped>
 
-.dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.dialog .dialog-content {
-  padding: 30px;
-  background-color: white;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-.button-group {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px
-}
-
 .row-group {
   display: flex;
   gap: 15px;
@@ -127,5 +99,9 @@ function closeDialog() {
 
 .flex-item {
   flex: 1;
+}
+
+.primary-button {
+  max-width: 100px;
 }
 </style>
