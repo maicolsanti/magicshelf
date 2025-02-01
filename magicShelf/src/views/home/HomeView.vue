@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import SearchInstructions from '@/components/home/SearchInstructions.vue'
-import SupplierLink from '@/components/home/SupplierLink.vue'
-import { useConfigurationStore } from '@/stores/configurations'
-import AboutView from './AboutView.vue';
+import SearchInstructions from '../../components/home/SearchInstructions.vue'
+import SupplierLink from '../../components/home/SupplierLink.vue'
+import { useConfigurationStore } from '../../stores/configurations';
+import AboutView from '../about_us/AboutView.vue';
 import { computed } from 'vue';
 
 const confStore = useConfigurationStore();
