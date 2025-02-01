@@ -35,8 +35,6 @@ export const updateCliente = async (codice_cliente, custom_data) => {
     WHERE CODICE_CLIENTE = ?
   `;
 
-  console.log(query);
-
   // Execute the update query and return the number of affected rows
   const [result] = await pool.promise().execute(query, values);
   return result.affectedRows;
