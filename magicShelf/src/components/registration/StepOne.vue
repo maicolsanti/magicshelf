@@ -16,7 +16,7 @@ const dropDownString = computed(() => getDropdownString.value);
         <div class="d-flex justify-content-center mb-3">
             <h5 class="mt-5 step-instruction">Seleziona il tipo di utente</h5>
         </div>
-        <div class="dropdown d-flex justify-content-center mb-5">
+        <div class="d-flex justify-content-center mb-5">
             <button class="btn dropdown-toggle user-type-dropdown d-flex justify-content-between align-items-center"
                 type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
                 <span class="dropdown-text">{{ dropDownString }}</span>

@@ -11868,7 +11868,8 @@ textarea.form-control-lg {
 }
 
 .form-column {
-  width: 350px;
+  max-width: 350px;
+  min-width: 150px;
 }
 
 .margin-content {

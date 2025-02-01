@@ -34,16 +34,16 @@ function submit() {
             Benvenut*,<br />accedi per trovare ciò che cerchi
         </h1>
         <div class="form-g">
-            <div class="form-group mb-3">
+            <div class="row form-group mb-3">
                 <label for="">Username</label>
                 <input type="email" class="form-control" id="usernameInput" v-model="loginData.usernameInput" placeholder="indirizzo email" required />
             </div>
-            <div class="form-group row">
+            <div class="row form-group form-column">
                 <label for="">Password</label>
                 <div class="col-md-13 input-group">
                     <input :type="passwordInputType" class=" form-control mb-5" id="passwordInput" v-model="loginData.passwordInput"
                         placeholder="password" required />
-                    <div class="input-group-btn">
+                    <div class="">
                         <button class="btn icon-button" @click="loginStore.toggleShowPassword()">
                             <v-icon v-if="!infos.showPassword" name="md-visibility-round" class="visibility-icon" />
                             <v-icon v-if="infos.showPassword" name="md-visibilityoff-round" class="visibility-icon" />
@@ -67,7 +67,6 @@ function submit() {
 .form-g {
     justify-self: center;
     justify-items: center;
-    width: 350px;
 }
 
 input {
@@ -75,7 +74,7 @@ input {
     border-width: 1px;
     height: 40px;
     color: var(--bs-primary);
-    min-width: 350px;
+    min-width: 150px;
 }
 
 label {

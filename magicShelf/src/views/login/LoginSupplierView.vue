@@ -75,7 +75,7 @@ input {
     border-width: 1px;
     height: 40px;
     color: var(--bs-primary);
-    min-width: 350px;
+    min-width: 150px;
 }
 label {
     color: var(--bs-primary);
