@@ -19,9 +19,11 @@ export const useSearchStore = defineStore('searchStore', {
   }),
   actions: {
     changePriceRange(priceRangeSelected) {
+      // Set price range
       this.searchAttributes.priceRange = priceRangeSelected;
     },
     changeDistanceRange(distanceRangeSelected) {
+      // Set distance range
         this.searchAttributes.distanceRange = distanceRangeSelected;
     },
   },

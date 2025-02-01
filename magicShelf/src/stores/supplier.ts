@@ -13,10 +13,9 @@ export const useSupplierStore = defineStore('supplierStore', {
     selectedSupplierId: null,
     selectedProductId: null,
     supplier: null,
-    products: Product[0],
     location: null,
-    supplierFetchedProducts: [] as FoundProduct[],
-    materialSituations: [] as MaterialSituation[],
+    supplierFetchedProducts: [] as FoundProduct[], // Materials
+    materialSituations: [] as MaterialSituation[], // Materials situations
     productMaterialSituation: {} as MaterialSituation,
     newProduct: {} as Product,
     newProductDialog: false,
@@ -25,12 +24,16 @@ export const useSupplierStore = defineStore('supplierStore', {
   }),
   actions: {
     setSelectedProduct(productId, supplierId) {
+      // Set selected product
         this.selectedProductId = productId;
         this.selectedSupplierId = supplierId;
         console.log("Settato il prodotto selezionato: ", productId);
     },
     async fetchSupplierById(id: Number) {
+      // GET BY ID - supplier
+
       try {
+        // All supplier products
         this.supplierFetchedProducts = await axios.get('/api/materiali-fornitori/getById/' + id).then(res => res.data.map((fetchedProduct: any) => new FoundProduct(
           fetchedProduct.CODICE_FORNITORE,
           fetchedProduct.NOME,
@@ -55,6 +58,7 @@ export const useSupplierStore = defineStore('supplierStore', {
           fetchedProduct.IMMAGINE
         )));
 
+        // Supplier data
         this.supplier = new Supplier(
           this.supplierFetchedProducts[0].supplierId,
           this.supplierFetchedProducts[0].supplierName,
@@ -76,6 +80,7 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async fetchMaterialSituation(id: Number) {
+      // GET BY ID - material situation
       try {
         await axios.get('/api/situazione-materiali/getById/' + id).then(res => {
           const situation = res.data;
@@ -91,6 +96,7 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async fetchAllMaterialSituations() {
+      // GET ALL - material situations
       try {
         this.materialSituations = await axios.get('/api/situazione-materiali/getAll/').then(res => res.data.map((fetchedSituation: any) => new MaterialSituation(
           fetchedSituation.CODICE_MATERIALE,
@@ -103,6 +109,8 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async fetchLocationByIstatCode() {
+        // GET BY ID - location
+
         try {
           await axios.get('/api/localita/getById/' + this.supplier.istatCode).then(res => {
             this.location = new LocationDetails(
@@ -121,6 +129,8 @@ export const useSupplierStore = defineStore('supplierStore', {
         return true;
     },
     async insertQuantity(id, quantity) {
+      // CREATE - material situation
+
       try {
         await axios.post('/api/situazione-materiali/create', {
           custom_data: {
@@ -137,6 +147,8 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async editQuantity(id, quantity) {
+      // UPDATE - material situation
+
       try {
         await axios.put('/api/situazione-materiali/update/' + id, {
           custom_data: {
@@ -153,7 +165,11 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async insertNewProduct(productDescription, productBrand, productUnit, productPrice, productQuantity, productImage, supplierId) {
-      let responseId = 0;
+      // CREATE - material
+
+      let responseId = 0; // Response id for creating new material situation
+
+      // Populate form data
       let formData = new FormData();
       formData.append(
         'custom_data',
@@ -165,7 +181,11 @@ export const useSupplierStore = defineStore('supplierStore', {
             PREZZO_UNITARIO: productPrice,
         })
       );
+
+      // Append image
       formData.append('image', productImage);
+
+      // Make request
       try {
         await axios.post('/api/materiali/create', 
           formData,
@@ -176,9 +196,13 @@ export const useSupplierStore = defineStore('supplierStore', {
         })
           .then(function (response) {
             console.log("Materiale creato con successo.");
-            responseId = response.data.id;
+            responseId = response.data.id; // Save response id
           })
+
+          // Insert quantity
           this.insertQuantity(responseId, productQuantity);
+
+          // Fetch supplier for updating product list
           this.fetchSupplierById(supplierId);
       }
       catch (error) {
@@ -186,6 +210,9 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async editProduct(productId,productDescription, productBrand, productUnit, productPrice, productQuantity, productImage, originalProduct) {
+      // Update - material
+
+      // Populate form data with only updated values
       let formData = new FormData();
       formData.append(
         'custom_data',
@@ -196,7 +223,11 @@ export const useSupplierStore = defineStore('supplierStore', {
             ...(productPrice !== originalProduct.materialPrice && { PREZZO_UNITARIO: productPrice }),
         })
       );
+
+      // Append image
       formData.append('image', productImage);
+
+      // Make request
       try {
         await axios.put('/api/materiali/update/' + productId, 
           formData,
@@ -208,9 +239,13 @@ export const useSupplierStore = defineStore('supplierStore', {
           .then(function (response) {
             console.log("Materiale modificato con successo.");
           })
+
+          // Update quantity if necessary
           if (this.productMaterialSituation.materialQuantity != productQuantity){
             this.editQuantity(productId, productQuantity);
           }
+
+          // Fetch supplier for updating product list
           this.fetchSupplierById(this.supplierFetchedProducts[0].supplierId);
       }
       catch (error) {
@@ -218,10 +253,14 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async deleteMaterialSituation(materialId) {
+      // DELETE - material situation
+
       try {
         await axios.delete('/api/situazione-materiali/remove/' + materialId)
           .then(function (response) {
             console.log("Materiale eliminato con successo.");
+
+            // Delete material
             this.deleteMaterial(materialId);
           })
       }
@@ -230,10 +269,14 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
     },
     async deleteMaterial(materialId) {
+      // DELETE - material
+
       try {
         await axios.delete('/api/materiali/remove/' + materialId)
           .then(function (response) {
             console.log("Situazione materiale eliminata con successo.");
+
+            // Fetch supplier for updating product list
             this.fetchSupplierById(this.supplier.id);
           })
       }

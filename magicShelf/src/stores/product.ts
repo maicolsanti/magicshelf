@@ -10,7 +10,7 @@ import { FoundProduct } from '@/models/found_product';
 
 export const useProductsStore = defineStore('productStore', {
   state: () => ({
-    products: [] as FoundProduct[],
+    products: [] as FoundProduct[], // Fetched products
     filters: {
       productName: "",
       brand: "",
@@ -22,6 +22,9 @@ export const useProductsStore = defineStore('productStore', {
   }),
   actions: {
     async getFilteredProducts() {
+      // GET FILTERED PRODUCTS
+
+      // Set price range
       var priceRange = [];
       switch (this.filters.priceRange) {
         case PriceRange.ZEROTEN:
@@ -39,7 +42,11 @@ export const useProductsStore = defineStore('productStore', {
         default:
           priceRange = [0, 100];
       }
+
+      // Set distance range
       const distanceRange = this.filters.distanceRange == DistanceRange.SAMEISTATCODE ? "Dentro al Comune" : "Fuori dal Comune";
+
+      // Create filters
       const filters = {
         "DESCRIZIONE_MATERIALE": this.filters.productName,
         "MARCA": this.filters.brand,
@@ -48,12 +55,16 @@ export const useProductsStore = defineStore('productStore', {
         "ZONA_DI_RICERCA": distanceRange,
         "ZONA_DI_PARTENZA": this.filters.cap
       };
+
+      // Create request body
       const requestBodyFilters = Object.entries(filters).reduce((acc, [key, value]) => {
         if (value !== "" && value !== null) {
           acc[key] = value;
         }
         return acc;
       }, {} as Record<string, any>);
+
+      // Make request getFiltered
       try {
         this.products = await axios.post('/api/materiali-fornitori/getFiltered', requestBodyFilters).then(res => res.data.map((product: any) => new FoundProduct(
           product.CODICE_FORNITORE,

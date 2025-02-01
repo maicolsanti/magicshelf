@@ -10,7 +10,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
   state: () => ({
     configurations: {
       pageCode: page.HOME,
-      pageString: '',
+      pageString: '', // Title of the page
       logged: false,
       userType: UserType.COSTUMER,
       userData: {
@@ -25,12 +25,12 @@ export const useConfigurationStore = defineStore('configurationsStore', {
         email: "",
         phoneNumber: "",
       },
-      authToken: ''
     }
   }),
   actions: {
     async getProfile() {
       try {
+        // GET PROFILE
         await axios.get('/api/auth/general/getProfile').then(res => {
           const user = res.data;
           this.configurations.userData = new Profile(
@@ -60,10 +60,12 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       }
     },
     updatePage(newPageCode) {
+      // Updates the current page
       this.configurations.pageCode = newPageCode
       this.updatePageName
     },
     updatePageName() {
+      // Updates the page title
       switch (this.configurations.pageCode) {
         case page.HOME:
           this.configurations.pageString = 'Home'
@@ -89,7 +91,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       return this.configurations.pageString
     },
     async loginCostumer(username, password) {
-
+      // LOGIN - costumer
       try {
         await axios.post('/api/auth/clienti/login', {
           EMAIL: username,
@@ -99,7 +101,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
             console.log("Cliente loggato con successo.");
           })
 
-          this.getProfile();
+          this.getProfile(); // Update the user data
           this.configurations.logged = true;
       }
       catch (error) {
@@ -108,7 +110,7 @@ export const useConfigurationStore = defineStore('configurationsStore', {
 
     },
     async loginSupplier(fiscalCode, password) {
-
+      // LOGIN - supplier
       try {
         await axios.post('/api/auth/fornitori/login', {
           CODICE_FISCALE: fiscalCode,
@@ -118,22 +120,23 @@ export const useConfigurationStore = defineStore('configurationsStore', {
             console.log("Fornitore loggato con successo.");
           })
 
-          this.getProfile();
+          this.getProfile(); // Update the user data
           this.configurations.userType = UserType.SUPPLIER;
           this.configurations.logged = true;
       }
       catch (error) {
         console.error("Errore nel login: ", error);
       }
-
     },
     async logout() {
+      // LOGOUT
       try {
         await axios.post('/api/auth/general/logout')
           .then(function (response) {
             console.log("Logout effettuato con successo.");
           })
 
+          // Reset userData
           this.userData = {
             name: "",
             surname: "",
@@ -145,14 +148,15 @@ export const useConfigurationStore = defineStore('configurationsStore', {
             email: "",
             phoneNumber: "",
           },
+
           this.configurations.logged = false;
       }
       catch (error) {
         console.error("Errore nel logout del profilo: ", error);
       }
-
     },
     setUserType(userType) {
+      // Sets user type
       this.configurations.userType = userType;
     }
   },
