@@ -80,6 +80,24 @@ $body-color: $dark;
     color: var(--bs-secondary);
 }
 
+.alert-icon {
+    color: #155724;
+    height: 24px;
+    width: 24px;
+}
+
+.alert-icon.success {
+    color: #155724;
+}
+
+.alert-icon.error {
+    color: #721c24;
+}
+
+.alert-icon:hover {
+    cursor: pointer;
+}
+
 .icon-button {
     height: 40px;
     border-color: var(--bs-secondary);
@@ -189,6 +207,9 @@ $body-color: $dark;
     border: 1px solid transparent;
     border-radius: 5px;
     font-weight: bold;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
   }
   
   .custom-alert.success {

@@ -20,7 +20,10 @@ export const useSupplierStore = defineStore('supplierStore', {
     newProduct: {} as Product,
     newProductDialog: false,
     editProductDialog: false,
-    deleteProductDialog: false
+    deleteProductDialog: false,
+    alertMessage: "",
+    responseStatus: 0,
+    showAlert: false
   }),
   actions: {
     setSelectedProduct(productId, supplierId) {
@@ -196,8 +199,13 @@ export const useSupplierStore = defineStore('supplierStore', {
           }
         })
           .then(function (response) {
-            console.log("Materiale creato con successo.");
-            responseId = response.data.id; // Save response id
+            if (response.status == 200) {
+              console.log("Materiale creato con successo.");
+              responseId = response.data.id; // Save response id
+              this.responseStatus = 200;
+              this.alertMessage = "Materiale creato con successo.";
+              this.doShowAlert();
+            }
           })
 
           // Insert quantity
@@ -208,6 +216,9 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
       catch (error) {
         console.error("Errore nella creazione del materiale: ", error);
+        this.responseStatus = 0;
+        this.alertMessage = "Errore nella creazione del materiale.";
+        this.doShowAlert();
       }
     },
     async editProduct(productId,productDescription, productBrand, productUnit, productPrice, productQuantity, productImage, originalProduct) {
@@ -238,7 +249,12 @@ export const useSupplierStore = defineStore('supplierStore', {
           }
         })
           .then(function (response) {
-            console.log("Materiale modificato con successo.");
+            if (response.status == 200) {
+              console.log("Materiale modificato con successo.");
+              this.responseStatus = 200;
+              this.alertMessage = "Materiale modificato con successo.";
+              this.doShowAlert();
+            }
           })
 
           // Update quantity if necessary
@@ -251,6 +267,9 @@ export const useSupplierStore = defineStore('supplierStore', {
       }
       catch (error) {
         console.error("Errore nella modifica del materiale: ", error);
+        this.responseStatus = 0;
+        this.alertMessage = "Errore nella modifica del materiale.";
+        this.doShowAlert();
       }
     },
     async deleteMaterialSituation(materialId) {
@@ -260,13 +279,18 @@ export const useSupplierStore = defineStore('supplierStore', {
         await axios.delete('/api/situazione-materiali/remove/' + materialId)
           .then(function (response) {
             console.log("Materiale eliminato con successo.");
-
+            this.responseStatus = 200;
+            this.alertMessage = "Errore nella modifica del materiale.";
+            this.doShowAlert();
             // Delete material
             this.deleteMaterial(materialId);
           })
       }
       catch (error) {
-        console.error("Errore nell'eliminazione del materiale': ", error);
+        console.error("Errore nell'eliminazione del materiale: ", error);
+        this.responseStatus = 0;
+        this.alertMessage = "Errore nell'eliminazione del materiale.";
+        this.doShowAlert();
       }
     },
     async deleteMaterial(materialId) {
@@ -275,14 +299,22 @@ export const useSupplierStore = defineStore('supplierStore', {
       try {
         await axios.delete('/api/materiali/remove/' + materialId)
           .then(function (response) {
-            console.log("Situazione materiale eliminata con successo.");
+            if (response.status == 200) {
+              console.log("Situazione materiale eliminata con successo.");
+              this.responseStatus = 200;
+              this.alertMessage = "Situazione materiale eliminata con successo.";
+              this.doShowAlert();
 
-            // Fetch supplier for updating product list
-            this.fetchSupplierById(this.supplier.id);
+              // Fetch supplier for updating product list
+              this.fetchSupplierById(this.supplier.id);
+            }
           })
       }
       catch (error) {
-        console.error("Errore nell'eliminazione della situazione materiale': ", error);
+        console.error("Errore nell'eliminazione della situazione materiale: ", error);
+        this.responseStatus = 0;
+        this.alertMessage = "Errore nell'eliminazione della situazione materiale.";
+        this.doShowAlert();
       }
     },
     setSupplierIdNull() {
@@ -307,6 +339,12 @@ export const useSupplierStore = defineStore('supplierStore', {
     },
     closeDeleteProductDialog() {
       this.deleteProductDialog = false;
+    },
+    doShowAlert() {
+      this.configurations.showAlert = true;
+    },
+    closeAlert() {
+      this.configurations.showAlert = false;
     }
   },
   getters: {
@@ -321,6 +359,12 @@ export const useSupplierStore = defineStore('supplierStore', {
     },
     getSelectedProductQuantity() {
       return this.productMaterialSituation.materialQuantity;
+    },
+    showAlert() {
+      return this.configurations.showAlert;
+    },
+    getResponseStatus() {
+      return this.responseStatus;
     }
   },
 });

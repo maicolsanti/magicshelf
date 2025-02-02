@@ -19,6 +19,8 @@ export const useProductsStore = defineStore('productStore', {
       priceRange: PriceRange.NOTSELECTED,
       distanceRange: DistanceRange.SAMEISTATCODE
     },
+    alertMessage: "",
+    showAlert: false
   }),
   actions: {
     async getFilteredProducts() {
@@ -109,7 +111,16 @@ export const useProductsStore = defineStore('productStore', {
 
       this.products = [] as FoundProduct[];
     },
+    showAlert() {
+      this.configurations.showAlert = true;
+    },
+    closeAlert() {
+      this.configurations.showAlert = false;
+    }
   },
   getters: {
+    showAlert() {
+      return this.configurations.showAlert;
+    }
   },
 });

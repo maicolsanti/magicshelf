@@ -2,8 +2,12 @@
 import SearchInstructions from '../../components/home/SearchInstructions.vue'
 import SupplierLink from '../../components/home/SupplierLink.vue'
 import { useConfigurationStore } from '../../stores/configurations';
+import { MdCancelpresentation } from 'oh-vue-icons/icons'
 import AboutView from '../about_us/AboutView.vue';
 import { computed } from 'vue';
+import { addIcons } from 'oh-vue-icons'
+
+addIcons(MdCancelpresentation);
 
 const confStore = useConfigurationStore();
 
@@ -12,11 +16,28 @@ confStore.getProfile();
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 const isSupplier = computed(() => confStore.isSupplier);
+const alertMessage = computed(() => confStore.configurations.loginMessage);
+const alertTimeout = computed(() => confStore.showAlert);
+
+function getAlertType() {
+  if (isLoggedIn.value) {
+    return "success";
+  } else {
+    return "error";
+  }
+}
 
 </script>
-
 <template>
   <main>
+    <div 
+        v-if="alertMessage != '' && alertTimeout" 
+        class="custom-alert"
+        :class="getAlertType()"
+      >
+        {{ alertMessage }}
+        <v-icon name="md-cancelpresentation" @click="confStore.closeAlert()" class="alert-icon" :class="getAlertType()"/>
+      </div>
     <h1 class="welcome mb-4" v-if="!isSupplier">Benvenut*,<br>qui potrai trovare ciò che cerchi
     </h1>
     <h1 class="welcome mb-4" v-if="isSupplier">Benvenut*,<br>qui potrai far scoprire i tuoi prodotti

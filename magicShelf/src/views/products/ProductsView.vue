@@ -25,6 +25,17 @@ const products = computed(() => supplierStore.supplierFetchedProducts);
 const openNewDialog = computed(() => supplierStore.shouldBeOpen);
 const openEditDialog = computed(() => supplierStore.editShouldBeOpen);
 const openDeleteDialog = computed(() => supplierStore.deleteShouldBeOpen);
+const alertMessage = computed(() => supplierStore.alertMessage);
+const alertStatus = computed(() => supplierStore.responseStatus);
+const alert = computed(() => supplierStore.doShowAlert);
+
+function getAlertType() {
+  if (alertStatus.value == 200) {
+    return "success";
+  } else {
+    return "error";
+  }
+}
 
 // Selected product for edit and delete
 let productSelected = null;
@@ -50,6 +61,14 @@ function openDeletePDialog(product) {
 
 <template>
   <main class="mt-5 d-flex flex-grow justify-content-center">
+    <div 
+        v-if="alertMessage != '' && alert" 
+        class="custom-alert"
+        :class="getAlertType()"
+      >
+        {{ alertMessage }}
+        <v-icon name="md-cancelpresentation" @click="supplierStore.closeAlert()" class="alert-icon" :class="getAlertType()"/>
+      </div>
     <section class="width supplier-products mt-5 w-100">
       <h3 class="font-lighter">Ecco la lista dei tuoi prodotti</h3>
       <button type="button" class="btn btn-primary py-2 mt-4 primary-button" @click="openNewPDialog()">

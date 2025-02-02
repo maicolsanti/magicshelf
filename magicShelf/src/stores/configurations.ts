@@ -25,6 +25,8 @@ export const useConfigurationStore = defineStore('configurationsStore', {
         email: "",
         phoneNumber: "",
       },
+      loginMessage: "",
+      showAlert: false
     }
   }),
   actions: {
@@ -106,19 +108,24 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           PASSWORD_HASH: password,
         })
           .then(function (response) {
-            console.log("Cliente loggato con successo.");
-            loggedWithSuccess = true;
+            if (response.status == 200) {
+              console.log("Cliente loggato con successo.");
+              loggedWithSuccess = true;
+            }
           })
 
           this.getProfile(); // Update the user data
           if(loggedWithSuccess) {
             this.configurations.userType = UserType.SUPPLIER;
             this.configurations.logged = true;
+            this.configurations.loginMessage = "Login effettuato con successo.";
+            this.setAlertTimeout();
           }
-          
       }
       catch (error) {
         console.error("Errore nel login: ", error);
+        this.configurations.loginMessage = "Login non riuscito.\nControllare le credenziali e riprovare.";
+        this.setAlertTimeout();
       }
 
     },
@@ -132,8 +139,10 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           PASSWORD_HASH: password,
         })
           .then(function (response) {
-            console.log("Fornitore loggato con successo.");
-            loggedWithSuccess = true;
+            if (response.status == 200) {
+              console.log("Fornitore loggato con successo.");
+              loggedWithSuccess = true;
+            }
           })
 
           this.getProfile(); // Update the user data
@@ -141,11 +150,14 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           if(loggedWithSuccess) {
             this.configurations.userType = UserType.SUPPLIER;
             this.configurations.logged = true;
+            this.configurations.loginMessage = "Login effettuato con successo.";
+            this.setAlertTimeout();
           }
-          
       }
       catch (error) {
         console.error("Errore nel login: ", error);
+        this.configurations.loginMessage = "Login non riuscito.\nControllare le credenziali e riprovare.";
+        this.setAlertTimeout();
       }
     },
     async logout() {
@@ -153,7 +165,9 @@ export const useConfigurationStore = defineStore('configurationsStore', {
       try {
         await axios.post('/api/auth/general/logout')
           .then(function (response) {
-            console.log("Logout effettuato con successo.");
+            if (response.status == 200) {
+              console.log("Logout effettuato con successo.");
+            }
           })
 
           // Reset userData
@@ -178,6 +192,12 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     setUserType(userType) {
       // Sets user type
       this.configurations.userType = userType;
+    },
+    setAlertTimeout() {
+      this.configurations.showAlert = true;
+    },
+    closeAlert() {
+      this.configurations.showAlert = false;
     }
   },
   getters: {
@@ -190,5 +210,8 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     isSupplier() {
       return this.configurations.userType === UserType.SUPPLIER;
     },
+    showAlert() {
+      return this.configurations.showAlert;
+    }
   }
 });
