@@ -1,5 +1,5 @@
 import { getMaterialeById, createMateriale, updateMateriale, deleteMateriale } from '../models/materialiModel.js';
-import { materialeSchema } from '../schemas/materialiSchemas.js';
+import { createMaterialeSchema, updateMaterialeSchema } from '../schemas/materialiSchemas.js';
 import { getUser } from '../utils/auth.js';
 import multer from 'multer';
 
@@ -46,7 +46,7 @@ export const create = async (req, res) => {
     }
 
     // Validate data
-    const { error, value } = materialeSchema.validate(req.body.custom_data, { stripUnknown: true });
+    const { error, value } = createMaterialeSchema.validate(req.body.custom_data, { stripUnknown: true });
 
     if (error) {
         // If validation error
@@ -92,7 +92,7 @@ export const update = async (req, res) => {
     }
 
     // Validate data
-    const { error, value } = materialeSchema.validate(req.body.custom_data, { stripUnknown: true });
+    const { error, value } = updateMaterialeSchema.validate(req.body.custom_data, { stripUnknown: true });
 
     if (error) {
         // If validation error
