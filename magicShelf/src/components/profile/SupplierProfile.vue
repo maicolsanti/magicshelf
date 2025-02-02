@@ -8,6 +8,15 @@
         </div>
       </div>
 
+      <!-- If a message exist show custom style -->
+      <div 
+        v-if="alertMessage" 
+        class="custom-alert"
+        :class="alertType"
+      >
+        {{ alertMessage }}
+      </div>
+
       <!-- Data form -->
       <form @submit.prevent="saveProfileChanges">
         <!-- Anagrafica section -->
@@ -146,6 +155,7 @@
 
 <script>
 import { ref, watch, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useConfigurationStore } from "@/stores/configurations";
 import { useProfileStore } from "@/stores/profile";
 
@@ -154,6 +164,7 @@ export default {
   setup() {
     const configurationStore = useConfigurationStore();
     const profileStore = useProfileStore();
+    const router = useRouter();
 
     const profile = ref({
       id: null,
@@ -177,6 +188,10 @@ export default {
 
     const localities = ref([]);
 
+    // Alert variables
+    const alertMessage = ref('');
+    const alertType = ref('');
+
     // Each password field has its own visibility state
     const passwordVisibility = ref({
       old: false,
@@ -184,7 +199,7 @@ export default {
       confirm: false,
     });
 
-    // Method to toggle visibility for a specific field
+    // Toggle visibility for a specific field
     const toggleVisibility = (field) => {
       passwordVisibility.value[field] = !passwordVisibility.value[field];
     };
@@ -194,7 +209,7 @@ export default {
       try {
         localities.value = await profileStore.getLocalityByCap(cap);
       } catch (error) {
-        console.error("Errore nel caricamento delle località:", error);
+        console.error(error);
         localities.value = [];
       }
     };
@@ -205,7 +220,7 @@ export default {
         const istatCodes = await profileStore.GetLocalityByCapDenominazione(cap, locality);
         return istatCodes;
       } catch (error) {
-        console.error("Errore nel recupero del codice ISTAT:", error);
+        console.error(error);
         return null;
       }
     };
@@ -219,16 +234,19 @@ export default {
         }
 
         if (!profile.value.istatCode) {
-          alert("Errore: non è stato possibile recuperare il codice ISTAT.");
+          alertMessage.value = "Errore: impossibile recuperare il codice ISTAT.";
+          alertType.value = "error";
           return;
         }
 
         // Save profile data
         await profileStore.saveChanges("fornitori", profile.value);
-        alert("Modifiche salvate con successo.");
+        alertMessage.value = "Modifiche salvate con successo.";
+        alertType.value = "success";
       } catch (error) {
-        console.error("Errore durante il salvataggio del profilo:", error);
-        alert("Si è verificato un errore durante il salvataggio.");
+        console.error(error);
+        alertMessage.value = "Errore durante il salvataggio delle modifiche al profilo.";
+        alertType.value = "error";
       }
     };
 
@@ -250,22 +268,49 @@ export default {
         await configurationStore.getProfile();
         Object.assign(profile.value, configurationStore.configurations.userData);
       } catch (error) {
-        console.error("Errore durante il caricamento del profilo:", error);
+        console.error(error);
       }
     };
 
     // Save password changes
-    const savePasswordChanges = () => {
+    const savePasswordChanges = async () => {
       if (passwords.value.newPassword === passwords.value.confirmPassword) {
-        profileStore.changePassword(passwords.value);
+        try {
+
+          await profileStore.changePassword(passwords.value);
+
+          alertMessage.value = "Password cambiata con successo.";
+          alertType.value = "success";
+
+          passwords.value.oldPassword = "";
+          passwords.value.newPassword = "";
+          passwords.value.confirmPassword = "";
+        } catch (error) {
+          console.error(error);
+          alertMessage.value = "Errore durante il salvataggio della password.";
+          alertType.value = "error";
+        }
       } else {
-        alert("Le password non corrispondono.");
+        alertMessage.value = "Le password non corrispondono.";
+        alertType.value = "error";
       }
     };
 
     // Delete profile
     const deleteProfile = () => {
-      profileStore.deleteProfile("fornitori", profile.value.id);
+      try {
+        profileStore.deleteProfile("fornitori", profile.value.id);
+        alertMessage.value = "Profilo utente eliminato con successo."
+        alertType.value = "success";
+        configurationStore.logout().then(() => {
+          setTimeout(() => {
+            router.push("/");
+          }, 2000);
+        });
+      } catch (error) {
+        alertMessage.value = "Errore durante la cancellazione del profilo.";
+        alertType.value = "error";
+      }
     };
 
     onMounted(fetchProfile);
@@ -276,6 +321,8 @@ export default {
       localities,
       passwordVisibility,
       toggleVisibility,
+      alertMessage,
+      alertType,
       saveProfileChanges,
       savePasswordChanges,
       deleteProfile,

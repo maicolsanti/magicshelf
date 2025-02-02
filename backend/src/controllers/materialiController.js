@@ -1,4 +1,4 @@
-import { getAllMateriali, getMaterialeById, createMateriale, updateMateriale, deleteMateriale } from '../models/materialiModel.js';
+import { getMaterialeById, createMateriale, updateMateriale, deleteMateriale } from '../models/materialiModel.js';
 import { materialeSchema } from '../schemas/materialiSchemas.js';
 import { getUser } from '../utils/auth.js';
 import multer from 'multer';
@@ -7,29 +7,6 @@ const storage = multer.memoryStorage(); // Save image as a buffer in memory
 const upload = multer({ storage });
 
 const ROLE_NAME = 'FORNITORE';
-
-export const getAll = async (req, res) => {
-  try {
-    const user = getUser(req, res);
-
-    // Check if the user is logged in
-    if (!user) {
-      return res.status(401).send('This operation requires you to be logged in');
-    }
-
-    // Retrieve all materials from the database
-    const materiali = await getAllMateriali();
-
-    // Send the retrieved materials as a JSON response
-    res.status(200).json(materiali);
-  } catch (error) {
-    // Log any error that occurs during the retrieval process
-    console.error('Error occurred while retrieving materials:', error);
-
-    // Send a generic error message to the client
-    res.status(500).send('Internal server error');
-  }
-};
 
 export const getById = async (req, res) => {
   const { codice_materiale } = req.params; // Extract the material ID from the request parameters

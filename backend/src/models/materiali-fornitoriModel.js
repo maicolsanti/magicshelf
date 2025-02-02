@@ -1,21 +1,5 @@
 import pool from '../config/db.js';
 
-// Get all suppliers' materials
-export const getAllFornitoriMateriali = async () => {
-    // Execute a query to fetch all supplier materials from the database
-    const [rows] = await pool.promise().query('SELECT * FROM MATERIALI_FORNITORI');
-
-    // Convert image BLOB to Base64 string for each row
-    const materiali = rows.map((row) => {
-        if (row.IMMAGINE) {
-        row.IMMAGINE = row.IMMAGINE.toString('base64'); // Convert BLOB to Base64
-        }
-        return row;
-    });
-
-    return materiali;
-};
-
 // Get supplier's material by supplier code
 export const getFornitoreMaterialiById = async (codice_fornitore) => {
     // Execute a query to fetch the supplier material by supplier code

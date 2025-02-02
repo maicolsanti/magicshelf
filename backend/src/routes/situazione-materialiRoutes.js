@@ -6,58 +6,9 @@
  */
 
 import express from 'express';
-import { getAll, getById, create, update, remove } from '../controllers/situazione-materialiController.js';
+import { getById, create, update, remove } from '../controllers/situazione-materialiController.js';
 
 const router = express.Router();
-
-/**
- * @swagger
- * /situazione-materiali/getAll:
- *   get:
- *     tags:
- *       - Situazione Materiali
- *     summary: Retrieve all material situations
- *     description: Fetches all material situations from the database, including the current quantity and last modification date.
- *     responses:
- *       200:
- *         description: List of all material situations
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   CODICE_MATERIALE:
- *                     type: integer
- *                     description: Unique code of the material
- *                     example: 1
- *                   QUANTITA:
- *                     type: number
- *                     format: decimal
- *                     description: Current quantity of the material
- *                     example: 150.75
- *                   DATA_ULTIMA_MODIFICA:
- *                     type: string
- *                     format: date-time
- *                     description: Date and time of the last modification
- *                     example: "2025-01-02T14:35:00Z"
- *       401:
- *         description: The user is not logged in
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "This operation requires you to be logged in"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/text:
- *             schema:
- *               type: string
- *               example: "Internal server error"
- */
-router.get('/getAll', getAll);
 
 /**
  * @swagger

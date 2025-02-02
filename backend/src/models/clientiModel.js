@@ -1,12 +1,5 @@
 import pool from '../config/db.js';
 
-// Get all clients
-export const getAllClienti = async () => {
-  // Execute a query to fetch all clients
-  const [rows] = await pool.promise().query('SELECT * FROM ANAGRAFICA_CLIENTI');
-  return rows;
-};
-
 // Get client by ID
 export const getClienteById = async (codice_cliente) => {
   // Execute a query to fetch the client with the given client code (ID)
@@ -34,8 +27,6 @@ export const updateCliente = async (codice_cliente, custom_data) => {
         DATA_ULTIMA_MODIFICA = CURRENT_TIMESTAMP()
     WHERE CODICE_CLIENTE = ?
   `;
-
-  console.log(query);
 
   // Execute the update query and return the number of affected rows
   const [result] = await pool.promise().execute(query, values);

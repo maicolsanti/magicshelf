@@ -3,14 +3,11 @@ import { ref } from "vue";
 import axios from 'axios';
 import { Costumer } from "@/models/costumer";
 import { Supplier } from "@/models/supplier";
-import { useConfigurationStore } from '@/stores/configurations';
 
 export const useProfileStore = defineStore("profile", () => {
   // Profile status
   const customerProfile = ref<Costumer | null>(null);
   const supplierProfile = ref<Supplier | null>(null);
-
-  const configurationStore = useConfigurationStore();
 
   // Profile value change function
   const saveChanges = async (profileType: "clienti" | "fornitori", profileData: Costumer | Supplier) => {
@@ -26,7 +23,6 @@ export const useProfileStore = defineStore("profile", () => {
           PHONE_NUMBER: profileData.phoneNumber
         }
       };
-      console.log(data);
       const response = await axios.put(endpoint, data);
 
       if (response.status != 200) {
@@ -35,7 +31,7 @@ export const useProfileStore = defineStore("profile", () => {
 
       console.log(`Profilo ${profileType} salvato con successo.`);
     } catch (error) {
-      console.error("Errore durante il salvataggio:", error);
+      throw error;
     }
   };
 
@@ -53,7 +49,6 @@ export const useProfileStore = defineStore("profile", () => {
   
       return localities;
     } catch (error) {
-      console.error("Errore durante il caricamento delle località:", error);
       throw error;
     }
   };  
@@ -62,18 +57,15 @@ export const useProfileStore = defineStore("profile", () => {
     try {
       const endpoint = `/api/localita/getByCapDenominazione/${cap}/${denominazione}`;
       const response = await axios.get(endpoint);
-      console.log(response);
 
       if (response.status !== 200) {
         throw new Error('Errore durante il recupero del codice istat');
       }
 
       const istat_code = response.data.CODICE_ISTAT;
-      console.log(istat_code);
 
       return istat_code;
     } catch (error) {
-      console.error('Errore durante il caricamento del codice istat:', error);
       throw error;
     }
   };
@@ -83,8 +75,6 @@ export const useProfileStore = defineStore("profile", () => {
     try {
       const endpoint = `/api/${profileType}/remove/${id}`;
       const response = await axios.delete(endpoint);
-
-      console.log(response);
 
       if (response.status != 200) {
         throw new Error(`Errore durante l'eliminazione del profilo ${profileType}`);
@@ -97,32 +87,28 @@ export const useProfileStore = defineStore("profile", () => {
         supplierProfile.value = null;
       }
 
-      alert(`Profilo ${profileType} eliminato con successo.`);
-
-      configurationStore.logout();
+      console.log(`Profilo ${profileType} eliminato con successo.`);
     } catch (error) {
-      console.error("Errore durante l'eliminazione:", error);
+      throw error;
     }
   };
 
   const changePassword = async (passwordData) => {
     try {
       const endpoint = `api/auth/general/changePassword`;
-      console.log(passwordData);
       const data = {
         "OLD_PASSWORD": passwordData.oldPassword,
         "NEW_PASSWORD": passwordData.newPassword
       };
-      console.log(data);
       const response = await axios.post(endpoint, data);
 
       if (response.status != 200) {
         throw new Error('Errore durante il cambio password');
       }
 
-      console.log('Password aggiornata correttamente')
+      console.log('Password aggiornata correttamente.');
     } catch (error) {
-      console.log('Errore durante il cambio della password:', error);
+      throw(error);
     }
   };
 

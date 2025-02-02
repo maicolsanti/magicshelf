@@ -1,21 +1,5 @@
 import pool from '../config/db.js';
 
-// Get all materials
-export const getAllMateriali = async () => {
-  // Execute a query to fetch all materials from the database
-  const [rows] = await pool.promise().query('SELECT * FROM ANAGRAFICA_MATERIALI');
-
-  // Convert image BLOB to Base64 string for each row
-  const materiali = rows.map((row) => {
-    if (row.IMMAGINE) {
-      row.IMMAGINE = row.IMMAGINE.toString('base64'); // Convert BLOB to Base64
-    }
-    return row;
-  });
-
-  return materiali;
-};
-
 // Get a specific material by its code
 export const getMaterialeById = async (codice_materiale) => {
   // Execute a query to fetch a material by its code
