@@ -12,10 +12,10 @@ export const useSearchStore = defineStore('searchStore', {
         supplier: "",
         cap: "",
         priceRange: PriceRange.NOTSELECTED,
-        distanceRange: DistanceRange.NOTSELECTED
+        distanceRange: DistanceRange.SAMEISTATCODE
       },
       priceRangeOptions: [PriceRange.NOTSELECTED, PriceRange.ZEROTEN, PriceRange.TENTWENTYFIVE, PriceRange.TWENTYFIVEFIFTY, PriceRange.FIFTYHUNDRED],
-      distanceRangeOptions: [DistanceRange.NOTSELECTED, DistanceRange.SAMEISTATCODE, DistanceRange.NOTSAMEISTATCODE]
+      distanceRangeOptions: [DistanceRange.SAMEISTATCODE, DistanceRange.NOTSAMEISTATCODE]
   }),
   actions: {
     changePriceRange(priceRangeSelected) {

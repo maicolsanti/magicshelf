@@ -26,7 +26,7 @@ const user = computed(() => confStore.getUserData);
 
 // Defaults dropdowns strings
 let priceString = "Fascia di prezzo";
-let distanceString = "Zona di ricerca";
+let distanceString = "Nel tuo comune";
 
 // Filters
 let searchFilters = {
@@ -35,7 +35,7 @@ let searchFilters = {
     supplier: "",
     cap: user.value.cap,
     priceRange: null,
-    distanceRange: null
+    distanceRange: DistanceRange.SAMEISTATCODE
 };
 
 // Set Price Range
@@ -71,14 +71,10 @@ function findPriceString(priceRange) {
 // Get distance range string
 function findDistanceString(distanceRange) {
     switch (distanceRange) {
-        case DistanceRange.NOTSELECTED:
-            return 'Nessun range'
         case DistanceRange.SAMEISTATCODE:
             return 'Nel tuo comune'
         case DistanceRange.NOTSAMEISTATCODE:
             return 'Fuori dal tuo comune'
-        default:
-            return 'Seleziona'
     }
 }
 

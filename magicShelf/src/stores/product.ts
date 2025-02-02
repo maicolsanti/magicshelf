@@ -24,6 +24,9 @@ export const useProductsStore = defineStore('productStore', {
     async getFilteredProducts() {
       // GET FILTERED PRODUCTS
 
+      // Clear previously fetched products
+      this.products = [] as FoundProduct[];
+
       // Set price range
       var priceRange = [];
       switch (this.filters.priceRange) {
@@ -103,6 +106,8 @@ export const useProductsStore = defineStore('productStore', {
       this.filters.cap = cap;
       this.filters.priceRange = priceRange;
       this.filters.distanceRange = distanceRange;
+
+      this.products = [] as FoundProduct[];
     },
   },
   getters: {
