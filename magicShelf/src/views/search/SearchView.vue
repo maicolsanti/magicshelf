@@ -86,8 +86,8 @@ function findDistanceString(distanceRange) {
 function submit() {
     productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchStore.searchAttributes.priceRange, searchStore.searchAttributes.distanceRange).then(() => {
         productStore.getFilteredProducts();
+        supplierStore.fetchAllMaterialSituations();
     });
-    supplierStore.fetchAllMaterialSituations();
 }
 </script>
 

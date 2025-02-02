@@ -17,7 +17,7 @@ export const useProductsStore = defineStore('productStore', {
       supplier: "",
       cap: "",
       priceRange: PriceRange.NOTSELECTED,
-      distanceRange: DistanceRange.NOTSELECTED
+      distanceRange: DistanceRange.SAMEISTATCODE
     },
   }),
   actions: {
@@ -44,11 +44,7 @@ export const useProductsStore = defineStore('productStore', {
       }
 
       // Set distance range
-      let distanceRange = "";
-      if (this.filters.distanceRange != DistanceRange.NOTSELECTED) {
-        console.log("SELECTED DISTANCE RANGE");
-        distanceRange = this.filters.distanceRange == DistanceRange.SAMEISTATCODE ? "Dentro al Comune" : "Fuori dal Comune";
-      }
+      const distanceRange = this.filters.distanceRange == DistanceRange.SAMEISTATCODE ? "Dentro al Comune" : "Fuori dal Comune";
 
       // Create filters
       const filters = {

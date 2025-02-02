@@ -97,6 +97,7 @@ export const useSupplierStore = defineStore('supplierStore', {
     },
     async fetchAllMaterialSituations() {
       // GET ALL - material situations
+      console.log("Chiamata per recuperare tutte le situazioni materiali.");
       try {
         this.materialSituations = await axios.get('/api/situazione-materiali/getAll/').then(res => res.data.map((fetchedSituation: any) => new MaterialSituation(
           fetchedSituation.CODICE_MATERIALE,
