@@ -1,5 +1,12 @@
 import pool from '../config/db.js';
 
+// Get all material situations
+export const getAllSituazioni = async () => {
+  // Execute a query to fetch all material situations from the database
+  const [rows] = await pool.promise().query('SELECT * FROM SITUAZIONE_MATERIALI');
+  return rows;
+};
+
 // Get a specific material situation by material code
 export const getSituazioneById = async (codice_materiale) => {
   // Execute a query to fetch a material situation by its material code
