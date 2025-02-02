@@ -92,6 +92,8 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     },
     async loginCostumer(username, password) {
       // LOGIN - costumer
+
+      let loggedWithSuccess = false;
       try {
         await axios.post('/api/auth/clienti/login', {
           EMAIL: username,
@@ -99,10 +101,15 @@ export const useConfigurationStore = defineStore('configurationsStore', {
         })
           .then(function (response) {
             console.log("Cliente loggato con successo.");
+            loggedWithSuccess = true;
           })
 
           this.getProfile(); // Update the user data
-          this.configurations.logged = true;
+          if(loggedWithSuccess) {
+            this.configurations.userType = UserType.SUPPLIER;
+            this.configurations.logged = true;
+          }
+          
       }
       catch (error) {
         console.error("Errore nel login: ", error);
@@ -111,6 +118,8 @@ export const useConfigurationStore = defineStore('configurationsStore', {
     },
     async loginSupplier(fiscalCode, password) {
       // LOGIN - supplier
+
+      let loggedWithSuccess = false;
       try {
         await axios.post('/api/auth/fornitori/login', {
           CODICE_FISCALE: fiscalCode,
@@ -118,11 +127,16 @@ export const useConfigurationStore = defineStore('configurationsStore', {
         })
           .then(function (response) {
             console.log("Fornitore loggato con successo.");
+            loggedWithSuccess = true;
           })
 
           this.getProfile(); // Update the user data
-          this.configurations.userType = UserType.SUPPLIER;
-          this.configurations.logged = true;
+
+          if(loggedWithSuccess) {
+            this.configurations.userType = UserType.SUPPLIER;
+            this.configurations.logged = true;
+          }
+          
       }
       catch (error) {
         console.error("Errore nel login: ", error);
