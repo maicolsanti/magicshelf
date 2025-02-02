@@ -31,7 +31,7 @@ function logout() {
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-end">
           <li class="nav-item mx-2" @click="confStore.updatePage(page.HOME)">
             <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">Home</RouterLink>
           </li>
