@@ -119,7 +119,7 @@ function submit() {
                                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                             aria-expanded="true">
                                             <span class="dropdown-text"
-                                                :class="{ 'town-not-selected': searchFilters.priceRange == null }">{{
+                                                :class="{ 'not-selected': searchFilters.priceRange == null }">{{
                                                     priceString }}</span>
                                             <span class="dropdown-icon"></span>
                                         </button>
@@ -140,7 +140,7 @@ function submit() {
                                             class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
                                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown">
                                             <span class="dropdown-text"
-                                                :class="{ 'not-selected': searchFilters.distanceRange == '' }">{{
+                                                :class="{ 'not-selected': searchFilters.distanceRange == null }">{{
                                                     distanceString }}</span>
                                             <span class="dropdown-icon"></span>
                                         </button>
@@ -226,5 +226,9 @@ label {
 
 .small {
     max-width: 175px;
+}
+
+.dropdown-text {
+    font-size: small;
 }
 </style>

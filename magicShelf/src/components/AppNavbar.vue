@@ -31,7 +31,7 @@ function logout() {
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
           <li class="nav-item mx-2" @click="confStore.updatePage(page.HOME)">
             <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">Home</RouterLink>
           </li>
@@ -52,7 +52,7 @@ function logout() {
             <RouterLink to="/loginCostumer" class="nav-link inactive-page" active-class="active-page">Accedi</RouterLink>
           </li>
           <li class="nav-item mx-2" v-if="isLoggedIn" @click="logout()">
-            <p class="nav-link inactive-page" active-class="active-page">Logout</p>
+            <button class="nav-link inactive-page" active-class="active-page">Logout</button>
           </li>
         </ul>
       </div>
@@ -83,5 +83,9 @@ function logout() {
 
 .navbar {
   width: 100vw;
+}
+
+li:hover {
+  font-weight: bolder;
 }
 </style>
