@@ -53,6 +53,12 @@ export const useConfigurationStore = defineStore('configurationsStore', {
           this.configurations.logged = true;
         }
 
+        if (this.configurations.userData.role == UserType.COSTUMER) {
+          this.configurations.userType = UserType.COSTUMER;
+        } else {
+          this.configurations.userType = UserType.SUPPLIER;
+        }
+
         console.log(`Profilo recuperato con successo.`);
       }
       catch (error) {

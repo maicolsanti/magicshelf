@@ -44,7 +44,11 @@ export const useProductsStore = defineStore('productStore', {
       }
 
       // Set distance range
-      const distanceRange = this.filters.distanceRange == DistanceRange.SAMEISTATCODE ? "Dentro al Comune" : "Fuori dal Comune";
+      let distanceRange = "";
+      if (this.filters.distanceRange != DistanceRange.NOTSELECTED) {
+        console.log("SELECTED DISTANCE RANGE");
+        distanceRange = this.filters.distanceRange == DistanceRange.SAMEISTATCODE ? "Dentro al Comune" : "Fuori dal Comune";
+      }
 
       // Create filters
       const filters = {

@@ -11,14 +11,15 @@ const confStore = useConfigurationStore();
 confStore.getProfile();
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
+const isSupplier = computed(() => confStore.isSupplier);
 
 </script>
 
 <template>
   <main>
-    <h1 class="welcome mb-4" v-if="!confStore.isSupplier">Benvenut*,<br>qui potrai trovare ciò che cerchi
+    <h1 class="welcome mb-4" v-if="!isSupplier">Benvenut*,<br>qui potrai trovare ciò che cerchi
     </h1>
-    <h1 class="welcome mb-4" v-if="confStore.isSupplier">Benvenut*,<br>qui potrai far scoprire i tuoi prodotti
+    <h1 class="welcome mb-4" v-if="isSupplier">Benvenut*,<br>qui potrai far scoprire i tuoi prodotti
     </h1>
     <div class="d-grid gap-2 mb-1" v-if="!isLoggedIn">
       <RouterLink to="/loginCostumer" class="login-link primary-button">
@@ -27,14 +28,14 @@ const isLoggedIn = computed(() => confStore.isLoggedIn);
         </button>
       </RouterLink>
     </div>
-    <div class="d-grid gap-2 mb-1" v-if="isLoggedIn && !confStore.isSupplier">
+    <div class="d-grid gap-2 mb-1" v-if="isLoggedIn && !isSupplier">
       <RouterLink to="/search" class="login-link primary-button">
         <button type="button" class="btn btn-primary py-2 primary-button">
           Vai alla ricerca
         </button>
       </RouterLink>
     </div>
-    <div class="d-grid gap-2 mb-1" v-if="isLoggedIn && confStore.isSupplier">
+    <div class="d-grid gap-2 mb-1" v-if="isLoggedIn && isSupplier">
       <RouterLink to="/products" class="login-link primary-button">
         <button type="button" class="btn btn-primary py-2 primary-button">
           Vai ai tuoi prodotti
