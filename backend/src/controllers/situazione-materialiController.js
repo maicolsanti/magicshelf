@@ -1,6 +1,6 @@
 import { getSituazioneById, createSituazione, updateSituazione, deleteSituazione } from '../models/situazione-materialiModel.js';
 import { getMaterialeById } from '../models/materialiModel.js';
-import { situazioneMaterialiSchema } from '../schemas/situazione-materialiSchemas.js';
+import { createSituazioneMaterialiSchema, updateSituazioneMaterialiSchema } from '../schemas/situazione-materialiSchemas.js';
 import { getUser } from '../utils/auth.js';
 
 const ROLE_NAME = 'FORNITORE';
@@ -41,7 +41,7 @@ export const create = async (req, res) => {
 
     let body;
     // Validate data
-    const { error, value } = situazioneMaterialiSchema.validate(req.body.custom_data, { stripUnknown: true });
+    const { error, value } = createSituazioneMaterialiSchema.validate(req.body.custom_data, { stripUnknown: true });
 
     if (error) {
         // If validation error
@@ -91,7 +91,7 @@ export const update = async (req, res) => {
 
     let body;
     // Validate data
-    const { error, value } = situazioneMaterialiSchema.validate(req.body.custom_data, { stripUnknown: true });
+    const { error, value } = updateSituazioneMaterialiSchema.validate(req.body.custom_data, { stripUnknown: true });
 
     if (error) {
         // If validation error
