@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { UserType } from '@/models/user-type'
+import axios from "axios"
+import { LocationDetails } from '@/models/location-details';
 
 export const useRegistrationStore = defineStore('registrationStore', {
   state: () => ({
@@ -16,45 +18,28 @@ export const useRegistrationStore = defineStore('registrationStore', {
         phoneNumber: "",
         cap: "",
         town: "",
+        address: "",
+        townCode: "",
         password: ""
       },
-      towns: [
-        {
-          name: "Cesena",
-          caps: ["47520", "47521"]
-        },
-        {
-          name: "Longiano",
-          caps: ["47020"]
-        },
-        {
-          name: "Bologna",
-          caps: ["47120", "47121", "47122", "47123"]
-        },
-        {
-          name: "Cisterna di Latina",
-          caps: ["04012"]
-        },
-        {
-          name: "Como",
-          caps: ["40130", "40131"]
-        }
-      ],
-      showPassword: false,
+      towns: [] as LocationDetails[], // Fetched locations
+      showPassword: false, // For showing/hiding password
       inputPasswordType: 'password',
-      vatSameAsFiscalCode: false,
+      vatSameAsFiscalCode: false, // For vat checkbox
       registrationDataError: false,
     }
   }),
   actions: {
-    nextStep(){
+    nextStep() {
       this.registration.step++;
     },
-    previousStep(){
+    previousStep() {
       this.registration.step--;
     },
     setSelectedUserType(userType) {
       this.registration.userType = userType;
+
+      // Set company data to strings
       if (userType === UserType.SUPPLIER) {
         this.registration.registrationData.companyName = "";
         this.registration.registrationData.vatNumber = "";
@@ -65,31 +50,73 @@ export const useRegistrationStore = defineStore('registrationStore', {
     },
     toggleVatCheckbox() {
       this.registration.vatSameAsFiscalCode = !this.registration.vatSameAsFiscalCode;
-      // if(this.registration.vatSameAsFiscalCode) {
-      //   this.registration.registrationData.fiscalCode = this.registration.registrationData.vatNumber;
-      // }
     },
     clearVatSameAsFiscalCode() {
       this.registration.vatSameAsFiscalCode = false;
     },
-    setSelectedTown(townName) {
+    async fetchTowns() {
+      // GET ALL - locations
+
+      try {
+        this.registration.towns = await axios.get('/api/localita/getAll').then(res => res.data.map((locality: any) => new LocationDetails(
+          locality.CODICE_ISTAT,
+          locality.CAP,
+          locality.SIGLA_PROVINCIA,
+          locality.DENOMINAZIONE_REGIONE,
+          locality.DENOMINAZIONE_LOCALITA
+        )));
+
+        console.log("Località recuperate con successo.");
+      }
+      catch (error) {
+        console.error("Errore nella richiesta delle località: ", error);
+      }
+    },
+    setSelectedTown(townName, townCode) {
+      // Set town and town code
       this.registration.registrationData.town = townName;
+      this.registration.registrationData.townCode = townCode;
     },
     changeCAP(CAPInput) {
+      // Reset town and set CAP
       this.registration.registrationData.town = "";
       this.setSelectedTown("");
       this.registration.registrationData.cap = CAPInput;
     },
-    setCostumerFormData(nameInput, surnameInput, emailInput, phoneInput, passwordInput) {
+    setRegistrationDataError(hasError) {
+      this.registration.registrationDataError = hasError;
+    },
+    async registerCostumer(nameInput, surnameInput, emailInput, phoneInput, passwordInput) {
+      // REGISTER - client
+
       this.registration.registrationData.name = nameInput;
       this.registration.registrationData.surname = surnameInput;
       this.registration.registrationData.email = emailInput;
       this.registration.registrationData.phoneNumber = phoneInput;
-      // this.registration.registrationData.cap = CAPInput,
-      // this.registration.registrationData.town = townInput,
       this.registration.registrationData.password = passwordInput;
+
+      // Make request
+      try {
+        await axios.post('/api/auth/clienti/register', {
+            NOME: nameInput,
+            COGNOME: surnameInput,
+            CAP: Number(this.registration.registrationData.cap),
+            CODICE_ISTAT: Number(this.registration.registrationData.townCode),
+            EMAIL: emailInput,
+            PHONE_NUMBER: Number(phoneInput),
+            PASSWORD_HASH: passwordInput
+        })
+          .then(function (response) {
+            console.log("Cliente creato con successo.");
+          })
+      }
+      catch (error) {
+        console.error("Errore nella registrazione del cliente: ", error);
+      }
     },
-    setSupplierFormData(nameInput, surnameInput, companyNameInput, vatNumberInput, fiscalCodeInput, emailInput, phoneInput, passwordInput) {
+    async registerSupplier(nameInput, surnameInput, companyNameInput, vatNumberInput, fiscalCodeInput, emailInput, phoneInput, addressInput, passwordInput) {
+      // REGISTER - supplier
+
       this.registration.registrationData.name = nameInput;
       this.registration.registrationData.surname = surnameInput;
       this.registration.registrationData.companyName = companyNameInput;
@@ -97,12 +124,31 @@ export const useRegistrationStore = defineStore('registrationStore', {
       this.registration.registrationData.fiscalCode = fiscalCodeInput;
       this.registration.registrationData.email = emailInput;
       this.registration.registrationData.phoneNumber = phoneInput;
-      // this.registration.registrationData.cap = CAPInput,
-      // this.registration.registrationData.town = townInput,
-      this.registration.registrationData.password = passwordInput;
-    },
-    setRegistrationDataError(hasError) {
-      this.registration.registrationDataError = hasError;
+      this.registration.registrationData.address = addressInput,
+        this.registration.registrationData.password = passwordInput;
+
+      // Make request
+      try {
+        await axios.post('/api/auth/fornitori/register', {
+            NOME: nameInput,
+            COGNOME: surnameInput,
+            RAGIONE_SOCIALE: companyNameInput,
+            PARTITA_IVA: vatNumberInput,
+            CODICE_FISCALE: fiscalCodeInput,
+            CAP: Number(this.registration.registrationData.cap),
+            CODICE_ISTAT: Number(this.registration.registrationData.townCode),
+            EMAIL: emailInput,
+            INDIRIZZO: addressInput,
+            PHONE_NUMBER: Number(phoneInput),
+            PASSWORD_HASH: passwordInput
+        })
+          .then(function (response) {
+            console.log("Fornitore creato con successo.");
+          })
+      }
+      catch (error) {
+        console.error("Errore nella registrazione del fornitore: ", error);
+      }
     },
     clearRegistrationData() {
       this.registration.registrationData = {
@@ -120,7 +166,8 @@ export const useRegistrationStore = defineStore('registrationStore', {
     }
   },
   getters: {
-    getDropdownString(){
+    getDropdownString() {
+      // Get user type dropdown string
       switch (this.registration.userType) {
         case UserType.NOTSELECTED:
           return 'Seleziona'
@@ -142,13 +189,20 @@ export const useRegistrationStore = defineStore('registrationStore', {
       return this.registration.vatSameAsFiscalCode;
     },
     getTowns() {
-      return this.registration.towns.filter(town => town.caps.includes(this.registration.registrationData.cap));
+      // Get towns that match CAP
+      if (this.registration.towns.length > 0) {
+        return this.registration.towns.filter(town => town.cap == this.registration.registrationData.cap);
+      } else {
+        console.info("Non sono state trovate località.");
+        return [] as LocationDetails[];
+      }
     },
     getTown() {
       return this.registration.registrationData.town;
     },
-    getTownString(){
-      if(this.registration.registrationData.town == "") {
+    getTownString() {
+      // Get town dropdown string
+      if (this.registration.registrationData.town == "") {
         return "Seleziona comune";
       } else {
         return this.registration.registrationData.town;

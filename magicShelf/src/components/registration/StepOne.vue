@@ -16,7 +16,7 @@ const dropDownString = computed(() => getDropdownString.value);
         <div class="d-flex justify-content-center mb-3">
             <h5 class="mt-5 step-instruction">Seleziona il tipo di utente</h5>
         </div>
-        <div class="dropdown d-flex justify-content-center mb-5">
+        <div class="d-flex justify-content-center mb-5">
             <button class="btn dropdown-toggle user-type-dropdown d-flex justify-content-between align-items-center"
                 type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="true">
                 <span class="dropdown-text">{{ dropDownString }}</span>
@@ -37,7 +37,17 @@ const dropDownString = computed(() => getDropdownString.value);
                 Continua
             </button>
         </div>
-        <RouterLink to="/login" class="nav-link inactive-page" active-class="active-page">
+        <RouterLink v-if="registration.userType == UserType.COSTUMER" to="/loginCostumer" class="nav-link inactive-page" active-class="active-page">
+            <p class="form-alternative">
+                Hai già un account?<br /><span class="form-alternative-a">Accedi</span>
+            </p>
+        </RouterLink>
+        <RouterLink v-if="registration.userType == UserType.SUPPLIER" to="/loginSupplier" class="nav-link inactive-page" active-class="active-page">
+            <p class="form-alternative">
+                Hai già un account?<br /><span class="form-alternative-a">Accedi</span>
+            </p>
+        </RouterLink>
+        <RouterLink v-if="registration.userType != UserType.COSTUMER && registration.userType != UserType.SUPPLIER" to="/loginSupplier" class="nav-link inactive-page" active-class="active-page">
             <p class="form-alternative">
                 Hai già un account?<br /><span class="form-alternative-a">Accedi</span>
             </p>
@@ -49,10 +59,6 @@ const dropDownString = computed(() => getDropdownString.value);
 <style scoped>
 .step-instruction {
     font-weight: lighter;
-}
-
-.dropdown-menu {
-    width: 200px;
 }
 
 .user-type-dropdown {

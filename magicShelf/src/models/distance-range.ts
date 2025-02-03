@@ -1,9 +1,7 @@
 const DistanceRange = Object.freeze({
     NOTSELECTED: 0,
-    LESSTHENFIVE: 1,
-    LESSTHENTWENTY: 2,
-    LESSTHENFIFTY: 3,
-    LESSTHENHUNDRED: 4,
+    SAMEISTATCODE: 1,
+    NOTSAMEISTATCODE: 2,
   });
   
 export { DistanceRange };

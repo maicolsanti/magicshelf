@@ -1,126 +1,200 @@
-# Info Generali
+# MagicShelf
 
-## Nome
+## Contenuti
 
-## magicshelf
+- [Informazioni Generali](#informazioni-generali)
+- [Features Utenti](#features-utenti)
+- [Features Fornitori](#features-fornitori)
+- [Struttura del Progetto](#struttura-del-progetto)
+- [Installazione ed Esecuzione](#installazione-ed-esecuzione)
+- [API EndPoints](#api-endpoints)
+- [Database e Schema Er](#database-e-schema-er)
+- [Documentazione](#documentazione)
 
-## Cos'è e cosa fa?
+## Informazioni Generali
 
-## WebApp multipiattaforma
+Il progetto si propone di realizzare un’applicazione web moderna e innovativa, progettata per rispondere alle esigenze di un mercato sempre più dinamico e interconnesso. L'app ha l'obiettivo di creare un punto di incontro tra acquirenti e fornitori, offrendo loro strumenti avanzati per semplificare la ricerca e la gestione dei prodotti.
 
-## Applicazione che permette all’utente di cercare prodotti di determinate marche/qualità/fascia di prezzo (ricerca specifica), in una zona
+In un contesto in cui la disponibilità di prodotti è vasta e spesso dispersiva, la necessità di strumenti che consentano una ricerca mirata è sempre più pressante. La nostra piattaforma vuole colmare questa lacuna, permettendo agli utenti di individuare prodotti in base a criteri specifici come qualità, marca, zona geografica e fascia di prezzo. Allo stesso tempo, offre ai fornitori un ambiente digitale in cui possono inserire, aggiornare e promuovere i propri materiali, migliorando la visibilità delle loro attività.
 
-## Funzionalità base
+## Features Utenti
 
-### Utente
+- Loggati o registrati inserendo i dati personali, compresi quelli della località.
+- Possibilità di visualizzare e modificare il proprio profilo nella apposita sezione.
+- Naviga alla pagina di ricerca e applica i filtri da te desiderati.
+- Visualizza i fornitori trovati con i filttri applicati.
+- Possibilità di visualizzare i dettagli del singolo fornitore, compresi gli altri prodotti da lui pubblicati.
 
-- ricerca prodotti per specifica
+## Features Fornitori
 
-### Fornitore
+- Loggati o registrati inserendo i dati personali, compresi quelli della località.
+- Possibilità di visualizzare e modificare il proprio profilo nella apposita sezione.
+- Inserimento, modifica e cancellazione di un nuovo prodotto.
+- Inserimento, modifica e cancellazione della quantità di un nuovo prodotto.
+- Visualizzazione dei propri materiali.
 
-- caricare prodotti
-- modificare prodotti
-- eliminare prodotti
+## Struttura del Progetto
 
-### Amministratori (noi)
+### Backend
 
-- gestione generale
-- validazione fornitore
+- Database ==> MySql
+- XAMPP ==> Host per Database
+- Node.js ==> Ambiente di esecuzione JavaScript lato server
+- Express ==> Framework server-side
+- Joi ==> Validazione del payload JSON
+- Swagger ==> Documentazione Endpoint [link](http://localhost:3000/api-docs)
+- Pacchetti: bcrypt, cookie-parser, jsonwebtoken, dotenv, multer
+
+### Frontend
+
+- Vue.js ==> Framework frontend per lo sviluppo di interfacce utente
+- Vite ==> Build tool per lo sviluppo
+- Vue Router ==> Libreria per la gestione delle rotte
+- Axios ==> Libreria per le richieste HTTP
+- TypeScript ==> Superset tipizzato di JavaScript
+- Pinia ==> Libreria per state management
+- Bootstrap e SASS ==> Framework e estensione di CSS per lo stile
+- Figma ==> Strumento di design delle interfacce
+- Pacchetti: oh-vue-icons
+
+## Installazione ed Esecuzione
+
+1. Clonare il repository utilizzando il comando
+
+```sh
+git clone https://github.com/maicolsanti/magicshelf.git
+```
+
+### BE
+
+2. Spostarsi nella cartella backend
+
+```sh
+cd backend
+```
+
+3. Installare le dipendenze
+
+```sh
+npm install
+```
+
+4. Creare un file chiamato .env e al suo interno copiare le seguenti variabili d'ambiente
+
+```text
+DB_HOST='yourhost'
+DB_USER='youruser'
+DB_PASSWORD='yourpassword'
+DB_NAME='magicshelf'
+JWT_SECRET='yourjwtsecret'
+```
+
+5. Eseguire il backend
+
+```sh
+npm start
+```
+
+### FE
+
+6. Spostarsi nella cartella frontend
+
+```sh
+cd..
+cd magicShelf
+```
+
+7. Avviare il frontend
+
+```sh
+npm run dev
+```
+
+8. Visitare il link mostrato per visualizzare l'applicazione web
+
+## API Endpoints
+
+La documentazione dettagliata degli endpoint si trova all'interno dello swagger.
+Per visualizzarlo arrivare al passaggio 5 di [Installazione ed Esecuzione](#installazione-ed-esecuzione) e navigare all'indirizzo <http://localhost:3000/api-docs/#/>
+
+### Auth Clienti
+
+- /auth/clienti/register
+- /auth/clienti/login
+
+### Auth Fornitori
+
+- /auth/fornitori/register
+- /auth/fornitori/login
+
+### Auth General
+
+- /auth/general/getProfile
+- /auth/general/getProfile
+
+### Clienti
+
+- /auth/general/getProfile
+- /clienti/getById/{codice_cliente}
+- /clienti/create
+- /clienti/update/{codice_cliente}
+- /clienti/delete/{codice_cliente}
+
+### Fornitori
+
+- /fornitori/getAll
+- /fornitori/getById/{codice_fornitore}
+- /fornitori/create
+- /fornitori/update/{codice_fornitore}
+- /fornitori/delete/{codice_fornitore}
+
+### Località
+
+- /localita/getAll
+- /localita/getById/{codice_istat}
+- /localita/getByCap/{cap}
+- /localita/getByCapDenominazione/{cap}/{denominazione}
+
+### Materiali Fornitori
+
+- /materiali-fornitori/getAll
+- /materiali-fornitori/getById/{codice_fornitore}
+- /materiali-fornitori/getFiltered
+
+### Materiali
+
+- /materiali/getAll
+- /materiali/getById/{codice_materiale}
+- /materiali/create
+- /materiali/update/{codice_materiale}
+- /materiali/remove/{codice_materiale}
+
+### Situazione Materiali
+
+- /situazione-materiali/getAll
+- /situazione-materiali/getById/{codice_materiale}
+- /situazione-materiali/create
+- /situazione-materiali/create
+- /situazione-materiali/remove/{codice_materiale}
+
+## Database e Schema Er
+
+![Schema ER](./SchemaER.png)
+
+## Documentazione
+
+- SWAGGER <https://swagger.io/docs/>
+- MYSQL <https://dev.mysql.com/doc/>
+- EXPRESS <https://expressjs.com/it/>
+- JOI <https://joi.dev/>
+- VUE <https://vuejs.org/guide/introduction.html>
+- PINIA <https://pinia.vuejs.org/>
+- BOOTSTRAP <https://getbootstrap.com/docs/5.3/getting-started/introduction/>
 
 ## Nice to have / sviluppi futuri
 
-### geolocalizzazione
-
-### profilazione utente secondo le proprie ricerche
-
-### ricerche salvate nei preferiti
-
-### integrazione inserimento prodotti con gestionali dei fornitori
-
-### ordine online
-
-## Tecnologie e framework
-
-## DB
-
-## PostgreSQL
-
-## Backend
-
-## node.js
-
-## Framework --> Express
-
-## Frontend
-
-## vue.js
-
-## Framework --> Bootstrap
-
-## UI
-
-## Figma: <https://www.figma.com/design/pjcUQrq626WMbDmfjUXumD/WireFrame?node-id=39-2418&t=sH2ZWa4eZoo2SCGZ-1>
-
-## Divisione dei compiti
-
-## Trello: <https://trello.com/b/1nIffKwB/progetto-ingengieria-dei-sistemi-web>
-
-## Schema ER
-
-## Lucidchart: <https://lucid.app/lucidchart/10a3d649-a701-4159-8f2c-538e73909bad/edit?beaconFlowId=7530B553D8FFDA80&page=0_0&invitationId=inv_f3e6d1b6-1420-433c-b1c6-3388ada606b7#>
-
-## Endpoint
-
-## Endpoint per l'entità Cliente
-
-### GET /clienti: Restituisce un elenco di tutti i clienti
-
-### GET /clienti/{codice_cliente}: Restituisce i dettagli di un cliente specifico, identificato dall'ID
-
-### POST /clienti: Crea un nuovo cliente
-
-### PUT /clienti/{codice_cliente}: Aggiorna le informazioni di un cliente esistente
-
-### DELETE /clienti/{codice_cliente}: Elimina un cliente
-
-## Endpoint per l'entità Fornitore
-
-### GET /fornitori: Restituisce un elenco di tutti i fornitori
-
-### GET /fornitori/{codice_fornitore}: Restituisce i dettagli di un fornitore specifico
-
-### POST /fornitori: Crea un nuovo fornitore
-
-### PUT /fornitori/{codice_fornitore}: Aggiorna le informazioni di un fornitore esistente
-
-### DELETE /fornitori/{codice_fornitore}: Elimina un fornitore
-
-## Endpoint per l'entità Materiale
-
-### GET /materiali: Restituisce un elenco di tutti i materiali
-
-### GET /materiali/{codice_materiale}: Restituisce i dettagli di un materiale specifico
-
-### POST /materiali: Crea un nuovo materiale
-
-### PUT /materiali/{codice_materiale}: Aggiorna le informazioni di un materiale esistente
-
-### DELETE /materiali/{codice_materiale}: Elimina un materiale
-
-## Endpoint per l'entità Situazione Materiali
-
-### GET /situazione-materiali: Restituisce un elenco di tutte le situazioni dei fornitori (quantità di materiali forniti)
-
-### GET /situazione-materiali/{codice_materiale}: Restituisce la situazione di un fornitore specifico per un materiale specifico
-
-### POST /situazione-materiali: Crea una nuova situazione fornitore (aggiunge una nuova quantità di un materiale fornito da un fornitore)
-
-### PUT /situazione-materiali/{id_materiale}: Aggiorna la quantità di un materiale fornito da un fornitore
-
-### DELETE /situazione-materiali/{id_materiale}: Elimina la situazione di un fornitore per un materiale specifico
-
-## Endpoint per l'entità Località
-
-### GET /localita: Restituisce un elenco di tutte le località
-
-### GET /localita/{codice_istat}: Restituisce i dettagli di una località specifica, identificata dal CAP
+- geolocalizzazione
+- profilazione utente secondo le proprie ricerche
+- ricerche salvate nei preferiti
+- integrazione inserimento prodotti con gestionali dei fornitori
+- ordine online

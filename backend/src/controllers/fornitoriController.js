@@ -1,71 +1,93 @@
 import {
-  getAllFornitori,
-  getFornitoreById,
-  createFornitore,
   updateFornitore,
   deleteFornitore,
 } from '../models/fornitoriModel.js';
+import {
+  getUser
+} from '../utils/auth.js';
+import {
+  updateSchema
+} from '../schemas/fornitoriSchemas.js'
 
-export const getAll = async (req, res) => {
-  try {
-    const fornitori = await getAllFornitori();
-    res.json(fornitori);
-  } catch (error) {
-    console.error('Errore durante il recupero dei dati:', error);
-    res.status(500).send('Errore interno del server');
-  }
-};
-
-export const getById = async (req, res) => {
-  const { codice_fornitore } = req.params;
-  try {
-    const fornitore = await getFornitoreById(codice_fornitore);
-    if (!fornitore) {
-      return res.status(404).json({ message: 'Fornitore non trovato' });
-    }
-    res.json(fornitore);
-  } catch (error) {
-    console.error('Errore durante il recupero del fornitore:', error);
-    res.status(500).send('Errore interno del server');
-  }
-};
-
-export const create = async (req, res) => {
-  const { custom_data } = req.body;
-  try {
-    const id = await createFornitore(custom_data);
-    res.json({ message: 'Fornitore creato con successo', id });
-  } catch (error) {
-    console.error('Errore durante la creazione del fornitore:', error);
-    res.status(500).send('Errore interno del server');
-  }
-};
+const ROLE_NAME = 'FORNITORE';
 
 export const update = async (req, res) => {
-  const { codice_fornitore } = req.params;
-  const { custom_data } = req.body;
+  const { codice_fornitore } = req.params;  // Extract the supplier's ID from the route parameters
+
   try {
-    const rowsAffected = await updateFornitore(codice_fornitore, custom_data);
-    if (rowsAffected === 0) {
-      return res.status(404).json({ message: 'Fornitore non trovato' });
+
+    // Validate data
+    const { error, value } = updateSchema.validate(req.body.custom_data, { stripUnknown: true });
+
+    if (error) {
+        // If validation error
+        return res.status(400).json({
+        message: 'Validation error',
+        details: error.details.map((detail) => detail.message),
+        });
     }
-    res.json({ message: 'Fornitore aggiornato correttamente' });
+
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
+    }
+
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && codice_fornitore != user.CODICE_FORNITORE) {
+      return res.status(403).send('Insufficient permission');
+    }
+
+    // Attempt to update the supplier in the database
+    const rowsAffected = await updateFornitore(codice_fornitore, value);
+
+    // If no rows were affected, return a 404 error indicating the supplier was not found
+    if (rowsAffected === 0) {
+      return res.status(404).send('Supplier not found');
+    }
+
+    // Return a success message if the supplier was updated
+    res.status(200).json({ message: 'Supplier successfully updated' });
   } catch (error) {
-    console.error("Errore durante l'aggiornamento del fornitore:", error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the update process
+    console.error('Error occurred while updating supplier:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };
 
 export const remove = async (req, res) => {
-  const { codice_fornitore } = req.params;
+  const { codice_fornitore } = req.params;  // Extract the supplier's ID from the route parameters
   try {
-    const rowsAffected = await deleteFornitore(codice_fornitore);
-    if (rowsAffected === 0) {
-      return res.status(404).json({ message: 'Fornitore non trovato' });
+    const user = getUser(req, res);
+    // Check if the user is logged in
+    if (!user) {
+      res.status(401).send('This operation requires you to be logged in');
+      return;
     }
-    res.json({ message: 'Fornitore eliminato correttamente' });
+
+    // Check if the user role is supplier and the user id is equal to the request id
+    if(ROLE_NAME != user.ROLE_NAME && codice_fornitore != user.CODICE_FORNITORE) {
+      return res.status(403).send('Insufficient permission');
+    }
+
+    // Attempt to delete the supplier from the database
+    const rowsAffected = await deleteFornitore(codice_fornitore);
+
+    // If no rows were affected, return a 404 error indicating the supplier was not found
+    if (rowsAffected === 0) {
+      return res.status(404).send('Supplier not found');
+    }
+
+    // Return a success message if the supplier was successfully deleted
+    res.status(200).json({ message: 'Supplier successfully removed' });
   } catch (error) {
-    console.error("Errore durante l'eliminazione del fornitore:", error);
-    res.status(500).send('Errore interno del server');
+    // Log any error that occurs during the removal process
+    console.error('Error occurred while removing supplier:', error);
+
+    // Send a generic error message to the client
+    res.status(500).send('Internal server error');
   }
 };

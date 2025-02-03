@@ -10,8 +10,13 @@ import { OhVueIcon } from 'oh-vue-icons'
 
 const app = createApp(App)
 
+// Stores
 app.use(createPinia())
+
+// Routes
 app.use(router)
+
+// Icons
 app.component('v-icon', OhVueIcon)
 
 app.mount('#app')

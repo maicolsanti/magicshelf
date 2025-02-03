@@ -2,15 +2,20 @@
 import { useRegistrationStore } from '@/stores/registration'
 import { useConfigurationStore } from '@/stores/configurations'
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { addIcons } from 'oh-vue-icons'
 import { MdVisibilityoffRound, MdVisibilityRound } from 'oh-vue-icons/icons'
 import { useRouter } from 'vue-router'
+import { UserType } from '@/models/user-type';
 
 addIcons(MdVisibilityRound, MdVisibilityoffRound);
 const registrationStore = useRegistrationStore();
 const configurationStore = useConfigurationStore();
 const { registration, getPasswordType, getVatEquivalence, getTowns, getTown, getTownString } = storeToRefs(registrationStore);
+
+onMounted(() => {
+    registrationStore.fetchTowns();
+});
 
 const passwordInputType = computed(() => getPasswordType.value);
 const dropDownString = computed(() => getTownString.value);
@@ -32,7 +37,6 @@ function checkDataValidity() {
             valid = false;
         }
     });
-    console.log(valid);
     registrationStore.setRegistrationDataError(!valid);
 }
 
@@ -46,6 +50,7 @@ let formData = {
     phoneInput: "",
     CAPInput: "",
     selectedTown: "",
+    address: "",
     passwordInput: "",
 };
 
@@ -62,42 +67,42 @@ function setFiscalCodeWithVatNumber() {
 }
 
 function submit() {
-    registrationStore.setSupplierFormData(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.passwordInput);
-    configurationStore.login(formData.emailInput, formData.passwordInput);
+    registrationStore.registerSupplier(formData.nameInput, formData.surnameInput, formData.companyNameInput, formData.vatNumberInput, formData.fiscalCodeInput, formData.emailInput, formData.phoneInput, formData.address, formData.passwordInput).then(() => {
+        configurationStore.setUserType(UserType.SUPPLIER);
+        configurationStore.getProfile();
+    });
     router.push('/');
 }
 </script>
 
 <template>
-    <main class="margin-content">
-        <b-alert v-if="registration.registrationDataError" variant="danger"
-            class="d-flex justify-content-center alert">Compila correttamente i dati</b-alert>
+    <main>
         <h4 class="welcome d-flex my-5">
             Ciao fornitore,<br />inserisci i tuoi dati per completare la registrazione
         </h4>
         <form id="supplierRegistration" class="form-g mb-5" v-on:submit.prevent="checkDataValidity()" action=""
             method="post">
-            <div class="container">
+            <div class="">
                 <h5 class="form-section-title">Anagrafici e di contatto</h5>
                 <div class="row form-group">
-                    <div class="col-4 mb-3 form-column">
+                    <div class="col-8 mb-3 form-column">
                         <label for="">Nome</label>
                         <input type="text" class="form-control" id="nameInput" v-model="formData.nameInput"
                             placeholder="nome" required />
                     </div>
-                    <div class="col-4 mb-3 form-column">
+                    <div class="col-8 mb-3 form-column">
                         <label for="">Cognome</label>
                         <input type="text" class="form-control" id="surnameInput" v-model="formData.surnameInput"
                             placeholder="cognome" required />
                     </div>
-                    <div class="col-4 mb-3 form-column">
+                    <div class="col-8 mb-3 form-column">
                         <label for="">Ragione Sociale</label>
                         <input type="text" class="form-control" id="companyNameInput" v-model="formData.companyNameInput"
                             placeholder="ragione sociale" required />
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-4 mb-2 form-column">
+                    <div class="col-8 mb-2 form-column">
                         <label for="">Partita Iva</label>
                         <input type="text" class="form-control" id="vatNumberInput" v-model="formData.vatNumberInput"
                             placeholder="p. iva" required />
@@ -109,7 +114,7 @@ function submit() {
                                 codice fiscale</label>
                         </div>
                     </div>
-                    <div class="col-4 mb-3 form-column">
+                    <div class="col-8 mb-3 form-column">
                         <div class="form-group mb-3" v-if="!isVatEquivalent">
                             <label for="">Codice Fiscale</label>
                             <input type="text" class="form-control" id="fiscalCodeInput" v-model="formData.fiscalCodeInput"
@@ -124,12 +129,12 @@ function submit() {
 
                 </div>
                 <div class="row form-group">
-                    <div class="col-4 mb-3 form-column">
+                    <div class="col-8 mb-3 form-column">
                         <label for="">Email</label>
                         <input type="email" class="form-control" id="emailInput" v-model="formData.emailInput"
                             placeholder="indirizzo email" required />
                     </div>
-                    <div class="col-4 mb-3 form-column">
+                    <div class="col-8 mb-3 form-column">
                         <label for="">Telefono</label>
                         <input type="tel" class="form-control" id="phoneInput" v-model="formData.phoneInput"
                             placeholder="numero di telefono" required />
@@ -137,12 +142,17 @@ function submit() {
                 </div>
                 <h5 class="form-section-title mt-2">Località</h5>
                 <div class="row form-group">
-                    <div class="col-4 mb-3 form-column">
+                    <div class="col-8 mb-3 form-column">
+                        <label for="">Indirizzo</label>
+                        <input type="text" class="form-control" id="AddressInput" v-model="formData.address" placeholder="indirizzo"
+                            required />
+                    </div>
+                    <div class="col-8 mb-3 form-column">
                         <label for="">CAP</label>
                         <input type="text" class="form-control" id="CAPInput" v-model="formData.CAPInput" placeholder="cap"
                             required @change="registrationStore.changeCAP(formData.CAPInput)" />
                     </div>
-                    <div class="col-4 mb-3 form-column">
+                    <div class="col-8 mb-3 form-column">
                         <label for="">Comune</label>
                         <div class="dropdown d-flex justify-content-center mb-3">
                             <button
@@ -155,19 +165,17 @@ function submit() {
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
                                 <li v-if="towns.length == 0">
                                     <a class="dropdown-item disabled"
-                                        @click="registrationStore.setSelectedTown('')" href="#">Inserisci il cap</a>
-                                    
+                                        @click="registrationStore.setSelectedTown('', '')" href="#">Inserisci il cap</a>
                                 </li>
                                 <li v-if="towns.length > 0">
-                                    <a v-for="   town    in    towns   " v-bind:key="town.name"
-                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.name)"
+                                    <a v-for="   town    in    towns   " v-bind:key="town.istatCode"
+                                        class="dropdown-item" @click="registrationStore.setSelectedTown(town.municipality, town.istatCode)" 
                                         href="#">{{
-                                            town.name }}</a>
+                                            town.municipality }}</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
                 </div>
                 <h5 class="form-section-title mt-1">Account</h5>
                 <div class="row form-group">
@@ -212,26 +220,8 @@ input {
     max-width: 350px;
 }
 
-::placeholder {
-    color: var(--bs-secondary);
-    opacity: 0.4;
-}
-
 label {
     color: var(--bs-secondary);
-}
-
-.visibility-icon {
-    color: var(--bs-secondary);
-}
-
-.icon-button {
-    height: 40px;
-    border-color: var(--bs-secondary);
-    border-width: 1px;
-    border-top-left-radius: 0%;
-    border-bottom-left-radius: 0%;
-    border-left: none;
 }
 
 .form-check {
@@ -253,38 +243,4 @@ label {
     color: var(--bs-dark);
 }
 
-.dropdown {
-    max-width: 350px;
-    height: 40px;
-}
-
-.dropdown-select {
-    max-width: 350px;
-    height: 36px;
-    border-color: var(--bs-secondary);
-    border-radius: 6px;
-    padding-left: 10px;
-}
-
-.cap-dropdown {
-    max-width: 350px;
-    width: 350px;
-    align-content: start;
-    align-items: start;
-    justify-items: stretch;
-    border-color: var(--bs-secondary);
-}
-
-.town-not-selected {
-    color: var(--bs-secondary);
-    opacity: 0.5;
-}
-
-.input-group {
-    max-width: 350px;
-}
-
-.alert {
-    color: red;
-}
 </style>

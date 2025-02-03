@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   - name: Situazione Materiali
- *     description: Operazioni relative alla gestione delle situazioni dei materiali
+ *     description: Material situation operation management
  */
 
 import express from 'express';
@@ -16,10 +16,11 @@ const router = express.Router();
  *   get:
  *     tags:
  *       - Situazione Materiali
- *     summary: Recupera tutte le situazioni dei materiali
+ *     summary: Retrieve all material situations
+ *     description: Fetches all material situations from the database, including the current quantity and last modification date.
  *     responses:
  *       200:
- *         description: Lista di tutte le situazioni dei materiali
+ *         description: List of all material situations
  *         content:
  *           application/json:
  *             schema:
@@ -29,12 +30,32 @@ const router = express.Router();
  *                 properties:
  *                   CODICE_MATERIALE:
  *                     type: integer
+ *                     description: Unique code of the material
+ *                     example: 1
  *                   QUANTITA:
  *                     type: number
  *                     format: decimal
+ *                     description: Current quantity of the material
+ *                     example: 150.75
  *                   DATA_ULTIMA_MODIFICA:
  *                     type: string
  *                     format: date-time
+ *                     description: Date and time of the last modification
+ *                     example: "2025-01-02T14:35:00Z"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getAll', getAll);
 
@@ -44,16 +65,18 @@ router.get('/getAll', getAll);
  *   get:
  *     tags:
  *       - Situazione Materiali
- *     summary: Recupera la situazione di un materiale specifico
+ *     summary: Retrieve the situation of a specific material
+ *     description: Fetches the situation of a material by its unique ID, including its current quantity and the last modification date.
  *     parameters:
  *       - in: path
  *         name: codice_materiale
  *         required: true
  *         schema:
  *           type: integer
+ *         description: Unique code of the material
  *     responses:
  *       200:
- *         description: Dettagli della situazione del materiale
+ *         description: Details of the material's situation
  *         content:
  *           application/json:
  *             schema:
@@ -61,14 +84,39 @@ router.get('/getAll', getAll);
  *               properties:
  *                 CODICE_MATERIALE:
  *                   type: integer
+ *                   description: Unique code of the material
+ *                   example: 1
  *                 QUANTITA:
  *                   type: number
  *                   format: decimal
+ *                   description: Current quantity of the material
+ *                   example: 150.75
  *                 DATA_ULTIMA_MODIFICA:
  *                   type: string
  *                   format: date-time
+ *                   description: Date and time of the last modification
+ *                   example: "2025-01-02T14:35:00Z"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
- *         description: Materiale non trovato
+ *         description: Material situation not found
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Material situation not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getById/:codice_materiale', getById);
 
@@ -78,7 +126,8 @@ router.get('/getById/:codice_materiale', getById);
  *   post:
  *     tags:
  *       - Situazione Materiali
- *     summary: Crea una nuova situazione del materiale
+ *     summary: Create a new material situation
+ *     description: Adds a new material situation to the database with the provided custom data.
  *     requestBody:
  *       required: true
  *       content:
@@ -88,15 +137,40 @@ router.get('/getById/:codice_materiale', getById);
  *             properties:
  *               custom_data:
  *                 type: object
- *                 properties:
- *                   CODICE_MATERIALE:
- *                     type: integer
- *                   QUANTITA:
- *                     type: number
- *                     format: decimal
+ *                 description: Custom data for the material situation to be created
+ *                 example:
+ *                   CODICE_MATERIALE: 1
+ *                   QUANTITA: 200.50
  *     responses:
  *       200:
- *         description: Situazione del materiale creata con successo
+ *         description: Material situation successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *                   example: "Material situation successfully created"
+ *                 id:
+ *                   type: integer
+ *                   description: The unique ID of the newly created material situation
+ *                   example: 123
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.post('/create', create);
 
@@ -106,13 +180,15 @@ router.post('/create', create);
  *   put:
  *     tags:
  *       - Situazione Materiali
- *     summary: Aggiorna la situazione di un materiale esistente
+ *     summary: Update an existing material situation
+ *     description: Updates the details of a material situation in the database using the provided material code and custom data.
  *     parameters:
  *       - in: path
  *         name: codice_materiale
  *         required: true
  *         schema:
  *           type: integer
+ *         description: Unique identifier of the material situation to update
  *     requestBody:
  *       required: true
  *       content:
@@ -122,15 +198,42 @@ router.post('/create', create);
  *             properties:
  *               custom_data:
  *                 type: object
- *                 properties:
- *                   QUANTITA:
- *                     type: number
- *                     format: decimal
+ *                 description: Updated data for the material situation
+ *                 example:
+ *                   QUANTITA: 150.75
  *     responses:
  *       200:
- *         description: Situazione del materiale aggiornata correttamente
+ *         description: Material situation successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *                   example: "Material situation successfully updated"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
- *         description: Materiale non trovato
+ *         description: Material not found
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Material not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.put('/update/:codice_materiale', update);
 
@@ -140,18 +243,48 @@ router.put('/update/:codice_materiale', update);
  *   delete:
  *     tags:
  *       - Situazione Materiali
- *     summary: Elimina la situazione di un materiale specifico
+ *     summary: Delete a material situation
+ *     description: Deletes a material situation from the database based on the provided material code.
  *     parameters:
  *       - in: path
  *         name: codice_materiale
  *         required: true
  *         schema:
  *           type: integer
+ *         description: Unique identifier of the material situation to be deleted
  *     responses:
  *       200:
- *         description: Situazione del materiale eliminata correttamente
+ *         description: Material situation successfully deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *                   example: "Material situation successfully deleted"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
  *       404:
- *         description: Materiale non trovato
+ *         description: Material not found
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Material not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.delete('/remove/:codice_materiale', remove);
 

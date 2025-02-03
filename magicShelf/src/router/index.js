@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import SearchView from '../views/SearchView.vue'
-import ProductsView from '../views/ProductsView.vue'
-import ProfileView from '../views/ProfileView.vue'
-import AboutView from '../views/AboutView.vue'
-import LoginView from '../views/login/LoginView.vue'
+import HomeView from '../views/home/HomeView.vue'
+import SearchView from '../views/search/SearchView.vue'
+import ProductsView from '../views/products/ProductsView.vue'
+import ProfileView from '../views/profile/ProfileView.vue'
+import AboutView from '../views/about_us/AboutView.vue'
+import LoginCostumerView from '../views/login/LoginCostumerView.vue'
 import RegistrationView from '@/views/login/RegistrationView.vue'
+import LoginSupplierView from '@/views/login/LoginSupplierView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,9 +37,14 @@ const router = createRouter({
       component: AboutView
     },
     {
-      path: '/login',
-      name: 'login',
-      component: LoginView
+      path: '/loginCostumer',
+      name: 'loginCostumer',
+      component: LoginCostumerView
+    },
+    {
+      path: '/loginSupplier',
+      name: 'loginSupplier',
+      component: LoginSupplierView
     },
     {
       path: '/registration',

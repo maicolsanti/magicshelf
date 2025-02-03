@@ -9,12 +9,15 @@ const confStore = useConfigurationStore();
 
 const isLoggedIn = computed(() => confStore.isLoggedIn);
 
+const isSupplier = computed(() => confStore.isSupplier);
+
 const router = useRouter()
 
 function logout() {
-  confStore.updatePage(page.HOME)
-  confStore.logout();
-  router.push('/');
+  confStore.logout().then(() => {
+    confStore.updatePage(page.HOME)
+    router.push('/');
+  })
 }
 
 </script>
@@ -28,14 +31,14 @@ function logout() {
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-end">
           <li class="nav-item mx-2" @click="confStore.updatePage(page.HOME)">
             <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">Home</RouterLink>
           </li>
-          <li class="nav-item mx-2" @click="confStore.updatePage(page.SEARCH)">
+          <li class="nav-item mx-2" v-if="!isSupplier" @click="confStore.updatePage(page.SEARCH)">
             <RouterLink to="/search" class="nav-link inactive-page" active-class="active-page">Ricerca</RouterLink>
           </li>
-          <li class="nav-item mx-2" @click="confStore.updatePage(page.PRODUCTS)">
+          <li class="nav-item mx-2" v-if="isSupplier" @click="confStore.updatePage(page.PRODUCTS)">
             <RouterLink to="/products" class="nav-link inactive-page" active-class="active-page">Prodotti</RouterLink>
           </li>
           <li class="nav-item mx-2" @click="confStore.updatePage(page.PROFILE)">
@@ -46,10 +49,10 @@ function logout() {
           </li>
           <!-- TODO replace with icon -->
           <li class="nav-item mx-2" v-if="!isLoggedIn" @click="confStore.updatePage(page.LOGIN)">
-            <RouterLink to="/login" class="nav-link inactive-page" active-class="active-page">Accedi</RouterLink>
+            <RouterLink to="/loginCostumer" class="nav-link inactive-page" active-class="active-page">Accedi</RouterLink>
           </li>
-          <li class="nav-item mx-2" v-if="isLoggedIn" @click="logout">
-            <RouterLink to="/" class="nav-link inactive-page" active-class="active-page">Logout</RouterLink>
+          <li class="nav-item mx-2" v-if="isLoggedIn" @click="logout()">
+            <button class="nav-link inactive-page" active-class="active-page">Logout</button>
           </li>
         </ul>
       </div>
@@ -80,6 +83,9 @@ function logout() {
 
 .navbar {
   width: 100vw;
-  /* position:fixed; TODO: fix position */
+}
+
+li:hover {
+  font-weight: bolder;
 }
 </style>

@@ -1,43 +1,58 @@
 <script setup lang="ts">
 import { useConfigurationStore } from '@/stores/configurations';
 import { useSearchStore } from '@/stores/search';
+import { useProductsStore } from '@/stores/product';
+import { useSupplierStore } from '@/stores/supplier';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { PriceRange } from '@/models/prince-ranges';
 import { DistanceRange } from '@/models/distance-range';
+import SearchedProductCard from '../../components/search/SearchedProductCard.vue'
+import SupplierView from './SupplierView.vue';
 
 const confStore = useConfigurationStore();
 const searchStore = useSearchStore();
+const productStore = useProductsStore();
+const supplierStore = useSupplierStore();
 const { priceRangeOptions, distanceRangeOptions } = storeToRefs(searchStore);
 
+// Get or Update user data
+confStore.getProfile();
+
 const isLoggedIn = computed(() => confStore.isLoggedIn);
+const selectedSupplierId = computed(() => supplierStore.selectedSupplierId);
+const selectedProductId = computed(() => supplierStore.selectedProductId);
+const user = computed(() => confStore.getUserData);
 
-let user = confStore.getUserData;
-
+// Defaults dropdowns strings
 let priceString = "Fascia di prezzo";
-let distanceString = "Zona di ricerca";
+let distanceString = "Nel tuo comune";
 
+// Filters
 let searchFilters = {
     product: "",
     brand: "",
     supplier: "",
-    cap: user.cap,
+    cap: user.value.cap,
     priceRange: null,
-    distanceRange: null
+    distanceRange: DistanceRange.SAMEISTATCODE
 };
 
+// Set Price Range
 function changePriceRange(priceRange) {
     searchFilters.priceRange = priceRange;
     priceString = findPriceString(priceRange);
     searchStore.changePriceRange(priceRange);
 }
 
+// Set Distance Range
 function changeDistanceRange(distanceRange) {
     searchFilters.distanceRange = distanceRange;
     distanceString = findDistanceString(distanceRange);
     searchStore.changeDistanceRange(distanceRange);
 }
 
+// Get price range string
 function findPriceString(priceRange) {
     switch (priceRange) {
         case PriceRange.NOTSELECTED:
@@ -53,40 +68,38 @@ function findPriceString(priceRange) {
     }
 }
 
+// Get distance range string
 function findDistanceString(distanceRange) {
     switch (distanceRange) {
-        case DistanceRange.NOTSELECTED:
-            return 'Nessun range'
-        case DistanceRange.LESSTHENFIVE:
-            return '< 5km'
-        case DistanceRange.LESSTHENTWENTY:
-            return '< 20km'
-        case DistanceRange.LESSTHENFIFTY:
-            return '< 50km'
-        case DistanceRange.LESSTHENHUNDRED:
-            return '< 100km'
-        default:
-            return 'Seleziona'
+        case DistanceRange.SAMEISTATCODE:
+            return 'Nel tuo comune'
+        case DistanceRange.NOTSAMEISTATCODE:
+            return 'Fuori dal tuo comune'
     }
 }
 
+// Search
+function submit() {
+    productStore.setFilters(searchFilters.product, searchFilters.brand, searchFilters.supplier, searchFilters.cap, searchStore.searchAttributes.priceRange, searchStore.searchAttributes.distanceRange).then(() => {
+        productStore.getFilteredProducts();
+        supplierStore.fetchAllMaterialSituations();
+    });
+}
 </script>
 
 <template>
     <main class="margin-content">
         <div class="d-grid gap-2 mb-1" v-if="!isLoggedIn">
-            <RouterLink to="/login" class="login-link login-button">
+            <RouterLink to="/loginCostumer" class="login-link login-button">
                 <button type="button" class="btn btn-primary py-2 login-button">
                     Accedi per iniziare la ricerca
                 </button>
             </RouterLink>
         </div>
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn && selectedSupplierId == null">
             <h4 class="welcome d-flex my-5">
                 Cerca qui, gli articoli
             </h4>
-
-
             <form id="searchFilters" class="form-g mb-5" action="" method="post">
                 <div class="container">
                     <div class="row form-group  d-flex justify-content-center">
@@ -94,16 +107,15 @@ function findDistanceString(distanceRange) {
                             <label for="">Cosa cerchi?</label>
                             <input type="text" class="form-control mb-3" id="productInput"
                                 v-model="searchFilters.product" placeholder="prodotto" required />
-                            <div class="row d-flex justify-content-center">
-
+                            <div class="row d-flex">
                                 <div id="firstColumn" class="col-2 form-column small">
-                                    <div class="dropdown small d-flex justify-content-center mb-3">
+                                    <div class="dropdown d-flex mb-3">
                                         <button
                                             class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
                                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                             aria-expanded="true">
                                             <span class="dropdown-text"
-                                                :class="{ 'town-not-selected': searchFilters.priceRange == null }">{{
+                                                :class="{ 'not-selected': searchFilters.priceRange == null }">{{
                                                     priceString }}</span>
                                             <span class="dropdown-icon"></span>
                                         </button>
@@ -119,13 +131,12 @@ function findDistanceString(distanceRange) {
                                     </div>
                                 </div>
                                 <div id="secondColumn" class="col-2 form-column small">
-                                    <div class="dropdown small d-flex justify-content-center mb-3">
+                                    <div class="dropdown d-flex mb-3">
                                         <button
                                             class="btn dropdown-toggle cap-dropdown d-flex justify-content-between align-items-center"
-                                            type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                            aria-expanded="true">
+                                            type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown">
                                             <span class="dropdown-text"
-                                                :class="{ 'not-selected': searchFilters.distanceRange == '' }">{{
+                                                :class="{ 'not-selected': searchFilters.distanceRange == null }">{{
                                                     distanceString }}</span>
                                             <span class="dropdown-icon"></span>
                                         </button>
@@ -154,7 +165,7 @@ function findDistanceString(distanceRange) {
                                 placeholder="fornitore" required />
                         </div>
                     </div>
-                    <div class="row form-group d-flex  d-flex justify-content-center">
+                    <div class="row form-group d-flex justify-content-center">
                         <div class="col-4 mb-3 form-column">
                             <label for="">CAP</label>
                             <input type="text" class="form-control" id="capInput" v-model="searchFilters.cap"
@@ -170,19 +181,13 @@ function findDistanceString(distanceRange) {
                     </h4>
                 </div>
                 <div class="col-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
+                    <button @click="submit" type="submit" class="btn btn-primary py-2 primary-button">Cerca</button>
                 </div>
             </div>
-            <!-- <div class="col-md-4" v-for="prodotto in prodotti" :key="prodotto.id">
-                <div class="card">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Immagine prodotto">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ prodotto.nome }}</h5>
-                        <p class="card-text">{{ prodotto.descrizione }}</p>
-                        <p class="card-text"><strong>€{{ prodotto.prezzo.toFixed(2) }}</strong></p>
-                    </div>
-                </div>
-            </div> -->
+            <SearchedProductCard :cap="searchFilters.cap" />
+        </div>
+        <div v-if="isLoggedIn && selectedSupplierId != null && selectedProductId != null">
+            <SupplierView :supplierId="selectedSupplierId" :productId="selectedProductId" :filterCap="searchFilters.cap" />
         </div>
     </main>
 </template>
@@ -196,38 +201,17 @@ input {
     max-width: 350px;
 }
 
-::placeholder {
-    color: var(--bs-primary);
-    opacity: 0.4;
-}
-
 label {
     color: var(--bs-primary);
 }
 
-.input-group {
-    max-width: 350px;
-}
-
-.dropdown {
-    max-width: 350px;
-    height: 40px;
-}
-
 .dropdown-select {
-    max-width: 350px;
-    height: 36px;
-    border-color: var(--bs-primary);
-    border-radius: 6px;
-    padding-left: 10px;
+    padding-left: 0px;
 }
 
 .cap-dropdown {
     max-width: 350px;
     width: 350px;
-    align-content: start;
-    align-items: start;
-    justify-items: stretch;
     border-color: var(--bs-primary);
 }
 
@@ -237,6 +221,10 @@ label {
 }
 
 .small {
-    max-width: 165px;
+    max-width: 175px;
+}
+
+.dropdown-text {
+    font-size: small;
 }
 </style>

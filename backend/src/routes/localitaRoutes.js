@@ -2,11 +2,11 @@
  * @swagger
  * tags:
  *   - name: Localita
- *     description: Operazioni relative alle localita
+ *     description: Localities get endpoints
  */
 
 import express from 'express';
-import { getAll, getById } from '../controllers/localitaController.js';
+import { getAll, getById, getByCap, getByCapDenominazione } from '../controllers/localitaController.js';
 
 const router = express.Router();
 
@@ -47,6 +47,20 @@ const router = express.Router();
  *                     type: string
  *                     description: The name of the locality (e.g., city or town).
  *                     example: "Bologna"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
 router.get('/getAll', getAll);
 
@@ -93,27 +107,169 @@ router.get('/getAll', getAll);
  *                   type: string
  *                   description: The name of the locality (e.g., city or town).
  *                   example: "Bologna"
- *       404:
- *         description: Locality not found
+ *       401:
+ *         description: The user is not logged in
  *         content:
- *           application/json:
+ *           application/text:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Locality not found"
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       404:
+ *         description: The location is not found
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Location not found"
  *       500:
  *         description: Internal server error
  *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
+ */
+router.get('/getById/:codice_istat', getById);
+
+/**
+ * @swagger
+ * /localita/getByCap/{cap}:
+ *   get:
+ *     tags:
+ *      - Localita
+ *     summary: Retrieves a locality by its CAP code
+ *     parameters:
+ *       - name: cap
+ *         in: path
+ *         required: true
+ *         description: The CAP code of the locality.
+ *         schema:
+ *           type: integer
+ *           example: 12345
+ *     responses:
+ *       200:
+ *         description: Locality found
+ *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 CODICE_ISTAT:
+ *                   type: integer
+ *                   description: The unique ISTAT code of the locality.
+ *                   example: 12345
+ *                 CAP:
+ *                   type: integer
+ *                   description: The postal code of the locality.
+ *                   example: 40100
+ *                 PROVINCIA:
  *                   type: string
- *                   example: "Internal server error"
+ *                   description: The province of the locality.
+ *                   example: "Bologna"
+ *                 REGIONE:
+ *                   type: string
+ *                   description: The region of the locality.
+ *                   example: "Emilia-Romagna"
+ *                 LOCALITA:
+ *                   type: string
+ *                   description: The name of the locality (e.g., city or town).
+ *                   example: "Bologna"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       404:
+ *         description: The location is not found
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Location not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
  */
-router.get('/getById/:codice_istat', getById);
+router.get('/getByCap/:cap', getByCap);
+
+/**
+ * @swagger
+ * /localita/getByCapDenominazione/{cap}/{denominazione}:
+ *   get:
+ *     tags:
+ *      - Localita
+ *     summary: Retrieves a locality by its CAP code
+ *     parameters:
+ *       - name: cap
+ *         in: path
+ *         required: true
+ *         description: The CAP code of the locality.
+ *         schema:
+ *           type: integer
+ *           example: 12345
+ *       - name: denominazione
+ *         in: path
+ *         required: true
+ *         description: La denominazione della località
+ *         schema:
+ *           type: string
+ *           example: "Cesena"
+ *     responses:
+ *       200:
+ *         description: Locality found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 CODICE_ISTAT:
+ *                   type: integer
+ *                   description: The unique ISTAT code of the locality.
+ *                   example: 12345
+ *                 CAP:
+ *                   type: integer
+ *                   description: The postal code of the locality.
+ *                   example: 40100
+ *                 PROVINCIA:
+ *                   type: string
+ *                   description: The province of the locality.
+ *                   example: "Bologna"
+ *                 REGIONE:
+ *                   type: string
+ *                   description: The region of the locality.
+ *                   example: "Emilia-Romagna"
+ *                 LOCALITA:
+ *                   type: string
+ *                   description: The name of the locality (e.g., city or town).
+ *                   example: "Bologna"
+ *       401:
+ *         description: The user is not logged in
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "This operation requires you to be logged in"
+ *       404:
+ *         description: The location is not found
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Location not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/text:
+ *             schema:
+ *               type: string
+ *               example: "Internal server error"
+ */
+router.get('/getByCapDenominazione/:cap/:denominazione', getByCapDenominazione);
 
 export default router;

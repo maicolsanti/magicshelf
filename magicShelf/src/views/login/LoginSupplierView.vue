@@ -15,13 +15,15 @@ const passwordInputType = computed(() => getPasswordType.value);
 
 const router = useRouter()
 
+// Form data
 let loginData = {
-    usernameInput: "",
+    fiscalCodeInput: "",
     passwordInput: "",
 };
 
+// Login
 function submit() {
-    configurationStore.login(loginData.usernameInput, loginData.passwordInput);
+    configurationStore.loginSupplier(loginData.fiscalCodeInput, loginData.passwordInput);
     router.push('/');
 }
 </script>
@@ -29,19 +31,19 @@ function submit() {
 <template>
     <main>
         <h1 class="welcome d-flex justify-content-center mb-5">
-            Benvenut*,<br />accedi per trovare ciò che cerchi
+            Benvenut* fornitore,<br />accedi per gestire i tuoi prodotti
         </h1>
         <div class="form-g">
-            <div class="form-group mb-3">
-                <label for="">Username</label>
-                <input type="email" class="form-control" id="usernameInput" v-model="loginData.usernameInput" placeholder="indirizzo email" required />
+            <div class="row form-group mb-3">
+                <label for="">Codice Fiscale</label>
+                <input type="text" class="form-control" id="fiscalCodeInput" v-model="loginData.fiscalCodeInput" placeholder="codice fiscale" required />
             </div>
-            <div class="form-group row">
+            <div class="row form-group form-column">
                 <label for="">Password</label>
                 <div class="col-md-13 input-group">
                     <input :type="passwordInputType" class=" form-control mb-5" id="passwordInput" v-model="loginData.passwordInput"
                         placeholder="password" required />
-                    <div class="input-group-btn">
+                    <div class="">
                         <button class="btn icon-button" @click="loginStore.toggleShowPassword()">
                             <v-icon v-if="!infos.showPassword" name="md-visibility-round" class="visibility-icon" />
                             <v-icon v-if="infos.showPassword" name="md-visibilityoff-round" class="visibility-icon" />
@@ -73,28 +75,10 @@ input {
     border-width: 1px;
     height: 40px;
     color: var(--bs-primary);
-    min-width: 350px;
+    min-width: 150px;
 }
-
-::placeholder {
-    color: var(--bs-secondary);
-    opacity: 0.4;
-}
-
 label {
     color: var(--bs-primary);
 }
 
-.visibility-icon {
-    color: var(--bs-secondary);
-}
-
-.icon-button {
-    height: 40px;
-    border-color: var(--bs-secondary);
-    border-width: 1px;
-    border-top-left-radius: 0%;
-    border-bottom-left-radius: 0%;
-    border-left: none;
-}
 </style>
