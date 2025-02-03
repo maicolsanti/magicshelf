@@ -353,7 +353,7 @@ select {
   margin-top: 20px;
 }
 .delete-profile a {
-  color: #d9534f;
+  color: #721c24;
   text-decoration: none;
 }
 </style>
