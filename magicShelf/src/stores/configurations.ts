@@ -183,7 +183,9 @@ export const useConfigurationStore = defineStore('configurationsStore', {
             phoneNumber: "",
           },
 
+          this.configurations.loginMessage = "Logout effettuato con successo.";
           this.configurations.logged = false;
+          this.configurations.userType = UserType.COSTUMER;
       }
       catch (error) {
         console.error("Errore nel logout del profilo: ", error);

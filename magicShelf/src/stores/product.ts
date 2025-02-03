@@ -119,7 +119,7 @@ export const useProductsStore = defineStore('productStore', {
     }
   },
   getters: {
-    showAlert() {
+    doShowAlert() {
       return this.configurations.showAlert;
     }
   },
