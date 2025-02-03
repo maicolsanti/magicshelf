@@ -61,7 +61,7 @@ function closeDialog() {
         </div>
           <div class="mb-3 flex-item">
           <label for="price" class="form-label">Prezzo</label>
-          <input type="number" class="form-control" id="unitPrice" v-model="formData.unitPrice"
+          <input type="number" step=".01" class="form-control" id="unitPrice" v-model="formData.unitPrice"
           placeholder="0" required/>
         </div>
       </div>
