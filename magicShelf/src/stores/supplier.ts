@@ -172,6 +172,7 @@ export const useSupplierStore = defineStore('supplierStore', {
       // CREATE - material
 
       let responseId = 0; // Response id for creating new material situation
+      let callResponseStatus = 0;
 
       // Populate form data
       let formData = new FormData();
@@ -202,11 +203,15 @@ export const useSupplierStore = defineStore('supplierStore', {
             if (response.status == 200) {
               console.log("Materiale creato con successo.");
               responseId = response.data.id; // Save response id
-              this.responseStatus = 200;
-              this.alertMessage = "Materiale creato con successo.";
-              this.doShowAlert();
+              callResponseStatus = 200;
             }
           })
+
+          if (callResponseStatus == 200) {
+            this.responseStatus = 200;
+            this.alertMessage = "Materiale creato con successo.";
+            this.doShowAlert();
+          }
 
           // Insert quantity
           this.insertQuantity(responseId, productQuantity);
@@ -223,6 +228,8 @@ export const useSupplierStore = defineStore('supplierStore', {
     },
     async editProduct(productId,productDescription, productBrand, productUnit, productPrice, productQuantity, productImage, originalProduct) {
       // Update - material
+
+      let callResponseStatus = 0;
 
       // Populate form data with only updated values
       let formData = new FormData();
@@ -251,11 +258,15 @@ export const useSupplierStore = defineStore('supplierStore', {
           .then(function (response) {
             if (response.status == 200) {
               console.log("Materiale modificato con successo.");
-              this.responseStatus = 200;
-              this.alertMessage = "Materiale modificato con successo.";
-              this.doShowAlert();
+              callResponseStatus = 200;
             }
           })
+
+          if (callResponseStatus == 200) {
+            this.responseStatus = 200;
+            this.alertMessage = "Materiale modificato con successo.";
+            this.doShowAlert();
+          }
 
           // Update quantity if necessary
           if (this.productMaterialSituation.materialQuantity != productQuantity){
@@ -275,16 +286,23 @@ export const useSupplierStore = defineStore('supplierStore', {
     async deleteMaterialSituation(materialId) {
       // DELETE - material situation
 
+      let callResponseStatus = 0;
+
       try {
         await axios.delete('/api/situazione-materiali/remove/' + materialId)
           .then(function (response) {
-            console.log("Materiale eliminato con successo.");
+            console.log("Situazione materiale eliminata con successo.");
+            callResponseStatus = 200;
+          })
+
+          if (callResponseStatus == 200) {
             this.responseStatus = 200;
-            this.alertMessage = "Errore nella modifica del materiale.";
+            this.alertMessage = "Situazione materiale eliminata con successo.";
             this.doShowAlert();
             // Delete material
             this.deleteMaterial(materialId);
-          })
+            this.deleteProductDialog = false;
+          }
       }
       catch (error) {
         console.error("Errore nell'eliminazione del materiale: ", error);
@@ -296,19 +314,24 @@ export const useSupplierStore = defineStore('supplierStore', {
     async deleteMaterial(materialId) {
       // DELETE - material
 
+      let callResponseStatus = 0;
+
       try {
         await axios.delete('/api/materiali/remove/' + materialId)
           .then(function (response) {
             if (response.status == 200) {
-              console.log("Situazione materiale eliminata con successo.");
-              this.responseStatus = 200;
-              this.alertMessage = "Situazione materiale eliminata con successo.";
-              this.doShowAlert();
-
-              // Fetch supplier for updating product list
-              this.fetchSupplierById(this.supplier.id);
+              console.log("Materiale eliminata con successo.");
+              callResponseStatus = 200;
             }
           })
+
+          if (callResponseStatus == 200) {
+            this.responseStatus = 200;
+            this.alertMessage = "Materiale eliminata con successo.";
+            this.doShowAlert();
+            // Fetch supplier for updating product list
+            this.fetchSupplierById(this.supplier.id);
+          }
       }
       catch (error) {
         console.error("Errore nell'eliminazione della situazione materiale: ", error);
@@ -341,10 +364,10 @@ export const useSupplierStore = defineStore('supplierStore', {
       this.deleteProductDialog = false;
     },
     doShowAlert() {
-      this.configurations.showAlert = true;
+      this.showAlert = true;
     },
     closeAlert() {
-      this.configurations.showAlert = false;
+      this.showAlert = false;
     }
   },
   getters: {
@@ -360,8 +383,8 @@ export const useSupplierStore = defineStore('supplierStore', {
     getSelectedProductQuantity() {
       return this.productMaterialSituation.materialQuantity;
     },
-    showAlert() {
-      return this.configurations.showAlert;
+    getShowAlert() {
+      return this.showAlert;
     },
     getResponseStatus() {
       return this.responseStatus;

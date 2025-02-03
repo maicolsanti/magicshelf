@@ -27,7 +27,7 @@ const openEditDialog = computed(() => supplierStore.editShouldBeOpen);
 const openDeleteDialog = computed(() => supplierStore.deleteShouldBeOpen);
 const alertMessage = computed(() => supplierStore.alertMessage);
 const alertStatus = computed(() => supplierStore.responseStatus);
-const alert = computed(() => supplierStore.doShowAlert);
+const alert = computed(() => supplierStore.getShowAlert);
 
 function getAlertType() {
   if (alertStatus.value == 200) {
@@ -60,8 +60,8 @@ function openDeletePDialog(product) {
 </script>
 
 <template>
-  <main class="mt-5 d-flex flex-grow justify-content-center">
-    <div 
+  <main class="row mt-5 d-flex flex-grow justify-content-center">
+      <div 
         v-if="alertMessage != '' && alert" 
         class="custom-alert"
         :class="getAlertType()"
