@@ -77,8 +77,6 @@ function submit() {
 
 <template>
     <main>
-        <b-alert v-if="registration.registrationDataError" variant="danger"
-            class="d-flex justify-content-center alert">Compila correttamente i dati</b-alert>
         <h4 class="welcome d-flex my-5">
             Ciao fornitore,<br />inserisci i tuoi dati per completare la registrazione
         </h4>
