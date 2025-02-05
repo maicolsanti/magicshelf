@@ -1,6 +1,6 @@
 import { getFornitoreMaterialiById, getFilteredFornitoreMateriali } from '../models/materiali-fornitoriModel.js';
 import { getUser } from '../utils/auth.js';
-import { getLocalitaById } from '../models/localitaModel.js';
+import { getLocalitaByCap } from '../models/localitaModel.js';
 import { getFilteredSchema } from '../schemas/materiali-fornitoriSchemas.js';
 import multer from 'multer';
 
@@ -51,7 +51,7 @@ export const getFiltered = async (req, res) => {
 
         const reqBody = value; // Get filter by request payload
         const start_locality = reqBody.ZONA_DI_PARTENZA;
-        const localities = await getLocalitaById(start_locality);
+        const localities = await getLocalitaByCap(start_locality);
         const locality = localities[0];
 
         const filters = Object.assign(reqBody, locality);
