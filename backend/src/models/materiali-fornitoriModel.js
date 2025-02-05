@@ -40,11 +40,11 @@ export const getFilteredFornitoreMateriali = async (filters) => {
         sql += ' AND PREZZO_UNITARIO BETWEEN ? AND ?';
         params.push(filters.PREZZO_UNITARIO[0], filters.PREZZO_UNITARIO[1]);
     }
-    if (filters.ZONA_DI_RICERCA === 'Dentro il Comune') {
-        sql += ' AND DENOMINAZIONE_LOCALITA = ?';
+    if (filters.ZONA_DI_RICERCA === 'Dentro al Comune') {
+        sql += ' AND CAP = ?';
         params.push(filters.ZONA_DI_PARTENZA);
     } else if (filters.ZONA_DI_RICERCA === 'Fuori dal Comune') {
-        sql += ' AND DENOMINAZIONE_LOCALITA != ? AND DENOMINAZIONE_REGIONE = ?';
+        sql += ' AND CAP != ? AND DENOMINAZIONE_REGIONE = ?';
         params.push(filters.ZONA_DI_PARTENZA, filters.DENOMINAZIONE_REGIONE);
     }
 
